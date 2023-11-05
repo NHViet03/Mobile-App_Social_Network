@@ -4,11 +4,24 @@ import { router } from "expo-router";
 
 const login = () => {
   return (
-    <View className="flex-1 items-center justify-center bg-red-200" style={{
-      flex:1,
-      justifyContent:'flex-end'
-    }}>
-      <Text className="text-red-500">login</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Đăng nhập</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Mật khẩu"
+      />
+
+      <Button
+        title="Đăng nhập"
+        onPress={() => {}}
+        style={styles.button}
+      />
 
       <Pressable onPress={() => router.replace("/register")}>
         <Text>Go to register</Text>
