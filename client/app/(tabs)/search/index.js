@@ -6,7 +6,7 @@ const index = () => {
     <SafeAreaView style={{
       marginTop:StatusBar.currentHeight,
     }}>
-      <Text>Home</Text>
+      <Text>Search</Text>
     </SafeAreaView>
   )
 }
