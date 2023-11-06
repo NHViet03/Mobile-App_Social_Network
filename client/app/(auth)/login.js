@@ -6,10 +6,11 @@ const login = () => {
   return (
     <View className="flex-1 items-center justify-center bg-red-200" style={{
       flex:1,
-      justifyContent:'flex-end'
+      justifyContent:'flex-end',
+      alignItems:'center',
+      backgroundColor:'red'
     }}>
-      <Text className="text-red-500">login</Text>
-
+      <Text className="text-2xl font-bold">Login</Text>
       <Pressable onPress={() => router.replace("/register")}>
         <Text>Go to register</Text>
       </Pressable>
