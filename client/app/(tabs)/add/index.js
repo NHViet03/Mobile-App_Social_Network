@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,SafeAreaView,StatusBar } from 'react-native'
+import { StyleSheet, Text, View,StatusBar,SafeAreaView } from 'react-native'
 import React from 'react'
 
 const index = () => {
@@ -6,7 +6,7 @@ const index = () => {
     <SafeAreaView style={{
       marginTop:StatusBar.currentHeight,
     }}>
-      <Text>Home</Text>
+      <Text>Add</Text>
     </SafeAreaView>
   )
 }
