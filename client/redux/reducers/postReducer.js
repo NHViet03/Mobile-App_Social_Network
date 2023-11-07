@@ -15,7 +15,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc678",
+          _id: "abc670",
           username: "rohyoonseo",
           fullname: "Roh Yoon-seo",
           avatar:
@@ -85,7 +85,7 @@ const initialState = {
             content: "Awesome! The most beautiful girl i have ever seen!",
             likes:[""],
             user: {
-              _id: "abc678",
+              _id: "abc670",
               username: "rohyoonseo",
               fullname: "Roh Yoon-seo",
               avatar:
@@ -105,7 +105,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc678",
+          _id: "abc679",
           username: "rosalineyuhh",
           fullname: "Rosa Line",
           avatar:
@@ -125,7 +125,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc678",
+          _id: "abc679",
           username: "rosalineyuhh",
           fullname: "Rosa Line",
           avatar:
@@ -145,7 +145,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc678",
+          _id: "abc680",
           username: "phs1116",
           fullname: "PARK HYUNGSIK",
           avatar:
@@ -165,7 +165,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc678",
+          _id: "abc681",
           username: "bogummy",
           fullname: "PARK BO GUM",
           avatar:
@@ -185,7 +185,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc678",
+          _id: "abc681",
           username: "bogummy",
           fullname: "PARK BO GUM",
           avatar:
@@ -225,7 +225,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc105",
+          _id: "abc108",
           username: "thv",
           fullname: "V",
           avatar:
@@ -245,7 +245,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc105",
+          _id: "abc108",
           username: "thv",
           fullname: "V",
           avatar:
@@ -265,7 +265,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc105",
+          _id: "abc107",
           username: "hihyunwoo",
           fullname: "이현우",
           avatar:
@@ -285,7 +285,7 @@ const initialState = {
           },
         ],
         user: {
-          _id: "abc105",
+          _id: "abc111",
           username: "yejinhand",
           fullname: "Son Ye-Jin",
           avatar:
@@ -304,7 +304,7 @@ const initialState = {
           "https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.15752-9/396615157_551338183844421_7619172125110417112_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHRW7uHlh5XjzitCTbdFZMzNrbJfkSOG9E2tsl-RI4b0WVQrhPu2d1BZkDLRHgyc2zz7803SxyQYdAJ1xZ0ZK2e&_nc_ohc=E8Nu3nNn5psAX9UeJCw&_nc_ht=scontent.fsgn5-10.fna&oh=03_AdQtxzBRmbH7kuTuJj88fJBfpWJArRRQU3jWCX4BDMA8_w&oe=6566D742",
       },
       {
-        _id: "abc678",
+        _id: "abc670",
         username: "rohyoonseo",
         fullname: "Roh Yoon-seo",
         avatar:

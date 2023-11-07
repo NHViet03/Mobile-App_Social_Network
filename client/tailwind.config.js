@@ -11,7 +11,10 @@ module.exports = {
     extend: {},
     colors: {
       white: "#ffffff", 
-      dark: "#000000",
+      dark:{
+        dark_80:'#000000cc',
+        DEFAULT: "#c43302",
+      },
       borderColor:'#d9d9d9',
       textColor:'#737373',
       primary: {
