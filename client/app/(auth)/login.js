@@ -45,7 +45,7 @@ const login = () => {
           {passwordVisible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
         </Text>
       </TouchableOpacity> */}
-      <TouchableOpacity >
+      <TouchableOpacity onPress={() => router.replace("/home")} >
         <Text style={styles.button_login}>Đăng nhập</Text>
        
       </TouchableOpacity>
@@ -57,14 +57,14 @@ const login = () => {
           <Text style={styles.seperate_or}>OR</Text>
           <Text style={styles.seperate_space}></Text>
       </View>
-     
-      <TouchableOpacity style={styles.login_faceook}>
+
+      <Pressable style={styles.login_faceook}>
         <Image
         style={styles.logo_facebook}
         source={require("../../img/Facebook.png")}
         />
         <Text style={styles.button_login_facebook}>Đăng nhập với Facebook</Text>
-      </TouchableOpacity>
+      </Pressable>
       <View  style={styles.dont_have_account}>
       <Text style={styles.dont_have_account_text} >Bạn chưa có tài khoản?</Text>
       <Pressable onPress={() => router.replace("/register")}>
