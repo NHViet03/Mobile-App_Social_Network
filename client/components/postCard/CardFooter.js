@@ -1,17 +1,20 @@
 import { StyleSheet, Text, View,Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useSelector,useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
 import LikeBtn from "../LikeBtn";
 import BookmarkBtn from "./BookmarkBtn";
+import { PostContext } from "../../app/(tabs)/home";
 
-const CardFooter = ({ post,handleOpenCommentModal }) => {
+const CardFooter = ({ post}) => {
+  const {handleOpenCommentModal}=useContext(PostContext);
+  
   const [isLike, setIsLike] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const [postData, setPostData] = useState(post);
-  const { auth } = useSelector((state) => state);
+  const auth = useSelector((state) => state.auth);
   const dispatch=useDispatch();
 
   const handleLike = () => {
@@ -43,6 +46,7 @@ const CardFooter = ({ post,handleOpenCommentModal }) => {
       payload:postData
     }),
     handleOpenCommentModal();
+    
   }
 
   return (

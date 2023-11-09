@@ -13,7 +13,7 @@ import React from "react";
 import Avatar from "../../components/Avatar";
 
 export default function Layout() {
-  const { auth } = useSelector((state) => state);
+  const auth = useSelector((state) => state.auth);
   return (
     <Tabs
       screenOptions={{

@@ -13,12 +13,12 @@ module.exports = {
       white: "#ffffff", 
       dark:{
         dark_80:'#000000cc',
-        DEFAULT: "#c43302",
+        DEFAULT: "#000",
       },
       borderColor:'#d9d9d9',
       textColor:'#737373',
       primary: {
-        light: "#c9471b",
+        light: "#c433024d",
         DEFAULT: "#c43302",
         dark: "#b02d01",
       },

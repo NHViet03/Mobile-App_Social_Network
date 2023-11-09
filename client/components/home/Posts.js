@@ -5,7 +5,7 @@ import CardHeader from "../postCard/CardHeader";
 import CardBody from "../postCard/CardBody";
 import CardFooter from "../postCard/CardFooter";
 
-const Posts = ({handleOpenCommentModal}) => {
+const Posts = () => {
   const  homePosts  = useSelector((state) =>state.homePosts);
 
   return (
@@ -16,9 +16,9 @@ const Posts = ({handleOpenCommentModal}) => {
       scrollEnabled={true}
       renderItem={({ item, index }) => (
         <View key={index} className="mb-2 border-b-[0.5px] border-borderColor">
-          <CardHeader user={item.user}/>
+          <CardHeader post={item}/>
           <CardBody post={item} />
-          <CardFooter post={item} handleOpenCommentModal={handleOpenCommentModal}/>
+          <CardFooter post={item} />
         </View>
       )}
     />

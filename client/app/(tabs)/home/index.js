@@ -1,24 +1,33 @@
 import { View, StatusBar, Image, Pressable, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import React, { useRef, useMemo, useCallback } from "react";
+import React, { useRef, useMemo, useCallback, createContext } from "react";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
-import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Posts from "../../../components/home/Posts";
 import StoryList from "../../../components/home/StoryList";
 import ModalComment from "../../../components/ModalComment";
+import ModalReportPost from "../../../components/ModalReportPost";
+
+export const PostContext = createContext(null);
 
 const index = () => {
   const bottomSheetModalComment = useRef(null);
+  const bottomSheetModalReportPost = useRef(null);
   const dispatch = useDispatch();
 
   const snapPointsComment = useMemo(() => ["25%", "50%", "95%"], []);
+  const snapPointsReportPost = useMemo(() => ["50%"], []);
 
   const handleOpenCommentModal = useCallback(() => {
     bottomSheetModalComment.current?.present();
   }, []);
+
+  const handleOpenReportPostModal = useCallback(() => {
+    bottomSheetModalReportPost.current?.present();
+  });
 
   const handleCloseCommentModal = () => {
     dispatch({
@@ -26,6 +35,12 @@ const index = () => {
       payload: false,
     });
     bottomSheetModalComment.current?.dismiss();
+  };
+  const handleCloseReportPostModal = () => {
+    dispatch({
+      type: GLOBAL_TYPES.REPORT_POST_MODAL,
+      payload: false,
+    });
   };
 
   return (
@@ -57,6 +72,14 @@ const index = () => {
         </View>
       </View>
       <StoryList />
+      <PostContext.Provider
+        value={{
+          handleOpenCommentModal,
+          handleOpenReportPostModal,
+        }}
+      >
+        <Posts />
+      </PostContext.Provider>
 
       <BottomSheetModal
         ref={bottomSheetModalComment}
@@ -72,15 +95,22 @@ const index = () => {
       >
         <ModalComment />
       </BottomSheetModal>
-
-      <Posts handleOpenCommentModal={handleOpenCommentModal} />
+      <BottomSheetModal
+        ref={bottomSheetModalReportPost}
+        index={0}
+        snapPoints={snapPointsReportPost}
+        backgroundStyle={styles.modal}
+        onDismiss={() => handleCloseReportPostModal()}
+      >
+        <ModalReportPost />
+      </BottomSheetModal>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   modal: {
-    borderRadius:12,
+    borderRadius: 12,
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,

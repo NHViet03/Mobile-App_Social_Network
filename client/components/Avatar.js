@@ -82,14 +82,14 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   middle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   medium: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
   large: {
     width: 80,
