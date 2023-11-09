@@ -19,15 +19,59 @@ const login = () => {
     setUserData({ ...userData, [name]: value });
   };
   return (
-    <View className="flex-1 items-center justify-center bg-red-200" style={{
-      flex:1,
-      justifyContent:'flex-end'
-    }}>
-      <Text className="text-red-500">login</Text>
+    <View style={styles.container}>
+      <Image
+        style={styles.logo}
+        source={require("../../img/logo.png")}
 
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        name="email"
+       
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Mật khẩu"
+        name="password"
+       
+
+        // secureTextEntry={passwordVisible}
+      />
+      {/* <TouchableOpacity onPress={togglePasswordVisibility}>
+        <Text style={styles.toggleVisibilityText}>
+          {passwordVisible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+        </Text>
+      </TouchableOpacity> */}
+      <TouchableOpacity onPress={()=>router.replace('/(tabs)/home')} >
+        <Text style={styles.button_login}>Đăng nhập</Text>
+       
+      </TouchableOpacity>
+       <Pressable onPress={() => router.replace("/register")}>
+           <Text  style={styles.forgotpass} >Quên mật khẩu?</Text>
+      </Pressable>
+      <View style={styles.seperate} >
+          <Text style={styles.seperate_space}></Text>
+          <Text style={styles.seperate_or}>OR</Text>
+          <Text style={styles.seperate_space}></Text>
+      </View>
+     
+      <TouchableOpacity style={styles.login_faceook}>
+        <Image
+        style={styles.logo_facebook}
+        source={require("../../img/Facebook.png")}
+        />
+        <Text style={styles.button_login_facebook}>Đăng nhập với Facebook</Text>
+      </TouchableOpacity>
+      <View  style={styles.dont_have_account}>
+      <Text style={styles.dont_have_account_text} >Bạn chưa có tài khoản?</Text>
       <Pressable onPress={() => router.replace("/register")}>
         <Text style={styles.dont_have_account_register} >Đăng kí</Text>
       </Pressable>
+      </View>
+     
     </View>
   );
 };
