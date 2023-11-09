@@ -12,7 +12,13 @@ const CardBody = ({ post }) => {
   const [indicator, setIndicator] = useState(1);
   const imgWidth = parseInt(Dimensions.get("window").width);
   return (
-    <View className="flex-1">
+    <View
+      className="flex-1"
+      style={{
+        width: imgWidth,
+        height: 400,
+      }}
+    >
       <FlatList
         data={post.images}
         horizontal={true}
@@ -20,7 +26,7 @@ const CardBody = ({ post }) => {
         pagingEnabled={true}
         onScroll={(event) => {
           const x = event.nativeEvent.contentOffset.x;
-          setIndicator(Math.floor(x / imgWidth) + 1);
+          setIndicator(Math.round(x / imgWidth) + 1);
         }}
         renderItem={({ item, index }) => (
           <Image
@@ -28,10 +34,11 @@ const CardBody = ({ post }) => {
             source={{
               uri: item.url,
             }}
-            resizeMode={"cover"}
+            
             style={{
               width: imgWidth,
               height: 400,
+              objectFit:'cover'
             }}
           />
         )}

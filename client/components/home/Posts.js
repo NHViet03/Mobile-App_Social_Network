@@ -1,25 +1,24 @@
 import { StyleSheet, FlatList, View } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import CardHeader from "../postCard/CardHeader";
 import CardBody from "../postCard/CardBody";
 import CardFooter from "../postCard/CardFooter";
 
-const Posts = () => {
-  const { homePosts } = useSelector((state) => state);
-  const [posts, setPosts] = useState(homePosts.posts);
+const Posts = ({handleOpenCommentModal}) => {
+  const  homePosts  = useSelector((state) =>state.homePosts);
 
   return (
     <FlatList
-      data={posts}
+      data={homePosts.posts}
       numColumns={1}
       className="mb-[60px]"
       scrollEnabled={true}
       renderItem={({ item, index }) => (
         <View key={index} className="mb-2 border-b-[0.5px] border-borderColor">
-          <CardHeader user={item.user} />
+          <CardHeader user={item.user}/>
           <CardBody post={item} />
-          <CardFooter post={item} />
+          <CardFooter post={item} handleOpenCommentModal={handleOpenCommentModal}/>
         </View>
       )}
     />

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import Avatar from "../Avatar";
 
 const StoryList = () => {
-  const { homePosts } = useSelector((state) => state);
+  const  homePosts  = useSelector((state) =>state.homePosts);
   const { users } = homePosts;
 
   return (
