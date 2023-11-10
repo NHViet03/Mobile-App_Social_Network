@@ -10,16 +10,19 @@ import Posts from "../../../components/home/Posts";
 import StoryList from "../../../components/home/StoryList";
 import ModalComment from "../../../components/ModalComment";
 import ModalReportPost from "../../../components/ModalReportPost";
+import ModalSharePost from "../../../components/ModalSharePost";
 
 export const PostContext = createContext(null);
 
 const index = () => {
   const bottomSheetModalComment = useRef(null);
   const bottomSheetModalReportPost = useRef(null);
+  const bottomSheetModalSharePost = useRef(null);
   const dispatch = useDispatch();
 
   const snapPointsComment = useMemo(() => ["25%", "50%", "95%"], []);
   const snapPointsReportPost = useMemo(() => ["50%"], []);
+  const snapPointsSharePost = useMemo(() => ["75%", "95%"], []);
 
   const handleOpenCommentModal = useCallback(() => {
     bottomSheetModalComment.current?.present();
@@ -27,6 +30,10 @@ const index = () => {
 
   const handleOpenReportPostModal = useCallback(() => {
     bottomSheetModalReportPost.current?.present();
+  });
+
+  const handleOpenSharePostModal = useCallback(() => {
+    bottomSheetModalSharePost.current?.present();
   });
 
   const handleCloseCommentModal = () => {
@@ -39,6 +46,13 @@ const index = () => {
   const handleCloseReportPostModal = () => {
     dispatch({
       type: GLOBAL_TYPES.REPORT_POST_MODAL,
+      payload: false,
+    });
+  };
+
+  const handleCloseSharePostModal = () => {
+    dispatch({
+      type: GLOBAL_TYPES.SHARE_POST_MODAL,
       payload: false,
     });
   };
@@ -76,6 +90,7 @@ const index = () => {
         value={{
           handleOpenCommentModal,
           handleOpenReportPostModal,
+          handleOpenSharePostModal,
         }}
       >
         <Posts />
@@ -95,6 +110,7 @@ const index = () => {
       >
         <ModalComment />
       </BottomSheetModal>
+
       <BottomSheetModal
         ref={bottomSheetModalReportPost}
         index={0}
@@ -103,6 +119,16 @@ const index = () => {
         onDismiss={() => handleCloseReportPostModal()}
       >
         <ModalReportPost />
+      </BottomSheetModal>
+
+      <BottomSheetModal
+        ref={bottomSheetModalSharePost}
+        index={0}
+        snapPoints={snapPointsSharePost}
+        backgroundStyle={styles.modal}
+        onDismiss={() => handleCloseSharePostModal()}
+      >
+        <ModalSharePost />
       </BottomSheetModal>
     </ScrollView>
   );

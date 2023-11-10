@@ -1,21 +1,22 @@
-import { StyleSheet, Text, View,Pressable } from "react-native";
-import React, { useState,useContext } from "react";
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import React, { useState, useContext } from "react";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
 import LikeBtn from "../LikeBtn";
 import BookmarkBtn from "./BookmarkBtn";
 import { PostContext } from "../../app/(tabs)/home";
 
-const CardFooter = ({ post}) => {
-  const {handleOpenCommentModal}=useContext(PostContext);
-  
+const CardFooter = ({ post }) => {
+  const { handleOpenCommentModal, handleOpenSharePostModal } =
+    useContext(PostContext);
+
   const [isLike, setIsLike] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const [postData, setPostData] = useState(post);
   const auth = useSelector((state) => state.auth);
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
   const handleLike = () => {
     setIsLike(true);
@@ -40,14 +41,21 @@ const CardFooter = ({ post}) => {
     setIsBookmark(false);
   };
 
-  const handlePressComment =()=>{
+  const handlePressComment = () => {
     dispatch({
-      type:GLOBAL_TYPES.COMMENT_MODAL,
-      payload:postData
+      type: GLOBAL_TYPES.COMMENT_MODAL,
+      payload: postData,
     }),
-    handleOpenCommentModal();
-    
-  }
+      handleOpenCommentModal();
+  };
+
+  const handlePressShare = () => {
+    dispatch({
+      type: GLOBAL_TYPES.SHARE_POST_MODAL,
+      payload: postData,
+    }),
+      handleOpenSharePostModal();
+  };
 
   return (
     <View className=" px-3 pt-2 pb-3">
@@ -60,10 +68,12 @@ const CardFooter = ({ post}) => {
               handleUnLike={handleUnLike}
             />
           </View>
-          <Pressable onPress={handlePressComment} >
+          <Pressable onPress={handlePressComment}>
             <FontAwesome name="comment-o" size={25} color="black" />
           </Pressable>
-          <Ionicons name="ios-paper-plane-outline" size={25} color="black" />
+          <Pressable onPress={handlePressShare}>
+            <Ionicons name="ios-paper-plane-outline" size={25} color="black" />
+          </Pressable>
         </View>
         <View>
           <BookmarkBtn
@@ -93,7 +103,7 @@ const CardFooter = ({ post}) => {
           </Pressable>
         )}
       </View>
-      <Pressable  onPress={handlePressComment} >
+      <Pressable onPress={handlePressComment}>
         <Text className="text-textColor mt-2">
           {postData.comments.length > 0
             ? `Xem tất cả ${postData.comments.length} bình luận`

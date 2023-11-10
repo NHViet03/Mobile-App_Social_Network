@@ -16,6 +16,7 @@ module.exports = {
         DEFAULT: "#000",
       },
       borderColor:'#d9d9d9',
+      inputColor:'#eeeeee',
       textColor:'#737373',
       primary: {
         light: "#c433024d",

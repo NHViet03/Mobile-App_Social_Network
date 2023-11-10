@@ -11,7 +11,7 @@ const StoryList = () => {
     <FlatList
       data={users}
       horizontal={true}
-      className="pb-2 border-borderColor border-b-[0.5px]"
+      className="pb-2 border-borderColor border-b-[0.5px] mx-[6px]"
       renderItem={({ item, index }) => (
         <View className="mx-[6px]">
           <Avatar key={index} avatar={item.avatar} size="large" border />
