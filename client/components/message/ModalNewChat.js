@@ -100,7 +100,7 @@ import { router } from "expo-router";
             textAlign: "center",
             color: "#fff",
           }}
-          >Tạo nhóm chat</Text>
+          >Tạo tin nhắn mới</Text>
         </TouchableOpacity>
       </View>
     );

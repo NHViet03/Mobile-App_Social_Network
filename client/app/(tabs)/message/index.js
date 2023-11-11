@@ -18,7 +18,7 @@ const index = () => {
   const bottomSheetModalNewChat = useRef(null);
   const dispatch = useDispatch();
 
-  const snapPointsNewChat = useMemo(() => ["25%", "50%", "95%"], []);
+  const snapPointsNewChat = useMemo(() => ["95%"], []);
 
   const handleOpenNewChatModal = useCallback(() => {
     bottomSheetModalNewChat.current?.present();
@@ -124,12 +124,12 @@ const index = () => {
         </ScrollView>
       <BottomSheetModal
         ref={bottomSheetModalNewChat}
-        index={2}
+        index={0}
         snapPoints={snapPointsNewChat}
         backgroundStyle={styles.modal}
         onDismiss={() => handleCloseNewChatModal()}
         onChange={(index) => {
-          if (index === 0) {
+          if (index === -1) {
             handleCloseNewChatModal();
           }
         }}
