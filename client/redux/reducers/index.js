@@ -6,7 +6,7 @@ import commentModal from './commentModalReducer'
 import reportPostModal from './reportPostModalReducer'
 import sharePostModal from './sharePostModalReducer'
 import newChatModal from  './newChatModalReducer'
-
+import logOutModal from './logOutModalReducer'
 export default combineReducers({
   auth,
   homePosts,
@@ -15,5 +15,6 @@ export default combineReducers({
   reportPostModal,
   sharePostModal,
   commentModal,
-  newChatModal
+  newChatModal,
+  logOutModal,
 });
