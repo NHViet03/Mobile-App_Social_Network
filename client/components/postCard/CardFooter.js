@@ -5,12 +5,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
 import LikeBtn from "../LikeBtn";
 import BookmarkBtn from "./BookmarkBtn";
-import { PostContext } from "../../app/(tabs)/home";
+import { PostContext } from "../../app/_layout";
 
 const CardFooter = ({ post }) => {
   const { handleOpenCommentModal, handleOpenSharePostModal } =
     useContext(PostContext);
-
+    
   const [isLike, setIsLike] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   const [readMore, setReadMore] = useState(false);

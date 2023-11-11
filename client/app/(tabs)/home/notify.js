@@ -21,6 +21,7 @@ const notify = () => {
       style={{
         backgroundColor: "#fff",
       }}
+      showsVerticalScrollIndicator={false}
     >
       <View className="mt-5 px-3 pb-3 border-b-borderColor border-b-[0.5px]">
         <Text className="text-base font-bold mb-4">30 ngày qua</Text>
@@ -49,6 +50,7 @@ const notify = () => {
           <FlatList
             data={suggestUser}
             scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <Pressable
                 key={index}

@@ -50,6 +50,7 @@ const ModalSharePost = () => {
         scrollEnabled={true}
         className="flex-1 my-2 "
         data={searchResult}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <Pressable
             key={index}

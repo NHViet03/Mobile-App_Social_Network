@@ -7,7 +7,7 @@ const initialState = {
         username: "xeesoxee",
         fullname: "Han So-hee",
         avatar:
-          "https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.15752-9/396615157_551338183844421_7619172125110417112_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHRW7uHlh5XjzitCTbdFZMzNrbJfkSOG9E2tsl-RI4b0WVQrhPu2d1BZkDLRHgyc2zz7803SxyQYdAJ1xZ0ZK2e&_nc_ohc=E8Nu3nNn5psAX9UeJCw&_nc_ht=scontent.fsgn5-10.fna&oh=03_AdQtxzBRmbH7kuTuJj88fJBfpWJArRRQU3jWCX4BDMA8_w&oe=6566D742",
+        "https://i.pinimg.com/564x/14/9a/e0/149ae0f72060755d652d4d09591c6691.jpg",
       },
       createdAt: "2023-11-9T07:08:08.000Z",
     },
@@ -18,7 +18,7 @@ const initialState = {
         username: "rohyoonseo",
         fullname: "Roh Yoon-seo",
         avatar:
-          "https://scontent.fsgn5-2.fna.fbcdn.net/v/t1.15752-9/396419820_887913802728349_2601651184966517625_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGJur1UcJHdQB6lcwM3ZLlPZ63kFHMYKDNnreQUcxgoMyk1ANCoNc1WEa1qkikaLrB3j5g3q_vlKdG02jJqlQR6&_nc_ohc=frgmMR08utkAX8RzkOi&_nc_ht=scontent.fsgn5-2.fna&oh=03_AdSfsBFgUYCi7toROjKHPqDdEXHRIeZBISSNOgvGpqobJg&oe=6566E1FA",
+        "https://i.pinimg.com/564x/20/92/2c/20922c29d6d7ec392068f4a924a5ebd6.jpg",
       },
       createdAt: "2023-11-9T07:08:08.000Z",
     },
@@ -41,7 +41,7 @@ const initialState = {
         username: "phs1116",
         fullname: "PARK HYUNGSIK",
         avatar:
-          "https://scontent.fsgn5-8.fna.fbcdn.net/v/t1.15752-9/394659218_1087699275929146_1726840625700674151_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeEEh8U0eNCfNj9jZso_tcwqSnwg7iJgOTFKfCDuImA5MRoIBO-Ip8bsLDV-d5Qug59T8UfGspJJ0eMfVvvWrpkS&_nc_ohc=kPZeMxIQctUAX-_b5rH&_nc_ht=scontent.fsgn5-8.fna&oh=03_AdS1qhet2-TpajuaYugcBOZ8pViStROqjkAsXAHvJNgvNw&oe=6568A5CB",
+        "https://i.pinimg.com/564x/1e/b0/22/1eb022bc5bc2be053ba0f363de7b75ad.jpg",
       },
       createdAt: "2023-11-8T07:08:08.000Z",
     },
