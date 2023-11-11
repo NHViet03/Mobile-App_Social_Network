@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import ModalNewChat from '../../../components/message/ModalNewChat';
 
 
-const index = () => {
+const message = () => {
   const bottomSheetModalNewChat = useRef(null);
   const dispatch = useDispatch();
 
@@ -141,7 +141,7 @@ const index = () => {
   )
 }
 
-export default index
+export default message
 
 const styles = StyleSheet.create({
   modal: {

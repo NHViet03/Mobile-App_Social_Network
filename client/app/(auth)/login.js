@@ -1,74 +1,101 @@
-import { Pressable, StyleSheet, Text, View, TextInput, Button, Image, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet, Text, View, TextInput, Button, Image, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import React, {useState} from "react";
 import { router } from "expo-router";
 
 
 const login = () => {
-  // const [passwordVisible, setPasswordVisible] = useState(true);
-  // const togglePasswordVisibility = () => {
-  //   setPasswordVisible(!password);
-  // }
-  const initialState = {
-    email: '',
-    password: '',
-  };
-  const [userData, setUserData] = useState(initialState);
-  const {email, password} = userData;
-  const handleChangeInput = (e) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const handleLogin = () => {
+    if (email && password) {
+      setIsButtonEnabled(true); // Kích hoạt TouchableOpacity khi email và password đã được nhập đầy đủ
+      navigation.replace('Home'); // Chuyển hướng tới trang "Home"
+    } else {
+      setIsButtonEnabled(false); // Vô hiệu hóa TouchableOpacity nếu có ít nhất một trường không được nhập
+    }
   };
   return (
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require("../../img/logo.png")}
+        source={require("../../assets/logo-2.png")}
 
       />
       <TextInput
         style={styles.input}
         placeholder="Email"
         name="email"
-       
+        value={email}
+        onChangeText={ (Text) => setEmail(Text)}
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Mật khẩu"
-        name="password"
-       
+     <View style ={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: "#EEEEEE",
+        borderRadius: 10,
+        backgroundColor: "#EEEEEE"
 
-        // secureTextEntry={passwordVisible}
-      />
-      {/* <TouchableOpacity onPress={togglePasswordVisibility}>
-        <Text style={styles.toggleVisibilityText}>
-          {passwordVisible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+      }}
+      >
+        <TextInput
+          style={{
+            padding: 10,
+          }}
+          placeholder="Mật khẩu"
+          name="password"
+          secureTextEntry={showPassword? false : true}
+          value={password}
+          onChangeText={ (Text) => setPassword(Text)}
+         
+        />
+        <Pressable
+              onPress={() => setShowPassword(!showPassword)}
+              style={{
+                marginRight: 20,
+              }}
+            >
+              <Text className="text-primary text-right"
+             
+              >
+                {showPassword ? "Ẩn" : "Hiển thị"}
+              </Text>
+            </Pressable>
+     </View>
+      <TouchableOpacity 
+      onPress={()=>router.replace('/(tabs)/home')} 
+
+      >
+        <Text 
+        style={styles.button_login }
+        >Đăng nhập
         </Text>
-      </TouchableOpacity> */}
-      <TouchableOpacity onPress={()=>router.replace('/(tabs)/home')} >
-        <Text style={styles.button_login}>Đăng nhập</Text>
        
-      </TouchableOpacity>
-       <Pressable onPress={() => router.replace("/register")}>
+      </TouchableOpacity>  
            <Text  style={styles.forgotpass} >Quên mật khẩu?</Text>
-      </Pressable>
       <View style={styles.seperate} >
           <Text style={styles.seperate_space}></Text>
           <Text style={styles.seperate_or}>OR</Text>
           <Text style={styles.seperate_space}></Text>
       </View>
-     
-      <TouchableOpacity style={styles.login_faceook}>
+
+      <Pressable style={styles.login_faceook}>
         <Image
         style={styles.logo_facebook}
         source={require("../../img/Facebook.png")}
         />
         <Text style={styles.button_login_facebook}>Đăng nhập với Facebook</Text>
-      </TouchableOpacity>
+      </Pressable>
       <View  style={styles.dont_have_account}>
       <Text style={styles.dont_have_account_text} >Bạn chưa có tài khoản?</Text>
       <Pressable onPress={() => router.replace("/register")}>
-        <Text style={styles.dont_have_account_register} >Đăng kí</Text>
+        <Text style={styles.dont_have_account_register} >Đăng ký</Text>
       </Pressable>
       </View>
      
@@ -89,8 +116,9 @@ const styles = StyleSheet.create({
     margin: 20,
     alignSelf: "center",
     marginBottom: 50,
+    marginLeft: 50,
     resizeMode: "contain",
-    width: 400,
+    width: 450,
     height: 100,
   },
   input:{
@@ -110,6 +138,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#fff",
     backgroundColor: "#C43302",
+    padding: 10,
+    borderRadius: 20,
+  },
+  button_login_disable:{
+    textAlign: "center",
+    color: "#fff",
+    backgroundColor: "#e6a893",
     padding: 10,
     borderRadius: 20,
   },
@@ -148,7 +183,6 @@ const styles = StyleSheet.create({
   },
   button_login_facebook:{
     color : "#3338b6",
-    marginLeft: 10,
   },
   dont_have_account:{
     marginTop: 120,

@@ -32,8 +32,12 @@ const index = () => {
           >
             <AntDesign name="hearto" size={24} color="black" />
           </Pressable>
-          <Pressable className="w-8">
+          <Pressable 
+          className="w-8" 
+          onPress={() => router.push("/home/message")}
+          >
             <Feather name="message-square" size={25} color="black" />
+          
           </Pressable>
         </View>
       </View>

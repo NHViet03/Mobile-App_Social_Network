@@ -5,6 +5,7 @@ import notify from './notifyReducer'
 import commentModal from './commentModalReducer'
 import reportPostModal from './reportPostModalReducer'
 import sharePostModal from './sharePostModalReducer'
+import newChatModal from  './newChatModalReducer'
 
 export default combineReducers({
   auth,
@@ -12,5 +13,7 @@ export default combineReducers({
   notify,
   commentModal,
   reportPostModal,
-  sharePostModal
+  sharePostModal,
+  commentModal,
+  newChatModal
 });
