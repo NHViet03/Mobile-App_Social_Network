@@ -7,7 +7,7 @@ import {
   Pressable,
 } from "react-native";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -16,14 +16,15 @@ import { Octicons } from "@expo/vector-icons";
 import Avatar from "../../../components/Avatar";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useCallback, useMemo, useRef } from "react";
-import { useDispatch } from "react-redux";
+
 import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
 import ModalLogOut from "../../../components/profile/ModalLogOut";
 import ModalMyPost from "../../../components/profile/ModalMyPost";
 
 const index = () => {
+  const auth=useSelector(state=>state.auth);
   const bottomSheetModalLogOut = useRef(null);
   const dispatch = useDispatch();
 
@@ -73,7 +74,7 @@ const index = () => {
                 fontWeight: "bold",
               }}
             >
-              _hoang.phuc.seiza_
+             {auth.username}
             </Text>
           </TouchableOpacity>
         </View>
@@ -123,7 +124,7 @@ const index = () => {
             >
               <Avatar
                 size="large"
-                avatar="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
+                avatar={auth.avatar}
               ></Avatar>
             </View>
 
@@ -136,7 +137,7 @@ const index = () => {
               }}
             >
               {" "}
-              Nguyễn Hoàng Phúc
+              {auth.fullname}
             </Text>
           </View>
           <View
@@ -161,12 +162,12 @@ const index = () => {
                   fontWeight: "bold",
                 }}
               >
-                12
+                {0}
               </Text>
               <Text>Bài viết</Text>
             </View>
             <TouchableOpacity
-            onPress={() => router.push("/profile/following")}
+              onPress={() => router.push("/profile/following")}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -180,7 +181,7 @@ const index = () => {
                   fontWeight: "bold",
                 }}
               >
-                765
+                {auth.followers.length}
               </Text>
               <Text
                 style={{
@@ -191,7 +192,7 @@ const index = () => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-             onPress={() => router.push("/profile/following")}
+              onPress={() => router.push("/profile/following")}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -205,7 +206,7 @@ const index = () => {
                   fontWeight: "bold",
                 }}
               >
-                860
+                {auth.following.length}
               </Text>
               <Text
                 style={{
@@ -323,7 +324,9 @@ const index = () => {
             </View>
           ) : (
             <View>
-              <Text><ModalMyPost /></Text>
+              <Text>
+                <ModalMyPost />
+              </Text>
             </View>
           )}
         </View>
