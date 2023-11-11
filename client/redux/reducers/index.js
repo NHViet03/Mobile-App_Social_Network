@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import auth from './authReducer'
+import alert from './alertReducer'
 import homePosts from './postReducer'
 import notify from './notifyReducer'
 import commentModal from './commentModalReducer'
@@ -9,6 +10,7 @@ import newChatModal from  './newChatModalReducer'
 
 export default combineReducers({
   auth,
+  alert,
   homePosts,
   notify,
   commentModal,

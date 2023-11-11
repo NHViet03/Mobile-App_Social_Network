@@ -5,14 +5,16 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const RegisterSecond = ({ userData, setUserData, setRegisterStep }) => {
-  const { birthday } = userData;
 
+const RegisterSecond = ({ userData, setUserData, setRegisterStep,handleRegister }) => {
+  const { birthday } = userData;
   const [show, setShow] = useState(false);
+
 
   const handleChangeDate = (event, selectedDate) => {
     setShow(false);
@@ -23,6 +25,9 @@ const RegisterSecond = ({ userData, setUserData, setRegisterStep }) => {
       birthday: currentDate,
     });
   };
+
+
+
   return (
     <View className="w-full items-center mb-10">
       <View>
@@ -36,7 +41,9 @@ const RegisterSecond = ({ userData, setUserData, setRegisterStep }) => {
         />
       </View>
       <View className="w-3/4">
-        <Text className="text-center font-medium text-base">Thêm ngày sinh</Text>
+        <Text className="text-center font-medium text-base">
+          Thêm ngày sinh
+        </Text>
         <Text className="text-center text-textColor text-xs">
           Thông tin này sẽ không hiển thị trên trang cá nhân công khai của bạn.
         </Text>
@@ -73,15 +80,18 @@ const RegisterSecond = ({ userData, setUserData, setRegisterStep }) => {
       </Pressable>
 
       <View className="w-3/4">
-        <Text className="text-center text-textColor text-xs">Bạn cần nhập ngày sinh của mình</Text>
         <Text className="text-center text-textColor text-xs">
-        Hãy thêm ngày sinh của chính bạn, dù đây là tài khoản dành cho doanh nghiệp, thú cưng hay bất cứ điều gì khác
+          Bạn cần nhập ngày sinh của mình
+        </Text>
+        <Text className="text-center text-textColor text-xs">
+          Hãy thêm ngày sinh của chính bạn, dù đây là tài khoản dành cho doanh
+          nghiệp, thú cưng hay bất cứ điều gì khác
         </Text>
       </View>
 
       <TouchableOpacity
         className="rounded-md w-3/4 bg-primary py-3 px-2 mb-3 mt-6"
-        onPress={() => setRegisterStep((preStep) => preStep + 1)}
+        onPress={() => handleRegister()}
       >
         <Text className="text-white text-center">Tiếp</Text>
       </TouchableOpacity>
