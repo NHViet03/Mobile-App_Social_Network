@@ -6,10 +6,32 @@ import { Entypo } from '@expo/vector-icons';
 import StoryList from '../../../components/home/StoryList';
 import { EvilIcons } from '@expo/vector-icons';
 import Avatar from '../../../components/Avatar';
+import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
 import UserChat from '../../../components/message/UserChat';
+import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useCallback, useMemo, useRef } from "react";
+import { useDispatch } from "react-redux";
+import ModalNewChat from '../../../components/message/ModalNewChat';
 
 
 const index = () => {
+  const bottomSheetModalNewChat = useRef(null);
+  const dispatch = useDispatch();
+
+  const snapPointsNewChat = useMemo(() => ["25%", "50%", "95%"], []);
+
+  const handleOpenNewChatModal = useCallback(() => {
+    bottomSheetModalNewChat.current?.present();
+  }, []);
+
+  const handleCloseNewChatModal = () => {
+    dispatch({
+      type: GLOBAL_TYPES.NEWCHAT_MODAL,
+      payload: false,
+    });
+    bottomSheetModalNewChat.current?.dismiss();
+  };
+
   return (
    <View
     style={{
@@ -47,7 +69,7 @@ const index = () => {
           <Entypo 
           name="new-message" 
           size={24} color="black" 
-            
+          onPress={handleOpenNewChatModal}
           />
        </TouchableOpacity>
        
@@ -100,10 +122,37 @@ const index = () => {
           <UserChat/>
           <UserChat/>
         </ScrollView>
+      <BottomSheetModal
+        ref={bottomSheetModalNewChat}
+        index={2}
+        snapPoints={snapPointsNewChat}
+        backgroundStyle={styles.modal}
+        onDismiss={() => handleCloseNewChatModal()}
+        onChange={(index) => {
+          if (index === 0) {
+            handleCloseNewChatModal();
+          }
+        }}
+      >
+        <ModalNewChat/>
+      </BottomSheetModal>
    </View>
+   
   )
 }
 
 export default index
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  modal: {
+    borderRadius:12,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 6,
+    elevation: 20,
+  },
+})

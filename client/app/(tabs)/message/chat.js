@@ -28,7 +28,7 @@ import * as ImagePicker from 'expo-image-picker';
 const chat = () => {
     // Alert
     const ReportMessageAlert = () =>
-    Alert.alert('Tùy chọn tin nhắn', 'Bạn gặp vấn đề gì vậy?', [
+    Alert.alert('Tùy chọn đoạn chat', 'Bạn cần trợ giúp gì?', [
       {
         text: 'Xóa tin nhắn',
         onPress: () => console.log('Ask me later pressed'),
@@ -56,7 +56,7 @@ const chat = () => {
         if (!result.canceled) {
           console.log(result);
         } else {
-            Alert.alert('Có lẽ bạn quên?', 'Bạn chưa chọn tin nhắn nào')
+            console.log("Cancelled");
         }
       };
   return (
