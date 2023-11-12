@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, Pressable, TouchableOpacity, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { router } from 'expo-router';
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  Pressable,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 
 const Index = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -36,33 +44,33 @@ const Index = () => {
   return (
     <View
       style={{
-        display: 'flex',
+        display: "flex",
         flex: 1,
-        flexDirection: 'column',
-        backgroundColor: '#fff',
+        flexDirection: "column",
+        backgroundColor: "#fff",
       }}
     >
       <View
         style={{
           paddingHorizontal: 10,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexDirection: 'row',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexDirection: "row",
           height: 50,
           marginTop: StatusBar.currentHeight,
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
           marginBottom: 10,
         }}
       >
-        <Pressable onPress={() => router.push('/home')}>
+        <Pressable onPress={() => router.push("/home")}>
           <Ionicons name="chevron-back-outline" size={24} color="black" />
         </Pressable>
         <View>
           <Text
             style={{
               fontSize: 20,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             }}
           >
             Tạo bài viết mới
@@ -76,8 +84,8 @@ const Index = () => {
           <Text
             style={{
               fontSize: 18,
-              fontWeight: 'bold',
-              color: '#edaa25',
+              fontWeight: "bold",
+              color: "#c43302",
             }}
             onPress={() => router.push("/add/newPost")}
           >
@@ -87,56 +95,63 @@ const Index = () => {
       </View>
       <View
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: 40,
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         {selectedImage ? (
           <Image
             style={{
-              width: 200,
-              height: 200,
+              width: "100%",
+              minHeight:350,
+              height:'100%',
+              maxHeight:500,
+              borderRadius:4,
+              objectFit: "cover",
             }}
             source={{ uri: selectedImage }}
           />
         ) : (
-          <Image
-            style={{
-              width: 200,
-              height: 200,
-            }}
-            source={require('../../../assets/UploadPhoto.png')}
-          />
+          <View>
+            <Image
+              style={{
+                width: 200,
+                height: 200,
+                objectFit: "cover",
+              }}
+              source={require("../../../assets/UploadPhoto.png")}
+            />
+          </View>
         )}
-      </View>
-      <TouchableOpacity
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingVertical: 10,
-          backgroundColor: '#c43302',
-          borderRadius: 30,
-          marginStart: 40,
-          marginEnd: 40,
-        }}
-        onPress={pickImageAsync}
-      >
-        <Ionicons name="image" size={24} color="#fff" />
-        <Text
+        <TouchableOpacity
           style={{
-            marginLeft: 10,
-            fontSize: 16,
-            fontWeight: 'bold',
-            color: '#fff',
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingVertical: 12,
+            paddingHorizontal: 12,
+            backgroundColor: "#c43302",
+            borderRadius: 12,
+            marginHorizontal: 40,
+            marginTop: 20,
           }}
+          onPress={pickImageAsync}
         >
-          Chọn từ thiết bị của bạn
-        </Text>
-      </TouchableOpacity>
+          <Ionicons name="image" size={24} color="#fff" />
+          <Text
+            style={{
+              marginLeft: 10,
+              fontSize: 16,
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+          >
+            Chọn từ thiết bị của bạn
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

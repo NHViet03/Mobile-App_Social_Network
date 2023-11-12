@@ -1,20 +1,23 @@
-import React, {useState} from "react";
-import { View, Text, TextInput } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { View, Text, TextInput, Pressable, StatusBar } from "react-native";
+import {
+  MaterialIcons,
+  AntDesign,
+  Ionicons,
+  Feather,
+} from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
-import Avatar from "../../../components/Avatar";
-import { AntDesign } from "@expo/vector-icons";
-import { StatusBar } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
 import CheckBox from "react-native-check-box";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
+import { useSelector } from "react-redux";
+import Avatar from "../../../components/Avatar";
 
 const editProfile = () => {
-   // Images camera
-   const pickImageAsync = async () => {
+  const auth = useSelector((state) => state.auth);
+
+  // Images camera
+  const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
@@ -23,7 +26,7 @@ const editProfile = () => {
     if (!result.canceled) {
       console.log(result);
     } else {
-        console.log("Cancelled");
+      console.log("Cancelled");
     }
   };
   // Radio Checkbox
@@ -67,21 +70,20 @@ const editProfile = () => {
             justifyContent: "center",
           }}
         >
-          <Text style={{ fontSize: 19, fontWeight: "bold" }}
-          >
+          <Text style={{ fontSize: 19, fontWeight: "bold" }}>
             Chỉnh sửa trang cá nhân
           </Text>
         </View>
         <TouchableOpacity>
           <Text
-          onPress={() => router.push("/profile")}
-          style={{
-            fontSize: 17,
-            fontWeight: "bold",
-            color: "#0095f6",
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-          }}
+            onPress={() => router.push("/profile")}
+            style={{
+              fontSize: 17,
+              fontWeight: "bold",
+              color: "#c43302",
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+            }}
           >
             Lưu
           </Text>
@@ -99,15 +101,12 @@ const editProfile = () => {
         }}
         onPress={pickImageAsync}
       >
-        <Avatar
-          size="large"
-          avatar="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
-        />
+        <Avatar size="large" avatar={auth.avatar} />
         <Text
           style={{
             fontSize: 15,
             fontWeight: "bold",
-            color: "#0095f6",
+            color: "#c43302",
             marginTop: 10,
             marginBottom: 10,
           }}
@@ -137,14 +136,14 @@ const editProfile = () => {
         <TextInput
           style={{
             padding: 7,
-            fontStyle: "italic",
+            fontSize: 16,
             marginLeft: 85,
-            fontWeight: "bold",
+            fontWeight: "400",
             flex: 1,
             alignItems: "center",
           }}
         >
-          Nguyễn Hoàng Phúc
+          {auth.fullname}
         </TextInput>
       </View>
       <View
@@ -170,14 +169,14 @@ const editProfile = () => {
         <TextInput
           style={{
             padding: 7,
-            fontStyle: "italic",
+            fontSize: 16,
             marginLeft: 40,
-            fontWeight: "bold",
+            fontWeight: "400",
             flex: 1,
             alignItems: "center",
           }}
         >
-          _hoang.phuc.seiza_
+          {auth.username}
         </TextInput>
       </View>
       <View
@@ -208,15 +207,23 @@ const editProfile = () => {
             gap: 10,
           }}
         >
-          <Text>Nam</Text>
+          <Text
+            style={{
+              fontWeight: "400",
+              fontSize: 16,
+            }}
+          >
+            Nam
+          </Text>
           <CheckBox
-          isChecked={isMaleChecked}
-          onClick={()=>{
-            setIsMaleChecked(!isMaleChecked)
-            if(isFemaleChecked){
-              setIsFemaleChecked(!isFemaleChecked)
-            }
-          }}
+            checkBoxColor="#c43302"
+            isChecked={isMaleChecked}
+            onClick={() => {
+              setIsMaleChecked(!isMaleChecked);
+              if (isFemaleChecked) {
+                setIsFemaleChecked(!isFemaleChecked);
+              }
+            }}
           />
         </View>
         <View
@@ -228,15 +235,23 @@ const editProfile = () => {
             gap: 10,
           }}
         >
-          <Text>Nữ</Text>
+          <Text
+            style={{
+              fontWeight: "400",
+              fontSize: 16,
+            }}
+          >
+            Nữ
+          </Text>
           <CheckBox
-          isChecked={isFemaleChecked}
-          onClick={()=>{
-            setIsFemaleChecked(!isFemaleChecked)
-            if(isMaleChecked){
-              setIsMaleChecked(false)
-            }
-          }}
+            checkBoxColor="#c43302"
+            isChecked={isFemaleChecked}
+            onClick={() => {
+              setIsFemaleChecked(!isFemaleChecked);
+              if (isMaleChecked) {
+                setIsMaleChecked(false);
+              }
+            }}
           />
         </View>
       </View>

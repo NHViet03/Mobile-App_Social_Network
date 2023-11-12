@@ -1,16 +1,9 @@
 import React from "react";
-import { View, Text, TextInput } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { View, Text, TextInput, StatusBar, Pressable } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
-import Avatar from "../../../components/Avatar";
-import { AntDesign } from "@expo/vector-icons";
-import { StatusBar } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import CheckBox from "react-native-check-box";
-import * as ImagePicker from "expo-image-picker";
+
 const changePasswork = () => {
   return (
     <View
@@ -57,8 +50,9 @@ const changePasswork = () => {
         style={{
           fontSize: 15,
           fontWeight: 400,
-          marginBottom: 20,
-          paddingHorizontal: 10,
+          marginTop: 12,
+          marginBottom: 24,
+          paddingHorizontal: 12,
         }}
       >
         Mật khẩu của bạn phải có ít nhất 6 ký tự, bao gồm cả chữ và số, chữ cái
@@ -66,40 +60,37 @@ const changePasswork = () => {
       </Text>
       <TextInput
         style={{
-          paddingHorizontal: 10,
+          paddingHorizontal: 16,
           paddingVertical: 10,
-          marginStart: 10,
-          marginEnd: 10,
+          marginHorizontal: 12,
           borderWidth: 1,
           borderRadius: 10,
           borderColor: "#DDDDDD",
-          marginBottom: 10,
+          marginBottom: 16,
         }}
         placeholder="Mật khẩu hiện tại"
       />
       <TextInput
         style={{
-          paddingHorizontal: 10,
+          paddingHorizontal: 12,
           paddingVertical: 10,
-          marginStart: 10,
-          marginEnd: 10,
+          marginHorizontal: 12,
           borderWidth: 1,
           borderRadius: 10,
           borderColor: "#DDDDDD",
-          marginBottom: 10,
+          marginBottom: 16,
         }}
         placeholder="Mật khẩu mới"
       />
       <TextInput
         style={{
-          paddingHorizontal: 10,
+          paddingHorizontal: 16,
           paddingVertical: 10,
-          marginStart: 10,
-          marginEnd: 10,
+          marginHorizontal: 12,
           borderWidth: 1,
           borderRadius: 10,
           borderColor: "#DDDDDD",
-          marginBottom: 10,
+          marginBottom: 16,
         }}
         placeholder="Nhập lại mật khẩu"
       />
@@ -108,36 +99,37 @@ const changePasswork = () => {
           style={{
             fontSize: 15,
             fontWeight: 400,
-            marginBottom: 280,
-            fontWeight: "bold",
-            color: "#EDAA25",
+            marginBottom: 64,
+            fontWeight: "500",
+            color: "#c43302",
             paddingHorizontal: 10,
-            marginStart: 10,
+            marginStart: 12,
           }}
         >
           Bạn quên mật khẩu ư?
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-      onPress={()=> router.push("/profile")}
-      style={{
-        backgroundColor: "#c43302",
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 30,
-        alignItems: "center",
-        marginStart: 10,
-        marginEnd: 10,
-        borderRadius: 20,
-      }}
+        onPress={() => router.push("/profile")}
+        style={{
+          backgroundColor: "#c43302",
+          borderRadius: 5,
+          paddingVertical: 10,
+          paddingHorizontal: 30,
+          alignItems: "center",
+          marginHorizontal: 12,
+          borderRadius: 12,
+        }}
       >
         <Text
-        style={{
-          fontSize: 15,
-          fontWeight: 600,
-          color: "#fff",
-        }}
-        >Xác nhận</Text>
+          style={{
+            fontSize: 16,
+            fontWeight: 600,
+            color: "#fff",
+          }}
+        >
+          Xác nhận
+        </Text>
       </TouchableOpacity>
     </View>
   );

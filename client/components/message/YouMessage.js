@@ -40,7 +40,7 @@ const YouMessage = ({ text, image }) => {
             borderColor: '#dc8567',
           }}
         >
-          <Image source={{ uri: image }} style={{ minWidth: 100, minHeight: 100 }} />
+          <Image source={{ uri: image }} style={{width:150, height:180, borderRadius:12}} />
         </View>
       )}
     </View>

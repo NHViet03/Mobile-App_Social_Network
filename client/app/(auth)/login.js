@@ -10,6 +10,7 @@ import {
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { useDispatch } from "react-redux";
+import { FontAwesome5 } from '@expo/vector-icons';
 import { loginAction } from "../../redux/actions/authAction";
 import ModalAlert from "../../components/ModalAlert";
 
@@ -91,11 +92,8 @@ const login = () => {
         <Text style={styles.seperate_space}></Text>
       </View>
 
-      <Pressable style={styles.login_faceook}>
-        <Image
-          style={styles.logo_facebook}
-          source={require("../../img/Facebook.png")}
-        />
+      <Pressable style={styles.login_facebook}>
+        <FontAwesome5 name="facebook" size={30} color="#3338b6" />
         <Text style={styles.button_login_facebook}>Đăng nhập với Facebook</Text>
       </Pressable>
       <View style={styles.dont_have_account}>
@@ -130,9 +128,9 @@ const styles = StyleSheet.create({
     height: 100,
   },
   input: {
-    padding: 10,
+    padding: 12,
     marginHorizontal:20,
-    marginBottom: 10,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: "#EEEEEE",
     borderRadius: 10,
@@ -147,8 +145,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#fff",
     backgroundColor: "#C43302",
-    padding: 10,
-    borderRadius: 20,
+    padding: 12,
+    borderRadius: 12,
+    marginTop:24
   },
   button_login_disable: {
     textAlign: "center",
@@ -173,17 +172,18 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   seperate_space: {
-    backgroundColor: "#EEEEEE",
+    backgroundColor: '#d9d9d9',
     width: 150,
-    height: 1,
+    height: 1.5,
   },
   seperate_or: {
     color: "#6D6D6D",
   },
-  login_faceook: {
+  login_facebook: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 70,
+    justifyContent:'center',
+   
   },
   logo_facebook: {
     width: 30,
@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
   },
   button_login_facebook: {
     color: "#3338b6",
+    marginLeft: 10,
   },
   dont_have_account: {
     marginTop: 120,
@@ -206,5 +207,6 @@ const styles = StyleSheet.create({
   },
   dont_have_account_register: {
     color: "#C43302",
+    fontWeight:'500'
   },
 });
