@@ -55,14 +55,15 @@ const index = () => {
   return (
     <View
       style={{
-        marginTop: StatusBar.currentHeight,
         width: "100%",
         height: "100%",
         backgroundColor: "#fff",
         position: "relative",
       }}
     >
-      <Pressable className="flex-row items-center mx-3 mt-3 mb-3">
+      <Pressable className="flex-row items-center mx-3 mt-3 mb-3" style={{
+        marginTop:StatusBar.currentHeight+12
+      }}>
         {isOpenSearch && (
           <Pressable className="ml-2 mr-3" onPress={handleBack}>
             <MaterialIcons name="keyboard-backspace" size={30} color="black" />
