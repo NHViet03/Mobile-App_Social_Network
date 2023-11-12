@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
 import Avatar from "../../../components/Avatar";
 import { AntDesign } from "@expo/vector-icons";
@@ -12,13 +12,15 @@ import { Feather } from "@expo/vector-icons";
 import CheckBox from "react-native-check-box";
 import { useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { followerCard } from "../../../components/profile/followerCard";
+import FollowerCard from "../../../components/profile/followerCard";
+import FollowingCard from "../../../components/profile/followingCard";
 
 const following = () => {
-    const [selectedfollow, setselectedfollow] = useState("following");
-    const handleIconPress = (follow) => {
-        setselectedfollow(follow);
-    };
+  const [selectedfollow, setselectedfollow] = useState("following");
+  const handleIconPress = (follow) => {
+    setselectedfollow(follow);
+  };
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View
       style={{
@@ -57,61 +59,116 @@ const following = () => {
             justifyContent: "center",
           }}
         >
-          <Text style={{ fontSize: 19, fontWeight: "bold" }}
-          >
-             _hoang.phuc.seiza_
+          <Text style={{ fontSize: 19, fontWeight: "bold" }}>
+            _hoang.phuc.seiza_
           </Text>
         </View>
-        </View>
-        <View
+      </View>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <TouchableOpacity
           style={{
-            display: "flex",
-            flexDirection: "row",
+            paddingHorizontal: 50,
+            paddingBottom: 10,
+            borderBottomWidth: 1,
+            borderColor: selectedfollow === "following" ? "#000000" : "#DDDDDD",
           }}
+          onPress={() => handleIconPress("following")}
         >
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 50,
-              paddingBottom: 10,
-              borderBottomWidth: 1,
-              borderColor: selectedfollow === "following" ? "#000000" : "#DDDDDD",
-            }}
-            onPress={() => handleIconPress("following")}
-          >
           <Text
-          style={{
-            fontSize: 13,
-            fontWeight: 600,
-            color: selectedfollow === "following" ? "#000000" : "#DDDDDD",
-          }}
-          >Người theo dõi</Text>
-          
-          </TouchableOpacity>
-          <TouchableOpacity
             style={{
-              paddingHorizontal: 50,
-              borderBottomWidth: 1,
-              borderColor: selectedfollow === "follower" ? "#000000" : "#DDDDDD",
-              paddingBottom: 10,
+              fontSize: 13,
+              fontWeight: 600,
+              color: selectedfollow === "following" ? "#000000" : "#DDDDDD",
             }}
-            onPress={() => handleIconPress("follower")}
           >
-               <Text
+            Người theo dõi
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={{
-            fontSize: 13,
-            fontWeight: 600,
-            color: selectedfollow === "follower" ? "#000000" : "#DDDDDD",
+            paddingHorizontal: 50,
+            borderBottomWidth: 1,
+            borderColor: selectedfollow === "follower" ? "#000000" : "#DDDDDD",
+            paddingBottom: 10,
           }}
-          >Đang theo dõi</Text>
-          
-          </TouchableOpacity>
-        </View>
-        <View>
-            {selectedfollow === "following" ? 
-            <Text>Đang theo dõi</Text>  :
-            <Text>Đang theo dõi</Text> 
-            }
-        </View>
+          onPress={() => handleIconPress("follower")}
+        >
+          <Text
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: selectedfollow === "follower" ? "#000000" : "#DDDDDD",
+            }}
+          >
+            Đang theo dõi
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        {selectedfollow === "following" ? (
+          <View>
+            <ScrollView>
+              <Text
+                style={{
+                  marginStart: 10,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  fontSize: 15,
+                  fontWeight: "bold",
+                }}
+              >
+                Tất cả người theo dõi
+              </Text>
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              <FollowerCard  />
+              {/* Modal Alert */}
+
+            </ScrollView>
+          </View>
+        ) : (
+          <View>
+            <ScrollView>
+              <Text
+                style={{
+                  marginStart: 10,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  fontSize: 15,
+                  fontWeight: "bold",
+                }}
+              >
+                Bạn theo dõi
+              </Text>
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+              <FollowingCard />
+            </ScrollView>
+          </View>
+        )}
+      </View>
     </View>
   );
 };

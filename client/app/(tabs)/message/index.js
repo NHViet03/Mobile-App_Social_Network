@@ -12,6 +12,7 @@ import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useCallback, useMemo, useRef } from "react";
 import { useDispatch } from "react-redux";
 import ModalNewChat from '../../../components/message/ModalNewChat';
+import StoryListMessage from '../../../components/message/StoryListMessage';
 
 
 const index = () => {
@@ -108,7 +109,7 @@ const index = () => {
       marginBottom: 5,
      }}
      >
-      <StoryList />
+      <StoryListMessage />
       </View>
         {/* User Chat */}
        <ScrollView >

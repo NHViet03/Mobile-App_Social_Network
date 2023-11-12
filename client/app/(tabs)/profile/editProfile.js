@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Text, TextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -11,6 +11,7 @@ import { Pressable } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import CheckBox from "react-native-check-box";
 import * as ImagePicker from 'expo-image-picker';
+
 const editProfile = () => {
    // Images camera
    const pickImageAsync = async () => {
@@ -25,6 +26,9 @@ const editProfile = () => {
         console.log("Cancelled");
     }
   };
+  // Radio Checkbox
+  const [isMaleChecked, setIsMaleChecked] = useState(true);
+  const [isFemaleChecked, setIsFemaleChecked] = useState(false);
   return (
     <View
       style={{
@@ -68,6 +72,20 @@ const editProfile = () => {
             Chỉnh sửa trang cá nhân
           </Text>
         </View>
+        <TouchableOpacity>
+          <Text
+          onPress={() => router.push("/profile")}
+          style={{
+            fontSize: 17,
+            fontWeight: "bold",
+            color: "#0095f6",
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+          }}
+          >
+            Lưu
+          </Text>
+        </TouchableOpacity>
       </View>
       {/* Chỉnh sửa ảnh  */}
       <TouchableOpacity
@@ -192,6 +210,13 @@ const editProfile = () => {
         >
           <Text>Nam</Text>
           <CheckBox
+          isChecked={isMaleChecked}
+          onClick={()=>{
+            setIsMaleChecked(!isMaleChecked)
+            if(isFemaleChecked){
+              setIsFemaleChecked(!isFemaleChecked)
+            }
+          }}
           />
         </View>
         <View
@@ -205,6 +230,13 @@ const editProfile = () => {
         >
           <Text>Nữ</Text>
           <CheckBox
+          isChecked={isFemaleChecked}
+          onClick={()=>{
+            setIsFemaleChecked(!isFemaleChecked)
+            if(isMaleChecked){
+              setIsMaleChecked(false)
+            }
+          }}
           />
         </View>
       </View>
