@@ -34,7 +34,7 @@ const index = () => {
           </Pressable>
           <Pressable 
           className="w-8" 
-          onPress={() => router.push("/home/message")}
+          onPress={() => router.push("/message")}
           >
             <Feather name="message-square" size={25} color="black" />
           

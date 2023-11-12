@@ -10,6 +10,7 @@ import {
 import UserChat from "./UserChat";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
+import UserList from "./UserList";
   
   const ModalNewChat = () => {
     return (
@@ -65,19 +66,25 @@ import { router } from "expo-router";
           }}
         >Gợi ý</Text>
         
-        <ScrollView>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-          <UserChat/>
-        </ScrollView> 
+  
+          <ScrollView>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/>
+            <UserList/> 
+            <UserList/>
+            <UserList/>
+          </ScrollView> 
+      
         <TouchableOpacity
         style={{
           backgroundColor: "#C43302",

@@ -108,7 +108,7 @@ const changePasswork = () => {
           style={{
             fontSize: 15,
             fontWeight: 400,
-            marginBottom: 270,
+            marginBottom: 280,
             fontWeight: "bold",
             color: "#EDAA25",
             paddingHorizontal: 10,
@@ -119,8 +119,9 @@ const changePasswork = () => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
+      onPress={()=> router.push("/profile")}
       style={{
-        backgroundColor: "#FF0000",
+        backgroundColor: "#c43302",
         borderRadius: 5,
         paddingVertical: 10,
         paddingHorizontal: 30,
