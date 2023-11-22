@@ -8,12 +8,12 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { Image } from "react-native";
-import DataProvider from "../../redux/store";
 import { useSelector } from "react-redux";
-import React, { useState, useEffect } from "react";
+import React from "react";
+import Avatar from "../../components/Avatar";
 
 export default function Layout() {
-  const { auth } = useSelector((state) => state);
+  const auth = useSelector((state) => state.auth);
   return (
     <Tabs
       screenOptions={{
@@ -82,37 +82,22 @@ export default function Layout() {
           tabBarIcon: ({ focused }) =>
             auth.avatar ? (
               focused ? (
-                <Image
-                  source={{ uri: auth.avatar }}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 15,
-                    objectFit:'contain',
-                    borderWidth: 2,
-                    padding: 1,
-                    borderColor: "#000",
-                  }}
-                />
+                <Avatar avatar={auth.avatar} size="small" primary />
               ) : (
-                <Image
-                  source={{ uri: auth.avatar }}
-                  style={{
-                    width: 26,
-                    height: 26,
-                    borderRadius:13 ,
-                    objectFit:'contain',
-                    borderWidth: 1,
-                    padding: 1,
-                    borderColor: "#d9d9d9",
-                  }}
-                />
+                <Avatar avatar={auth.avatar} size="small" />
               )
             ) : (
               <FontAwesome name="user-o" size={25} color="black" />
             ),
         }}
       />
+      <Tabs.Screen
+        name="userProfile"
+        options={{
+          href:null
+        }}
+      />
+      
     </Tabs>
   );
 }
