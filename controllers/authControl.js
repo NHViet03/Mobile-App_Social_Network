@@ -15,7 +15,7 @@ const authControl = {
 
       const user_email = await Users.findOne({ email });
       if (user_email) {
-        return res.status(400).json({ msg: `Rất tiếc, email ${newUserName} đã được người dùng khác đăng ký. Bạn vui lòng chọn một email chưa được đăng ký.`});
+        return res.status(400).json({ msg: `Rất tiếc, email ${email} đã được người dùng khác đăng ký. Bạn vui lòng chọn một email chưa được đăng ký.`});
       }
 
       const passwordHash = await bcrypt.hash(password, 12);

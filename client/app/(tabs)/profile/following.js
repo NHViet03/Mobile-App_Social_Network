@@ -1,21 +1,23 @@
-import React from "react";
-import { View, Text, TextInput } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import React, { useState } from "react";
+import { View, Text, Pressable, StatusBar } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-virtualized-view";
 import { router } from "expo-router";
+import {
+  AntDesign,
+  MaterialIcons,
+  Feather,
+  MaterialCommunityIcons,
+  Ionicons,
+} from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 import Avatar from "../../../components/Avatar";
-import { AntDesign } from "@expo/vector-icons";
-import { StatusBar } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import CheckBox from "react-native-check-box";
-import { useState } from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import FollowerCard from "../../../components/profile/followerCard";
 import FollowingCard from "../../../components/profile/followingCard";
 
 const following = () => {
+  const auth = useSelector((state) => state.auth);
+
   const [selectedfollow, setselectedfollow] = useState("following");
   const handleIconPress = (follow) => {
     setselectedfollow(follow);
@@ -60,7 +62,7 @@ const following = () => {
           }}
         >
           <Text style={{ fontSize: 19, fontWeight: "bold" }}>
-            _hoang.phuc.seiza_
+            {auth.username}
           </Text>
         </View>
       </View>
@@ -68,85 +70,97 @@ const following = () => {
         style={{
           display: "flex",
           flexDirection: "row",
+          justifyContent: "space-between",
+          marginTop:16,
+          marginBottom:16
         }}
       >
-        <TouchableOpacity
-          style={{
-            paddingHorizontal: 50,
-            paddingBottom: 10,
-            borderBottomWidth: 1,
-            borderColor: selectedfollow === "following" ? "#000000" : "#DDDDDD",
-          }}
-          onPress={() => handleIconPress("following")}
-        >
-          <Text
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity
             style={{
-              fontSize: 13,
-              fontWeight: 600,
-              color: selectedfollow === "following" ? "#000000" : "#DDDDDD",
+              justifyContent:'center',
+              alignItems:'center',
+              paddingHorizontal: 50,
+              paddingBottom: 10,
+              borderBottomWidth: 1,
+              borderColor:
+                selectedfollow === "following" ? "#000000" : "#DDDDDD",
             }}
+            onPress={() => handleIconPress("following")}
           >
-            Người theo dõi
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            paddingHorizontal: 50,
-            borderBottomWidth: 1,
-            borderColor: selectedfollow === "follower" ? "#000000" : "#DDDDDD",
-            paddingBottom: 10,
-          }}
-          onPress={() => handleIconPress("follower")}
-        >
-          <Text
+            <Text
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: selectedfollow === "following" ? "#000000" : "#DDDDDD",
+              }}
+            >
+              Người theo dõi
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity
             style={{
-              fontSize: 13,
-              fontWeight: 600,
-              color: selectedfollow === "follower" ? "#000000" : "#DDDDDD",
+              justifyContent:'center',
+              alignItems:'center',
+              paddingHorizontal: 50,
+              borderBottomWidth: 1,
+              borderColor:
+                selectedfollow === "follower" ? "#000000" : "#DDDDDD",
+              paddingBottom: 10,
             }}
+            onPress={() => handleIconPress("follower")}
           >
-            Đang theo dõi
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: selectedfollow === "follower" ? "#000000" : "#DDDDDD",
+              }}
+            >
+              Đang theo dõi
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View>
         {selectedfollow === "following" ? (
-          <View>
-            <ScrollView>
+      
+            <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom:20}}>
               <Text
                 style={{
-                  marginStart: 10,
-                  marginTop: 10,
-                  marginBottom: 10,
+                  marginStart: 12,
+                  marginTop: 12,
+                  marginBottom: 12,
                   fontSize: 15,
                   fontWeight: "bold",
                 }}
               >
                 Tất cả người theo dõi
               </Text>
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
-              <FollowerCard  />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
+              <FollowerCard />
               {/* Modal Alert */}
-
             </ScrollView>
-          </View>
+         
         ) : (
-          <View>
-            <ScrollView>
+        
+            <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom:20}}> 
               <Text
                 style={{
-                  marginStart: 10,
-                  marginTop: 10,
-                  marginBottom: 10,
+                  marginStart: 12,
+                  marginTop: 12,
+                  marginBottom: 12,
                   fontSize: 15,
                   fontWeight: "bold",
                 }}
@@ -166,7 +180,7 @@ const following = () => {
               <FollowingCard />
               <FollowingCard />
             </ScrollView>
-          </View>
+      
         )}
       </View>
     </View>

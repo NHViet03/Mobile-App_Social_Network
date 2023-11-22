@@ -6,21 +6,19 @@ import {
   StatusBar,
   Pressable,
   TouchableOpacity,
-  ScrollView,
   Image,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
+import { ScrollView } from "react-native-virtualized-view";
 import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import Avatar from "../../../components/Avatar";
-import Feather from "@expo/vector-icons/Feather";
-import OtherMessage from "../../../components/message/OtherMessage";
-import YouMessage from "../../../components/message/YouMessage";
+import { Ionicons, Entypo, Feather } from "@expo/vector-icons";
 import EmojiSelector from "react-native-emoji-selector";
 import { FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { Alert } from "react-native";
+import OtherMessage from "../../../components/message/OtherMessage";
+import YouMessage from "../../../components/message/YouMessage";
+import Avatar from "../../../components/Avatar";
 
 const chat = () => {
   // Alert
@@ -77,10 +75,18 @@ const chat = () => {
   const renderSelectedImage = () => {
     if (selectedImage) {
       return (
-        <Image
-          source={{ uri: selectedImage }}
-          style={{ width: 100, height: 100, marginBottom: 20 }}
-        />
+        <View
+          style={{
+            position: "absolute",
+            right: 12,
+            top:-10
+          }}
+        >
+          <Image
+            source={{ uri: selectedImage }}
+            style={{ width: 50, height: 50, borderRadius: 4 }}
+          />
+        </View>
       );
     }
     return null;
@@ -109,13 +115,12 @@ const chat = () => {
         }}
       >
         <Pressable onPress={() => router.push("/message")}>
-          <Ionicons name="chevron-back-outline" size={24} color="black" />
+          <Ionicons name="chevron-back-outline" size={28} color="black" />
         </Pressable>
-        <View>
+        <View style={{ flex: 1 }}>
           <TouchableOpacity
             onPress={() => router.push("/message/chat")}
             style={{
-              display: "flex",
               flexDirection: "row",
               alignItems: "center",
               paddingHorizontal: 10,
@@ -151,7 +156,7 @@ const chat = () => {
         </View>
         <TouchableOpacity
           style={{
-            marginLeft: 65,
+            marginRight: 12,
           }}
           onPress={ReportMessageAlert}
         >
@@ -159,7 +164,7 @@ const chat = () => {
         </TouchableOpacity>
       </View>
       {/* Message chat */}
-      <ScrollView>
+      <ScrollView style={{ marginTop: 12 }}>
         <OtherMessage />
         {messages.map((msg) =>
           msg.type === "You" ? (
@@ -173,7 +178,6 @@ const chat = () => {
       <View
         style={{
           display: "flex",
-          paddingTop: 10,
           borderTopColor: "#EEEEEE",
           backgroundColor: "#fff",
         }}
@@ -185,10 +189,11 @@ const chat = () => {
             display: "flex",
             alignItems: "center",
             flexDirection: "row",
-            height: 40,
+            height: 50,
             marginBottom: 10,
             backgroundColor: "#EEEEEE",
             borderRadius: 30,
+            position: "relative",
           }}
         >
           <Entypo
@@ -202,9 +207,10 @@ const chat = () => {
             style={{
               flex: 1,
               fontSize: 16,
-              borderRadius: 10,
+              borderRadius: 8,
               borderColor: "#fff",
               marginStart: 10,
+              
             }}
           >
             {renderSelectedImage()}

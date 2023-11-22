@@ -12,8 +12,9 @@ const StoryListMessage = () => {
     <FlatList
       data={users}
       horizontal={true}
+      
       showsHorizontalScrollIndicator={false}
-      className="pb-2 border-borderColor border-b-[0.5px] mx-[6px]"
+      className="pb-2  mx-[6px]"
       renderItem={({ item, index }) => (
         <Pressable className="mx-[6px]" onPress={() =>
           router.push("/profile/otherProfile")

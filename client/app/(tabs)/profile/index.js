@@ -1,20 +1,16 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  StatusBar,
-  Pressable,
-} from "react-native";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
+import { ScrollView } from "react-native-virtualized-view";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { Octicons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  Octicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import Avatar from "../../../components/Avatar";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useCallback, useMemo, useRef } from "react";
@@ -24,7 +20,7 @@ import ModalLogOut from "../../../components/profile/ModalLogOut";
 import ModalMyPost from "../../../components/profile/ModalMyPost";
 
 const index = () => {
-  const auth=useSelector(state=>state.auth);
+  const auth = useSelector((state) => state.auth);
   const bottomSheetModalLogOut = useRef(null);
   const dispatch = useDispatch();
 
@@ -56,7 +52,7 @@ const index = () => {
     >
       <View
         style={{
-          paddingHorizontal: 10,
+          paddingHorizontal: 12,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -74,7 +70,7 @@ const index = () => {
                 fontWeight: "bold",
               }}
             >
-             {auth.username}
+              {auth.username}
             </Text>
           </TouchableOpacity>
         </View>
@@ -99,33 +95,35 @@ const index = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView showsHorizontalScrollIndicator="false">
         <View
           style={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
+            justifyContent: "space-between",
             marginBottom: 10,
             paddingHorizontal: 10,
+            marginTop: 12,
+            marginEnd: 12,
           }}
         >
           {/* Logo User, Name and info following, follower, post */}
           <View
             style={{
               display: "flex",
-              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             {/* Logo User, Name */}
             <View
               style={{
                 marginLeft: 10,
+                justifyContent: "center",
               }}
             >
-              <Avatar
-                size="large"
-                avatar={auth.avatar}
-              ></Avatar>
+              <Avatar size="large" avatar={auth.avatar}></Avatar>
             </View>
 
             <Text
@@ -144,7 +142,7 @@ const index = () => {
             style={{
               display: "flex",
               flexDirection: "row",
-              gap: 10,
+              gap: 16,
             }}
           >
             {/* post, following, follwer */}
@@ -183,13 +181,7 @@ const index = () => {
               >
                 {auth.followers.length}
               </Text>
-              <Text
-                style={{
-                  fontSize: 10,
-                }}
-              >
-                Người theo dõi
-              </Text>
+              <Text>Người the...</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push("/profile/following")}
@@ -208,13 +200,7 @@ const index = () => {
               >
                 {auth.following.length}
               </Text>
-              <Text
-                style={{
-                  fontSize: 10,
-                }}
-              >
-                Đang theo dõi
-              </Text>
+              <Text>Đang the...</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -228,6 +214,7 @@ const index = () => {
             justifyContent: "center",
             justifyContent: "space-between",
             marginBottom: 20,
+            marginTop: 12,
           }}
         >
           <TouchableOpacity
@@ -237,11 +224,10 @@ const index = () => {
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: "#DDDD",
-              borderRadius: 5,
-              paddingVertical: 5,
-              paddingHorizontal: 30,
-              width: 160,
-              marginLeft: 10,
+              borderRadius: 6,
+              paddingVertical: 6,
+              width: 180,
+              marginLeft: 12,
             }}
             onPress={() => router.push("/profile/editProfile")}
           >
@@ -249,6 +235,7 @@ const index = () => {
               style={{
                 fontSize: 15,
                 fontWeight: 600,
+                textAlign: "center",
               }}
             >
               Chỉnh sửa
@@ -262,11 +249,10 @@ const index = () => {
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: "#DDDD",
-              borderRadius: 5,
-              paddingVertical: 5,
-              paddingHorizontal: 30,
-              width: 160,
-              marginRight: 10,
+              borderRadius: 6,
+              paddingVertical: 6,
+              width: 180,
+              marginRight: 12,
             }}
             onPress={() => router.push("/profile/changePasswork")}
           >
@@ -274,6 +260,7 @@ const index = () => {
               style={{
                 fontSize: 15,
                 fontWeight: 600,
+                textAlign: "center",
               }}
             >
               Đổi mật khẩu
@@ -282,40 +269,51 @@ const index = () => {
         </View>
         <View
           style={{
-            display: "flex",
+            flex: 1,
             flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 80,
-              paddingBottom: 10,
-              borderBottomWidth: 1,
-              borderColor: selectedIcon === "grid" ? "#000000" : "#DDDDDD",
-            }}
-            onPress={() => handleIconPress("grid")}
-          >
-            <MaterialCommunityIcons
-              name="grid"
-              size={24}
-              color={selectedIcon === "grid" ? "#000000" : "#DDDDDD"}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 80,
-              borderBottomWidth: 1,
-              borderColor: selectedIcon === "bookmark" ? "#000000" : "#DDDDDD",
-              paddingBottom: 10,
-            }}
-            onPress={() => handleIconPress("bookmark")}
-          >
-            <Feather
-              name="bookmark"
-              size={24}
-              color={selectedIcon === "bookmark" ? "#000000" : "#DDDDDD"}
-            />
-          </TouchableOpacity>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+
+                paddingBottom: 10,
+                borderBottomWidth: 1,
+                borderColor: selectedIcon === "grid" ? "#000000" : "#DDDDDD",
+              }}
+              onPress={() => handleIconPress("grid")}
+            >
+              <MaterialCommunityIcons
+                name="grid"
+                size={24}
+                color={selectedIcon === "grid" ? "#000000" : "#DDDDDD"}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+
+                borderBottomWidth: 1,
+                borderColor:
+                  selectedIcon === "bookmark" ? "#000000" : "#DDDDDD",
+                paddingBottom: 10,
+              }}
+              onPress={() => handleIconPress("bookmark")}
+            >
+              <Feather
+                name="bookmark"
+                size={24}
+                color={selectedIcon === "bookmark" ? "#000000" : "#DDDDDD"}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <View>
           {selectedIcon === "grid" ? (
@@ -330,21 +328,22 @@ const index = () => {
             </View>
           )}
         </View>
-        <BottomSheetModal
-          ref={bottomSheetModalLogOut}
-          index={0}
-          snapPoints={snapPointsLogOut}
-          backgroundStyle={styles.modal}
-          onDismiss={() => handleCloseLogOutModal()}
-          onChange={(index) => {
-            if (index === -1) {
-              handleCloseLogOutModal();
-            }
-          }}
-        >
-          <ModalLogOut handleCloseLogOutModal={handleCloseLogOutModal} />
-        </BottomSheetModal>
       </ScrollView>
+
+      <BottomSheetModal
+        ref={bottomSheetModalLogOut}
+        index={0}
+        snapPoints={snapPointsLogOut}
+        backgroundStyle={styles.modal}
+        onDismiss={() => handleCloseLogOutModal()}
+        onChange={(index) => {
+          if (index === -1) {
+            handleCloseLogOutModal();
+          }
+        }}
+      >
+        <ModalLogOut handleCloseLogOutModal={handleCloseLogOutModal} />
+      </BottomSheetModal>
     </View>
   );
 };

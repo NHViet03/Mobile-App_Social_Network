@@ -1,18 +1,21 @@
-import React from 'react'
-import { View ,Text } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { router } from 'expo-router';
-import Avatar from '../Avatar';
-import { AntDesign } from '@expo/vector-icons';
-const ModalLogOut = ({handleCloseLogOutModal}) => {
+import React from "react";
+import { View, Text } from "react-native";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { router } from "expo-router";
+import { useSelector } from "react-redux";
+import Avatar from "../Avatar";
+
+const ModalLogOut = ({ handleCloseLogOutModal }) => {
+  const auth = useSelector((state) => state.auth);
+
   const handlePresslogout = () => {
-    router.push("/login");
     handleCloseLogOutModal();
-  }
+    router.push("/login");
+  };
   return (
     <View>
-       <View
+      <View
         style={{
           borderBottomWidth: 1,
           borderBottomColor: "#e6e6e6",
@@ -23,31 +26,37 @@ const ModalLogOut = ({handleCloseLogOutModal}) => {
           justifyContent: "space-between",
           alignItems: "center",
         }}
+      >
+        <View
+          style={{
+            marginStart: 10,
+            flexDirection: "row",
+            alignItems: "center",
+          }}
         >
-       <View
-       style={{
-          marginStart: 10,
-       }}
-       > 
-       <Avatar size="medium" avatar= 'https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png' ></Avatar>
-       </View>
-
+          <Avatar size="medium" avatar={auth.avatar}></Avatar>
           <Text
             style={{
-              fontSize: 20,
-              fontWeight: "bold",
+              fontSize: 16,
+              fontWeight: "600",
               textAlign: "center",
-              color: "#EDAA25",
-              marginEnd: 20,
+              marginStart: 12,
             }}
-          >_hoang.phuc.seiza_</Text>
-        <AntDesign 
-        style={{
-          marginEnd: 20,
-        }}
-        name="checkcircle" size={24} color="#EDAA25" />
+          >
+            {auth.username}
+          </Text>
         </View>
-        <TouchableOpacity
+
+        <AntDesign
+          style={{
+            marginEnd: 20,
+          }}
+          name="checkcircle"
+          size={24}
+          color="#c43302"
+        />
+      </View>
+      <TouchableOpacity
         style={{
           display: "flex",
           flexDirection: "row",
@@ -56,26 +65,31 @@ const ModalLogOut = ({handleCloseLogOutModal}) => {
           paddingTop: 20,
         }}
         onPress={handlePresslogout}
-        >
-        <MaterialIcons 
-        style={{
-          marginStart: 20,
-          flex: 1,
-        }}
-        name="logout" size={30} color="#FF0000" />
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              textAlign: "center",
-              color: "#FF0000",
-              flex: 11,
-              marginEnd: 20,
-            }}
-          >Đăng xuất</Text>
-        </TouchableOpacity>
-    </View>
-  )
-}
+      >
+        <MaterialIcons
+          style={{
+            marginStart: 20,
+            marginEnd: 24,
+          }}
+          name="logout"
+          size={30}
+          color="#c43302"
+        />
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: "600",
+            textAlign: "center",
+            color: "#c43302",
 
-export default ModalLogOut
+            marginEnd: 20,
+          }}
+        >
+          Đăng xuất
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default ModalLogOut;
