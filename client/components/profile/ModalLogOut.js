@@ -4,14 +4,16 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
 import { useSelector } from "react-redux";
+import { logoutAction } from "../../redux/actions/authAction";
 import Avatar from "../Avatar";
 
 const ModalLogOut = ({ handleCloseLogOutModal }) => {
   const auth = useSelector((state) => state.auth);
 
   const handlePresslogout = () => {
+    router.replace("/(auth)/login");
+    dispatch(logoutAction());
     handleCloseLogOutModal();
-    router.push("/login");
   };
   return (
     <View>
@@ -34,7 +36,7 @@ const ModalLogOut = ({ handleCloseLogOutModal }) => {
             alignItems: "center",
           }}
         >
-          <Avatar size="medium" avatar={auth.avatar}></Avatar>
+          <Avatar size="medium" avatar={auth.user.avatar}></Avatar>
           <Text
             style={{
               fontSize: 16,
@@ -43,7 +45,7 @@ const ModalLogOut = ({ handleCloseLogOutModal }) => {
               marginStart: 12,
             }}
           >
-            {auth.username}
+            {auth.user.username}
           </Text>
         </View>
 

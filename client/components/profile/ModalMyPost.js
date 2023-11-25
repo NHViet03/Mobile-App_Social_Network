@@ -1,20 +1,16 @@
 import {
     View,
     Text,
-    StatusBar,
     Pressable,
     Image,
-    TextInput,
     Dimensions,
   } from "react-native";
   import { ScrollView } from "react-native-virtualized-view";
   import React, { useState } from "react";
   import { useSelector } from "react-redux";
   import {
-    MaterialCommunityIcons,
     FontAwesome5,
     Entypo,
-    MaterialIcons,
   } from "@expo/vector-icons";
   import ImageGallery from "../search/ImageGallery";
   import Avatar from "../Avatar";

@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Avatar from "../Avatar";
 import LikeBtn from "../LikeBtn";
-import moment from 'moment'
+import moment from "moment";
 
 const CardComment = ({ comment }) => {
-    const auth=useSelector(state=>state.auth);
+  const auth = useSelector((state) => state.auth);
   const [isLike, setIsLike] = useState(false);
   const [commentData, setCommentData] = useState(comment);
 
@@ -14,7 +14,7 @@ const CardComment = ({ comment }) => {
     setIsLike(true);
     setCommentData({
       ...commentData,
-      likes: [...commentData.likes, auth._id],
+      likes: [...commentData.likes, auth.user._id],
     });
   };
 
@@ -22,7 +22,7 @@ const CardComment = ({ comment }) => {
     setIsLike(false);
     setCommentData({
       ...commentData,
-      likes: commentData.likes.filter((like) => like !== auth._id),
+      likes: commentData.likes.filter((like) => like !== auth.user._id),
     });
   };
 
@@ -37,7 +37,9 @@ const CardComment = ({ comment }) => {
               {commentData.user.username}
             </Text>
             <Text className="text-sm leading-4 text-textColor font-semibold ml-[6px]">
-              {comment.createdAt ? moment(comment.createdAt).fromNow() : "10 phút trước"}
+              {comment.createdAt
+                ? moment(comment.createdAt).fromNow()
+                : "10 phút trước"}
             </Text>
           </View>
 

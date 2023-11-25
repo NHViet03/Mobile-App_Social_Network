@@ -19,7 +19,7 @@ const FollowingCard = () => {
       paddingVertical: 5,
       alignItems: "center",
     }}
-    onPress={() => router.push("/profile/otherProfile")}
+    onPress={() => router.push("/otherProfile")}
     >
       <Avatar size="medium"   avatar="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png" />
       <View

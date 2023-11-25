@@ -101,7 +101,7 @@ const editProfile = () => {
         }}
         onPress={pickImageAsync}
       >
-        <Avatar size="large" avatar={auth.avatar} />
+        <Avatar size="large" avatar={auth.user.avatar} />
         <Text
           style={{
             fontSize: 15,
@@ -143,7 +143,7 @@ const editProfile = () => {
             alignItems: "center",
           }}
         >
-          {auth.fullname}
+          {auth.user.fullname}
         </TextInput>
       </View>
       <View
@@ -176,7 +176,7 @@ const editProfile = () => {
             alignItems: "center",
           }}
         >
-          {auth.username}
+          {auth.user.username}
         </TextInput>
       </View>
       <View

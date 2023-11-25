@@ -23,7 +23,7 @@ const ModalComment = () => {
       _id: uuid.v4(),
       content,
       likes: [],
-      user: auth,
+      user: auth.user,
       createdAt: new Date().toISOString(),
     };
     
@@ -35,7 +35,7 @@ const ModalComment = () => {
   };
 
   const handleSelectComment = (item) => {
-    if (item.user._id === auth._id) {
+    if (item.user._id === auth.user._id) {
       setCommentSelected(item);
     }
     return;
@@ -102,7 +102,7 @@ const ModalComment = () => {
       }
 
       <View className="flex-row items-center mb-2 px-4 py-3">
-        <Avatar avatar={auth.avatar} size="middle" />
+        <Avatar avatar={auth.user.avatar} size="middle" />
         <TextInput
           className="flex-1 ml-3 mr-1 "
           placeholder={`Bình luận cho ${postData.user.username}...`}

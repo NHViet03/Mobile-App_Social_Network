@@ -26,7 +26,7 @@ const CardHeader = ({ post, showFollow }) => {
         className="flex-row items-center flex-1 mr-3"
         onPress={() =>
           router.push({
-            pathname: "/(tabs)/userProfile",
+            pathname: "/(tabs)/otherProfile",
             params: { id: user._id },
           })
         }

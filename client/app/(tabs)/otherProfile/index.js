@@ -1,45 +1,34 @@
-import { StyleSheet, Text, View, StatusBar,TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-virtualized-view";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "expo-router";
 import {
+  Entypo,
   Ionicons,
-  Octicons,
+  Feather,
   MaterialCommunityIcons,
-  Feather
 } from "@expo/vector-icons";
-import { BottomSheetModal} from "@gorhom/bottom-sheet";
-import { useCallback, useMemo, useRef } from "react";
+import { ScrollView } from "react-native-virtualized-view";
 import Avatar from "../../../components/Avatar";
 
-import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
-import ModalLogOut from "../../../components/profile/ModalLogOut";
 import ModalMyPost from "../../../components/profile/ModalMyPost";
 
-const index = () => {
-  const auth = useSelector((state) => state.auth);
-  const bottomSheetModalLogOut = useRef(null);
-  const dispatch = useDispatch();
+const OtherProfile = () => {
   const router=useRouter();
+  const dispatch = useDispatch();
 
-  const snapPointsLogOut = useMemo(() => ["25%"], []);
-
-  const handleOpenLogOutModal = useCallback(() => {
-    bottomSheetModalLogOut.current?.present();
-  }, []);
-
-  const handleCloseLogOutModal = () => {
-    dispatch({
-      type: GLOBAL_TYPES.LOGOUT_MODAL,
-      payload: false,
-    });
-    bottomSheetModalLogOut.current?.dismiss();
-  };
   const [selectedIcon, setSelectedIcon] = useState("grid");
   const handleIconPress = (iconName) => {
     setSelectedIcon(iconName);
   };
+  const [isFollowing, setIsFollowing] = useState(true);
   return (
     <View
       style={{
@@ -51,7 +40,7 @@ const index = () => {
     >
       <View
         style={{
-          paddingHorizontal: 12,
+          paddingHorizontal: 10,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -61,15 +50,18 @@ const index = () => {
           backgroundColor: "#fff",
         }}
       >
+        <Pressable onPress={() => router.back()}>
+          <Ionicons name="chevron-back-outline" size={24} color="black" />
+        </Pressable>
         <View>
-          <TouchableOpacity onPress={handleOpenLogOutModal}>
+          <TouchableOpacity>
             <Text
               style={{
                 fontSize: 20,
                 fontWeight: "bold",
               }}
             >
-              {auth.user.username}
+              John Doe
             </Text>
           </TouchableOpacity>
         </View>
@@ -82,19 +74,19 @@ const index = () => {
           }}
         >
           <TouchableOpacity>
-            <Octicons name="diff-added" size={24} color="black" />
+            <Ionicons name="notifications-outline" size={24} color="black" />
           </TouchableOpacity>
 
-          <TouchableOpacity>
-            <Ionicons
-              name="ios-reorder-three-outline"
-              size={35}
-              color="black"
-            />
+          <TouchableOpacity
+            style={{
+              marginEnd: 10,
+            }}
+          >
+            <Entypo name="dots-three-horizontal" size={24} color="black" />
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView showsHorizontalScrollIndicator="false">
+      <ScrollView>
         <View
           style={{
             display: "flex",
@@ -102,7 +94,7 @@ const index = () => {
             alignItems: "center",
             justifyContent: "space-between",
             marginBottom: 10,
-            paddingHorizontal: 10,
+
             marginTop: 12,
             marginEnd: 12,
           }}
@@ -118,11 +110,13 @@ const index = () => {
             {/* Logo User, Name */}
             <View
               style={{
-                marginLeft: 10,
                 justifyContent: "center",
               }}
             >
-              <Avatar size="large" avatar={auth.user.avatar}></Avatar>
+              <Avatar
+                size="large"
+                avatar="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
+              ></Avatar>
             </View>
 
             <Text
@@ -134,7 +128,7 @@ const index = () => {
               }}
             >
               {" "}
-              {auth.user.fullname}
+              Nguyễn Hoàng Việt
             </Text>
           </View>
           <View
@@ -178,7 +172,7 @@ const index = () => {
                   fontWeight: "bold",
                 }}
               >
-                {auth.user.followers.length}
+                {12}
               </Text>
               <Text>Người the...</Text>
             </TouchableOpacity>
@@ -197,7 +191,7 @@ const index = () => {
                   fontWeight: "bold",
                 }}
               >
-                {auth.user.following.length}
+                {3}
               </Text>
               <Text>Đang the...</Text>
             </TouchableOpacity>
@@ -208,32 +202,37 @@ const index = () => {
           style={{
             display: "flex",
             flexDirection: "row",
-            flex: 1,
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: 20,
-            marginTop: 12,
             paddingHorizontal: 8,
             gap: 8,
+            marginBottom: 20,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
             <TouchableOpacity
               style={{
-                backgroundColor: "#DDDD",
-                borderRadius: 6,
-                paddingVertical: 6,
+                backgroundColor: isFollowing ? "#DDDD" : "#c43302",
+                borderRadius: 5,
+                paddingVertical: 5,
+                paddingHorizontal: 30,
               }}
-              onPress={() => router.push("/profile/editProfile")}
+              onPress={() => setIsFollowing(!isFollowing)}
             >
               <Text
                 style={{
+                  textAlign: "center",
                   fontSize: 15,
                   fontWeight: 600,
-                  textAlign: "center",
+
+                  color: isFollowing ? "#000" : "#ffff",
                 }}
               >
-                Chỉnh sửa
+                {isFollowing ? "Đang theo dõi" : "Theo dõi"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -246,70 +245,60 @@ const index = () => {
             <TouchableOpacity
               style={{
                 backgroundColor: "#DDDD",
-                borderRadius: 6,
-                paddingVertical: 6,
+                borderRadius: 5,
+                paddingVertical: 5,
+                paddingHorizontal: 30,
               }}
-              onPress={() => router.push("/profile/changePasswork")}
+              onPress={() => router.push("/message/chat")}
             >
               <Text
                 style={{
+                  textAlign: "center",
                   fontSize: 15,
                   fontWeight: 600,
-                  textAlign: "center",
                 }}
               >
-                Đổi mật khẩu
+                Nhắn tin
               </Text>
             </TouchableOpacity>
           </View>
         </View>
         <View
           style={{
-            flex: 1,
+            display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
           }}
         >
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-
-                paddingBottom: 10,
-                borderBottomWidth: 1,
-                borderColor: selectedIcon === "grid" ? "#000000" : "#DDDDDD",
-              }}
-              onPress={() => handleIconPress("grid")}
-            >
-              <MaterialCommunityIcons
-                name="grid"
-                size={24}
-                color={selectedIcon === "grid" ? "#000000" : "#DDDDDD"}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-
-                borderBottomWidth: 1,
-                borderColor:
-                  selectedIcon === "bookmark" ? "#000000" : "#DDDDDD",
-                paddingBottom: 10,
-              }}
-              onPress={() => handleIconPress("bookmark")}
-            >
-              <Feather
-                name="bookmark"
-                size={24}
-                color={selectedIcon === "bookmark" ? "#000000" : "#DDDDDD"}
-              />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={{
+              paddingHorizontal: 80,
+              paddingBottom: 10,
+              borderBottomWidth: 1,
+              borderColor: selectedIcon === "grid" ? "#000000" : "#DDDDDD",
+            }}
+            onPress={() => handleIconPress("grid")}
+          >
+            <MaterialCommunityIcons
+              name="grid"
+              size={24}
+              color={selectedIcon === "grid" ? "#000000" : "#DDDDDD"}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              paddingHorizontal: 80,
+              borderBottomWidth: 1,
+              borderColor: selectedIcon === "bookmark" ? "#000000" : "#DDDDDD",
+              paddingBottom: 10,
+            }}
+            onPress={() => handleIconPress("bookmark")}
+          >
+            <Feather
+              name="bookmark"
+              size={24}
+              color={selectedIcon === "bookmark" ? "#000000" : "#DDDDDD"}
+            />
+          </TouchableOpacity>
         </View>
         <View>
           {selectedIcon === "grid" ? (
@@ -324,26 +313,12 @@ const index = () => {
             </View>
           )}
         </View>
+       
       </ScrollView>
-
-      <BottomSheetModal
-        ref={bottomSheetModalLogOut}
-        index={0}
-        snapPoints={snapPointsLogOut}
-        backgroundStyle={styles.modal}
-        onDismiss={() => handleCloseLogOutModal()}
-        onChange={(index) => {
-          if (index === -1) {
-            handleCloseLogOutModal();
-          }
-        }}
-      >
-        <ModalLogOut handleCloseLogOutModal={handleCloseLogOutModal} />
-      </BottomSheetModal>
     </View>
   );
 };
 
-export default index;
+export default OtherProfile;
 
 const styles = StyleSheet.create({});

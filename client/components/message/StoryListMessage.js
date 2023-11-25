@@ -17,7 +17,7 @@ const StoryListMessage = () => {
       className="pb-2  mx-[6px]"
       renderItem={({ item, index }) => (
         <Pressable className="mx-[6px]" onPress={() =>
-          router.push("/profile/otherProfile")
+          router.push("/(tabs)/otherProfile")
         }>
           <Avatar key={index} avatar={item.avatar} size="large" />
         </Pressable>

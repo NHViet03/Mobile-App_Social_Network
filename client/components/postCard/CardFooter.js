@@ -22,7 +22,7 @@ const CardFooter = ({ post }) => {
     setIsLike(true);
     setPostData({
       ...postData,
-      likes: [...postData.likes, auth._id],
+      likes: [...postData.likes, auth.user._id],
     });
   };
 
@@ -30,7 +30,7 @@ const CardFooter = ({ post }) => {
     setIsLike(false);
     setPostData({
       ...postData,
-      likes: postData.likes.filter((like) => like !== auth._id),
+      likes: postData.likes.filter((like) => like !== auth.user._id),
     });
   };
 

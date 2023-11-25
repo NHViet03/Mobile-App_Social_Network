@@ -1,22 +1,16 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { View, Text, Pressable, StatusBar } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ScrollView } from "react-native-virtualized-view";
-import { router } from "expo-router";
-import {
-  AntDesign,
-  MaterialIcons,
-  Feather,
-  MaterialCommunityIcons,
-  Ionicons,
-} from "@expo/vector-icons";
+import {useRouter} from 'expo-router'
+import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import Avatar from "../../../components/Avatar";
 import FollowerCard from "../../../components/profile/followerCard";
 import FollowingCard from "../../../components/profile/followingCard";
 
 const following = () => {
   const auth = useSelector((state) => state.auth);
+  const router=useRouter();
 
   const [selectedfollow, setselectedfollow] = useState("following");
   const handleIconPress = (follow) => {
@@ -46,7 +40,7 @@ const following = () => {
           borderBottomWidth: 1,
         }}
       >
-        <Pressable onPress={() => router.push("/profile")}>
+        <Pressable onPress={() => router.back()}>
           <Ionicons name="chevron-back-outline" size={24} color="black" />
         </Pressable>
 
@@ -71,16 +65,15 @@ const following = () => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          marginTop:16,
-          marginBottom:16
+          marginTop: 16,
+          marginBottom: 16,
         }}
       >
         <View style={{ flex: 1 }}>
           <TouchableOpacity
             style={{
-              justifyContent:'center',
-              alignItems:'center',
-              paddingHorizontal: 50,
+              justifyContent: "center",
+              alignItems: "center",
               paddingBottom: 10,
               borderBottomWidth: 1,
               borderColor:
@@ -102,9 +95,8 @@ const following = () => {
         <View style={{ flex: 1 }}>
           <TouchableOpacity
             style={{
-              justifyContent:'center',
-              alignItems:'center',
-              paddingHorizontal: 50,
+              justifyContent: "center",
+              alignItems: "center",
               borderBottomWidth: 1,
               borderColor:
                 selectedfollow === "follower" ? "#000000" : "#DDDDDD",
@@ -126,61 +118,63 @@ const following = () => {
       </View>
       <View>
         {selectedfollow === "following" ? (
-      
-            <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom:20}}>
-              <Text
-                style={{
-                  marginStart: 12,
-                  marginTop: 12,
-                  marginBottom: 12,
-                  fontSize: 15,
-                  fontWeight: "bold",
-                }}
-              >
-                Tất cả người theo dõi
-              </Text>
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              <FollowerCard />
-              {/* Modal Alert */}
-            </ScrollView>
-         
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: 20 }}
+          >
+            <Text
+              style={{
+                marginStart: 12,
+                marginTop: 12,
+                marginBottom: 12,
+                fontSize: 15,
+                fontWeight: "bold",
+              }}
+            >
+              Tất cả người theo dõi
+            </Text>
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            <FollowerCard />
+            {/* Modal Alert */}
+          </ScrollView>
         ) : (
-        
-            <ScrollView showsVerticalScrollIndicator={false} style={{marginBottom:20}}> 
-              <Text
-                style={{
-                  marginStart: 12,
-                  marginTop: 12,
-                  marginBottom: 12,
-                  fontSize: 15,
-                  fontWeight: "bold",
-                }}
-              >
-                Bạn theo dõi
-              </Text>
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-              <FollowingCard />
-            </ScrollView>
-      
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: 20 }}
+          >
+            <Text
+              style={{
+                marginStart: 12,
+                marginTop: 12,
+                marginBottom: 12,
+                fontSize: 15,
+                fontWeight: "bold",
+              }}
+            >
+              Bạn theo dõi
+            </Text>
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+            <FollowingCard />
+          </ScrollView>
         )}
       </View>
     </View>
