@@ -33,7 +33,7 @@ const ShowImage = ({ post }) => {
           >
             <Image
               source={{
-                uri: image,
+                uri: image.uri,
               }}
               style={{
                 width: imgWidth-24,

@@ -1,9 +1,9 @@
 const router=require('express').Router();
-const authControl=require('../controllers/authControl');
+const authCtrl=require('../controllers/authCtrl');
 
-router.post('/register',authControl.register);
-router.post('/login',authControl.login);
-router.post('/refresh_token',authControl.generateAccessToken)
-router.post('/logout',authControl.logout);
+router.post('/register',authCtrl.register);
+router.post('/login',authCtrl.login);
+router.post('/refresh_token',authCtrl.generateAccessToken)
+router.post('/logout',authCtrl.logout);
 
 module.exports=router;

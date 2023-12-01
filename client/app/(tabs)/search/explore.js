@@ -1,20 +1,28 @@
 import { View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { useSelector } from "react-redux";
-import {ScrollView} from 'react-native-virtualized-view'
+import { ScrollView } from "react-native-virtualized-view";
 import CardHeader from "../../../components/postCard/CardHeader";
 import CardBody from "../../../components/postCard/CardBody";
 import CardFooter from "../../../components/postCard/CardFooter";
 
+import { useSelector } from "react-redux";
+
 const explore = () => {
+  const { explore, homePosts } = useSelector((state) => ({
+    explore: state.explore,
+    homePosts: state.homePosts,
+  }));
   const { id } = useLocalSearchParams();
-  const { posts } = useSelector((state) => state.homePosts);
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    setPost(posts.find((post) => post._id === id));
-  }, [id, posts]);
+    let postData = homePosts.posts.find((post) => post._id === id);
+    if (!postData) {
+      postData = explore.posts.find((post) => post._id === id);
+    }
+    setPost(postData);
+  }, [homePosts.posts, explore.posts, id]);
 
   return (
     <View
@@ -23,6 +31,7 @@ const explore = () => {
         backgroundColor: "#fff",
       }}
     >
+      
       <ScrollView className="mt-2" showsVerticalScrollIndicator={false}>
         {post && (
           <View className="mb-2 border-b-[0.5px] border-borderColor">

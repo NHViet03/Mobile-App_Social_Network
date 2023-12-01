@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useState, useContext } from "react";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { useSelector, useDispatch } from "react-redux";
-import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
+import moment from "moment";
 import LikeBtn from "../LikeBtn";
 import BookmarkBtn from "./BookmarkBtn";
 import { PostContext } from "../../app/_layout";
+
+import { useSelector, useDispatch } from "react-redux";
+import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
 
 const CardFooter = ({ post }) => {
   const { handleOpenCommentModal, handleOpenSharePostModal } =
@@ -14,24 +16,17 @@ const CardFooter = ({ post }) => {
   const [isLike, setIsLike] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   const [readMore, setReadMore] = useState(false);
-  const [postData, setPostData] = useState(post);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleLike = () => {
     setIsLike(true);
-    setPostData({
-      ...postData,
-      likes: [...postData.likes, auth.user._id],
-    });
+    
   };
 
   const handleUnLike = () => {
     setIsLike(false);
-    setPostData({
-      ...postData,
-      likes: postData.likes.filter((like) => like !== auth.user._id),
-    });
+   
   };
 
   const handleBookmark = () => {
@@ -44,7 +39,7 @@ const CardFooter = ({ post }) => {
   const handlePressComment = () => {
     dispatch({
       type: GLOBAL_TYPES.COMMENT_MODAL,
-      payload: postData,
+      payload: post,
     }),
       handleOpenCommentModal();
   };
@@ -52,7 +47,7 @@ const CardFooter = ({ post }) => {
   const handlePressShare = () => {
     dispatch({
       type: GLOBAL_TYPES.SHARE_POST_MODAL,
-      payload: postData,
+      payload: post,
     }),
       handleOpenSharePostModal();
   };
@@ -85,28 +80,29 @@ const CardFooter = ({ post }) => {
       </View>
       <View>
         <Text className="font-semibold text-[15px]">
-          {postData.likes.length} lượt thích
+          {post.likes.length} lượt thích
         </Text>
       </View>
       <View>
         <Text>
-          <Text className="font-semibold ">{postData.user.username}</Text>{" "}
-          {postData.content.length < 80 || readMore
-            ? postData.content
-            : postData.content.slice(0, 80) + "..."}
+          <Text className="font-semibold ">{post.user.username}</Text>{" "}
+          {post.content.length < 80 || readMore
+            ? post.content
+            : post.content.slice(0, 80) + "..."}
         </Text>
-        {postData.content.length > 80 && (
+        {post.content.length > 80 && (
           <Pressable onPress={() => setReadMore(!readMore)}>
             <Text className="text-textColor mt-1">
               {readMore ? "Ẩn bớt" : "Xem thêm"}
             </Text>
           </Pressable>
         )}
+        <Text className="text-textColor text-xs mt-[2px]">{moment(post.createdAt).fromNow()}</Text>
       </View>
       <Pressable onPress={handlePressComment}>
         <Text className="text-textColor mt-2">
-          {postData.comments.length > 0
-            ? `Xem tất cả ${postData.comments.length} bình luận`
+          {post.comments.length > 0
+            ? `Xem tất cả ${post.comments.length} bình luận`
             : "Thêm bình luận..."}
         </Text>
       </Pressable>

@@ -8,8 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
 import {
   MaterialCommunityIcons,
   FontAwesome5,
@@ -20,13 +19,36 @@ import ImageGallery from "../../../components/search/ImageGallery";
 import Avatar from "../../../components/Avatar";
 import SearchContent from "../../../components/search/SearchContent";
 
+import { useSelector, useDispatch } from "react-redux";
+import { getExplorePosts } from "../../../redux/actions/exploreAction";
+
 const index = () => {
-  const { posts, users } = useSelector((state) => state.homePosts);
+  const { users } = useSelector((state) => state.homePosts);
+  const { auth, explore } = useSelector((state) => ({
+    auth: state.auth,
+    explore: state.explore,
+  }));
+  const dispatch = useDispatch();
+
+  const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState(users);
 
   const [postPicker, setPostPicker] = useState(null);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
+
+  useEffect(() => {
+    const getPostsData = async () => {
+      if (explore.firstLoad) return;
+      await dispatch(getExplorePosts(auth.token));
+    };
+
+    getPostsData();
+  }, [dispatch, auth.token, explore.firstLoad]);
+
+  useEffect(() => {
+    setPosts(explore.posts);
+  }, [explore.posts]);
 
   const handlePickPost = (image) => {
     setPostPicker(image);
@@ -61,9 +83,12 @@ const index = () => {
         position: "relative",
       }}
     >
-      <Pressable className="flex-row items-center mx-3 mt-3 mb-3" style={{
-        marginTop:StatusBar.currentHeight+12
-      }}>
+      <Pressable
+        className="flex-row items-center mx-3 mt-3 mb-3"
+        style={{
+          marginTop: StatusBar.currentHeight + 12,
+        }}
+      >
         {isOpenSearch && (
           <Pressable className="ml-2 mr-3" onPress={handleBack}>
             <MaterialIcons name="keyboard-backspace" size={30} color="black" />

@@ -1,37 +1,61 @@
-import { StyleSheet, FlatList, View } from "react-native";
-import React from "react";
-import { useSelector } from "react-redux";
+import { View, Text, Dimensions, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
 import CardHeader from "../postCard/CardHeader";
 import CardBody from "../postCard/CardBody";
 import CardFooter from "../postCard/CardFooter";
 
+import { useSelector, useDispatch } from "react-redux";
+import { getPosts } from "../../redux/actions/postAction";
+
 const Posts = () => {
-  const homePosts = useSelector((state) => state.homePosts);
+  const { auth, homePosts } = useSelector((state) => ({
+    homePosts: state.homePosts,
+    auth: state.auth,
+  }));
+  const dispatch = useDispatch();
+
+  const [posts, setPosts] = useState([]);
+
+  const width = Dimensions.get("window").width;
+
+  useEffect(() => {
+    const getPostsData = async () => {
+      if (homePosts.firstLoad) return;
+      await dispatch(getPosts(auth.token));
+    };
+
+    getPostsData();
+  }, [auth.token, homePosts.firstLoad, dispatch]);
+
+  useEffect(() => {
+    setPosts(homePosts.posts);
+  }, [homePosts.posts]);
+
 
   return (
-    <FlatList
-      data={homePosts.posts}
-      numColumns={1}
-      className="mb-[60px]"
-      showsVerticalScrollIndicator={false}
-      scrollEnabled={true}
-      renderItem={({ item, index }) => (
+    <ScrollView className="mb-[60px]" showsVerticalScrollIndicator={false}>
+      {posts.length === 0 && (
+        <View>
+          <Text className="text-center text-lg font-medium">
+            Không có bài viết nào.
+          </Text>
+        </View>
+      )}
+      {posts.map((post, index) => (
         <View key={index} className="mb-2 border-b-[0.5px] border-borderColor">
-          <CardHeader post={item} />
+          <CardHeader post={post} />
           <View
             style={{
               height: 400,
             }}
           >
-            <CardBody post={item} />
+            <CardBody post={post} />
           </View>
-          <CardFooter post={item} />
+          <CardFooter post={post} />
         </View>
-      )}
-    />
+      ))}
+    </ScrollView>
   );
 };
 
 export default Posts;
-
-const styles = StyleSheet.create({});

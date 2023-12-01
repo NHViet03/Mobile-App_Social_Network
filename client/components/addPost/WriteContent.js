@@ -14,6 +14,7 @@ const WriteContent = ({ post, setPost }) => {
           placeholder="Viết chú thích..."
           multiline={true}
           className="flex-1 mx-2"
+          value={post.content}
           onChangeText={(text) =>
             setPost({
               ...post,
@@ -23,7 +24,7 @@ const WriteContent = ({ post, setPost }) => {
         />
         <Image
           source={{
-            uri: post.images[0],
+            uri: post ? post.images[0].uri: '',
           }}
           style={{
             width: 60,

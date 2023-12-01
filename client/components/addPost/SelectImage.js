@@ -7,11 +7,12 @@ const SelectImage = ({ post, setPost, setAddPostStep }) => {
     let images = await ImagePicker.launchImageLibraryAsync({
       allowsMultipleSelection: true,
       quality: 1,
+      base64:true
     });
 
     if (!images.canceled) {
       let newArr = [];
-      images.assets.forEach((image) => newArr.push(image.uri));
+      images.assets.forEach((image) => newArr.push(image));
 
       setPost({
         ...post,

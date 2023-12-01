@@ -7,7 +7,7 @@ import {
   Pressable,
 } from "react-native";
 import React, { useMemo } from "react";
-import {router} from 'expo-router'
+import { router } from "expo-router";
 
 const ImageGallery = ({ posts, handlePickPost }) => {
   const imgWidth = useMemo(() => Dimensions.get("window").width / 3 - 2, []);
@@ -21,113 +21,82 @@ const ImageGallery = ({ posts, handlePickPost }) => {
     return res;
   }, [posts]);
 
-  const handlePressPost = (post)=>{
-    if(post){
+  const handlePressPost = (post) => {
+    if (post) {
       router.push({
         pathname: "/(tabs)/search/explore",
         params: { id: post._id },
-      })
+      });
     }
-  }
+  };
 
   return (
     <View>
       {clusterPosts &&
         clusterPosts.map((cluster, index) => {
-          if (index % 2 == 0) {
-            return (
-              <View key={index} className="flex-row justify-between mb-[2px]">
-                <View
-                  className="flex-row flex-wrap justify-between gap-[2px]"
-                  style={{
-                    width: imgWidth * 2 + 5,
-                  }}
+          return (
+            <View key={index} className="flex-row justify-between mb-[2px]">
+              {index % 2 == 1 && cluster[4] && (
+                <Pressable
+                  onLongPress={() => handlePickPost(cluster[4])}
+                  onPress={() => handlePressPost(cluster[4])}
                 >
-                  {cluster.slice(0, 4).map((post, index) => (
-                    <Pressable
-                      key={index}
-                      onLongPress={() => handlePickPost(post)}
-                      onPress={() => handlePressPost(post)}
-                    >
-                      <Image
-                        source={{ uri: post.images[0].url }}
-                        style={{
-                          width: imgWidth,
-                          height: imgWidth,
-                          resizeMode: "cover",
-                          borderRadius: 1,
-                        }}
-                      />
-                    </Pressable>
-                  ))}
-                </View>
+                  <Image
+                    source={{ uri: cluster[4].images[0].url }}
+                    style={{
+                      width: imgWidth + 1,
+                      height: imgWidth * 2 + 2,
+                      resizeMode: "cover",
+                      borderRadius: 1,
+                      marginRight: 3,
+                    }}
+                  />
+                </Pressable>
+              )}
+              <View
+                className="flex-row flex-wrap justify-between gap-[2px]"
+                style={{
+                  width: imgWidth * 2 + 5,
+                }}
+              >
+                {cluster.slice(0, 4).map((post, index) => (
+                  <Pressable
+                    key={index}
+                    onLongPress={() => handlePickPost(post)}
+                    onPress={() => handlePressPost(post)}
+                  >
+                    <Image
+                      source={{ uri: post.images[0].url }}
+                      style={{
+                        width: imgWidth,
+                        height: imgWidth,
+                        resizeMode: "cover",
+                        borderRadius: 1,
+                      }}
+                    />
+                  </Pressable>
+                ))}
+              </View>
 
-                {cluster[4] && (
-                  <Pressable
-                    onLongPress={() => handlePickPost(cluster[4])}
-                    onPress={() => handlePressPost(cluster[4])}
-                  >
-                    <Image
-                      source={{ uri: cluster[4].images[0].url }}
-                      style={{
-                        width: imgWidth + 1,
-                        height: imgWidth * 2 + 2,
-                        resizeMode: "cover",
-                        borderRadius: 1,
-                        marginLeft: 3,
-                      }}
-                    />
-                  </Pressable>
-                )}
-              </View>
-            );
-          } else {
-            return (
-              <View key={index} className="flex-row justify-between mb-[2px]">
-                {cluster[4] && (
-                  <Pressable
-                    onLongPress={() => handlePickPost(cluster[4])}
-                    onPress={() => handlePressPost(cluster[4])}
-                  >
-                    <Image
-                      source={{ uri: cluster[4].images[0].url }}
-                      style={{
-                        width: imgWidth + 1,
-                        height: imgWidth * 2 + 2,
-                        resizeMode: "cover",
-                        borderRadius: 1,
-                        marginRight: 3,
-                      }}
-                    />
-                  </Pressable>
-                )}
-                <View
-                  className="flex-row flex-wrap justify-between gap-[2px]"
-                  style={{
-                    width: imgWidth * 2 + 5,
-                  }}
+              {index % 2 == 0 && cluster[4] && (
+                <Pressable
+                  onLongPress={() => handlePickPost(cluster[4])}
+                  onPress={() => handlePressPost(cluster[4])}
                 >
-                  {cluster.slice(0, 4).map((post, index) => (
-                    <Pressable
-                      key={index}
-                      onLongPress={() => handlePickPost(post)}
-                      onPress={() => handlePressPost(post)}
-                    >
-                      <Image
-                        source={{ uri: post.images[0].url }}
-                        style={{
-                          width: imgWidth,
-                          height: imgWidth,
-                          resizeMode: "cover",
-                          borderRadius: 1,
-                        }}
-                      />
-                    </Pressable>
-                  ))}
-                </View>
-              </View>
-            );
-          }
+                  <Image
+                    source={{ uri: cluster[4].images[0].url }}
+                    style={{
+                      width: imgWidth + 1,
+                      height: imgWidth * 2 + 2,
+                      resizeMode: "cover",
+                      borderRadius: 1,
+                      marginLeft: 3,
+                    }}
+                  />
+                </Pressable>
+              )}
+            </View>
+          );
         })}
     </View>
   );

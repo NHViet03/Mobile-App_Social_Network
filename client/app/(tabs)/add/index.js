@@ -3,12 +3,17 @@ import { StyleSheet, Text, View, StatusBar, Pressable } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-
 import SelectImage from "../../../components/addPost/SelectImage";
 import ShowImage from "../../../components/addPost/ShowImage";
 import WriteContent from "../../../components/addPost/WriteContent";
 
+import { useSelector, useDispatch } from "react-redux";
+import { createPost } from "../../../redux/actions/postAction";
+
 const Index = () => {
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   const [post, setPost] = useState({
     content: "",
     images: [],
@@ -33,12 +38,14 @@ const Index = () => {
     }
   }, [addPostStep, post, setPost]);
 
-  const handleCreatePost = () => {
+  const handleCreatePost = async () => {
+    await dispatch(createPost({ post, auth }));
+
+    setAddPostStep(1);
     setPost({
       content: "",
       images: [],
     });
-    setAddPostStep(1);
     router.replace("/home");
   };
 
