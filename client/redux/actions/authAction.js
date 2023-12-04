@@ -74,8 +74,9 @@ export const logoutAction = () => async (dispatch) => {
         user: {},
       },
     });
-    await postDataAPI("logout");
     await AsyncStorage.removeItem("firstLogin");
+    await postDataAPI("logout");
+  
   } catch (err) {
     console.log(err.response.data.msg);
     return {

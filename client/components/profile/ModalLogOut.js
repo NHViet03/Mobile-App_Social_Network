@@ -3,17 +3,18 @@ import { View, Text } from "react-native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/actions/authAction";
 import Avatar from "../Avatar";
 
 const ModalLogOut = ({ handleCloseLogOutModal }) => {
   const auth = useSelector((state) => state.auth);
+  const dispatch=useDispatch();
 
-  const handlePresslogout = () => {
+  const handlePresslogout = async () => {
     router.replace("/(auth)/login");
-    dispatch(logoutAction());
     handleCloseLogOutModal();
+    await dispatch(logoutAction());
   };
   return (
     <View>
