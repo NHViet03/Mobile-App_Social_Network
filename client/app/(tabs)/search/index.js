@@ -18,12 +18,13 @@ import {
 import ImageGallery from "../../../components/search/ImageGallery";
 import Avatar from "../../../components/Avatar";
 import SearchContent from "../../../components/search/SearchContent";
+import Loading from "../../../components/Loading";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getExplorePosts } from "../../../redux/actions/exploreAction";
+import { getDataAPI } from "../../../utils/fetchData";
 
 const index = () => {
-  const { users } = useSelector((state) => state.homePosts);
   const { auth, explore } = useSelector((state) => ({
     auth: state.auth,
     explore: state.explore,
@@ -31,8 +32,10 @@ const index = () => {
   const dispatch = useDispatch();
 
   const [posts, setPosts] = useState([]);
+  const [loadPost, setLoadPost] = useState(false);
   const [search, setSearch] = useState("");
-  const [searchResult, setSearchResult] = useState(users);
+  const [searchResult, setSearchResult] = useState([]);
+  const [loadSearch, setLoadSearch] = useState(false);
 
   const [postPicker, setPostPicker] = useState(null);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
@@ -40,7 +43,9 @@ const index = () => {
   useEffect(() => {
     const getPostsData = async () => {
       if (explore.firstLoad) return;
+      setLoadPost(true);
       await dispatch(getExplorePosts(auth.token));
+      setLoadPost(false);
     };
 
     getPostsData();
@@ -50,20 +55,24 @@ const index = () => {
     setPosts(explore.posts);
   }, [explore.posts]);
 
+  useEffect(() => {
+    if (search.length === 0) return;
+
+    const searchUsers = async () => {
+      setLoadSearch(true);
+      const res = await getDataAPI(
+        `search_users?username=${search}`,
+        auth.token
+      );
+      setSearchResult(res.data.users);
+      setLoadSearch(false);
+    };
+
+    searchUsers();
+  }, [search]);
+
   const handlePickPost = (image) => {
     setPostPicker(image);
-  };
-
-  const handleSearch = (text) => {
-    const formatText = text.trim().toLowerCase();
-    setSearch(text);
-    setSearchResult(
-      users.filter(
-        (user) =>
-          user.username.trim().toLowerCase().includes(formatText) ||
-          user.fullname.trim().toLowerCase().includes(formatText)
-      )
-    );
   };
 
   const handleBack = () => {
@@ -96,25 +105,28 @@ const index = () => {
         )}
         <View className=" flex-1 px-1 py-[6px] rounded-lg flex-row items-center justify-between bg-inputColor">
           <MaterialCommunityIcons name="magnify" size={24} color="black" />
-
           <TextInput
             placeholder="Tìm kiếm"
             className="flex-1 mx-2"
             onTouchStart={() => setIsOpenSearch(true)}
             value={search}
-            onChangeText={handleSearch}
+            onChangeText={(text) => setSearch(text)}
           />
         </View>
       </Pressable>
 
       {isOpenSearch ? (
         <ScrollView showsVerticalScrollIndicator={false}>
-          <SearchContent users={searchResult} />
+          {loadSearch ? <Loading /> : <SearchContent users={searchResult} />}
         </ScrollView>
       ) : (
         <>
           <ScrollView showsVerticalScrollIndicator={false} className="mb-3">
-            <ImageGallery posts={posts} handlePickPost={handlePickPost} />
+            {loadPost ? (
+              <Loading />
+            ) : (
+              <ImageGallery posts={posts} handlePickPost={handlePickPost} />
+            )}
           </ScrollView>
 
           {postPicker && (

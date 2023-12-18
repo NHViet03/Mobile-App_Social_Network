@@ -1,34 +1,85 @@
+import React, { useState, useEffect } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   StatusBar,
-  Pressable,
   TouchableOpacity,
+  Dimensions,
+  Pressable,
+  Image,
 } from "react-native";
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useRouter } from "expo-router";
-import {
-  Entypo,
-  Ionicons,
-  Feather,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
 import { ScrollView } from "react-native-virtualized-view";
+import { useRouter, useLocalSearchParams, Redirect } from "expo-router";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  Feather,
+  FontAwesome5,
+  Entypo,
+} from "@expo/vector-icons";
 import Avatar from "../../../components/Avatar";
+import Loading from "../../../components/Loading";
+import PostList from "../../../components/profile/PostList";
+import FollowBtn from "../../../components/FollowBtn";
 
-import ModalMyPost from "../../../components/profile/ModalMyPost";
+import { useSelector, useDispatch } from "react-redux";
+import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
+import { getDataAPI } from "../../../utils/fetchData";
 
-const OtherProfile = () => {
-  const router=useRouter();
-  const dispatch = useDispatch();
+const Profile = () => {
+  const auth = useSelector((state) => state.auth);
 
-  const [selectedIcon, setSelectedIcon] = useState("grid");
-  const handleIconPress = (iconName) => {
-    setSelectedIcon(iconName);
+  const { id } = useLocalSearchParams();
+  const [user, setUser] = useState({});
+  const [posts, setPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [isShowPosts, setIsShowPosts] = useState(true);
+  const [postPicker, setPostPicker] = useState(null);
+  const [loadPost, setLoadPost] = useState(false);
+
+  const router = useRouter();
+  const windowHeight = Dimensions.get("window").height;
+  const windowWidth = Dimensions.get("window").width;
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        setPosts([]);
+        setSavedPosts([]);
+        const res = await getDataAPI(`user/${id}`, auth.token);
+        setUser(res.data.user);
+      } catch (error) {}
+    };
+
+    getUser();
+  }, [auth.token, id]);
+
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        if (posts.length > 0 && savedPosts.length > 0) return;
+
+        setLoadPost(true);
+        if (isShowPosts && posts.length === 0) {
+          const res = await getDataAPI(`user_posts/${id}`, auth.token);
+          setPosts(res.data.posts);
+        } else if (!isShowPosts && savedPosts.length === 0) {
+          const res = await getDataAPI(`saved_posts/${id}`, auth.token);
+          setSavedPosts(res.data.posts);
+        }
+        setLoadPost(false);
+      } catch (error) {}
+    };
+    getPosts();
+  }, [auth.token, id, posts.length, savedPosts.length, isShowPosts]);
+
+  const handlePickPost = (image) => {
+    setPostPicker(image);
   };
-  const [isFollowing, setIsFollowing] = useState(true);
+
+  if (auth.user._id === id) return <Redirect href="/profile" />;
+  if (Object.keys(user).length === 0) return <Loading />;
+
   return (
     <View
       style={{
@@ -36,11 +87,12 @@ const OtherProfile = () => {
         flex: 1,
         flexDirection: "column",
         backgroundColor: "#fff",
+        position: "relative",
       }}
     >
       <View
         style={{
-          paddingHorizontal: 10,
+          paddingHorizontal: 16,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -50,275 +102,226 @@ const OtherProfile = () => {
           backgroundColor: "#fff",
         }}
       >
-        <Pressable onPress={() => router.back()}>
-          <Ionicons name="chevron-back-outline" size={24} color="black" />
-        </Pressable>
-        <View>
-          <TouchableOpacity>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-              }}
-            >
-              John Doe
-            </Text>
-          </TouchableOpacity>
+        <View className="flex-row items-center ">
+          <Pressable onPress={() => router.back()}>
+            <Feather name="arrow-left" size={24} color="black" />
+          </Pressable>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              marginLeft: 24,
+            }}
+          >
+            {user.username}
+          </Text>
         </View>
         <View
           style={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            gap: 10,
+            gap: 16,
           }}
         >
-          <TouchableOpacity>
-            <Ionicons name="notifications-outline" size={24} color="black" />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              marginEnd: 10,
-            }}
-          >
-            <Entypo name="dots-three-horizontal" size={24} color="black" />
-          </TouchableOpacity>
+          <Ionicons name="notifications-outline" size={24} color="black" />
+          <Entypo name="dots-three-vertical" size={20} color="black" />
         </View>
       </View>
-      <ScrollView>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 10,
-
-            marginTop: 12,
-            marginEnd: 12,
-          }}
-        >
-          {/* Logo User, Name and info following, follower, post */}
-          <View
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {/* Logo User, Name */}
-            <View
-              style={{
-                justifyContent: "center",
-              }}
-            >
-              <Avatar
-                size="large"
-                avatar="https://www.pngall.com/wp-content/uploads/5/Profile-Avatar-PNG.png"
-              ></Avatar>
+      <ScrollView showsHorizontalScrollIndicator="false">
+        <View className="mt-5 px-4">
+          <View className="flex flex-row justify-between items-center">
+            <Avatar avatar={user.avatar} size="large" />
+            <View className="flex flex-row gap-3">
+              <View className="flex items-center">
+                <Text className="font-bold text-lg">{posts.length}</Text>
+                <Text>Bài viết</Text>
+              </View>
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: "/otherProfile/follows",
+                    params: {
+                      type: "followers",
+                      id: user._id,
+                      username: user.username,
+                    },
+                  })
+                }
+              >
+                <View className="flex items-center">
+                  <Text className="font-bold text-lg">
+                    {user.followers.length}
+                  </Text>
+                  <Text>Người the...</Text>
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: "/otherProfile/follows",
+                    params: {
+                      type: "following",
+                      id: user._id,
+                      username: user.username,
+                    },
+                  })
+                }
+              >
+                <View className="flex items-center">
+                  <Text className="font-bold text-lg">
+                    {user.following.length}
+                  </Text>
+                  <Text>Đang theo...</Text>
+                </View>
+              </Pressable>
             </View>
-
-            <Text
-              style={{
-                fontSize: 15,
-                fontWeight: 500,
-                marginLeft: 5,
-                marginTop: 5,
-              }}
-            >
-              {" "}
-              Nguyễn Hoàng Việt
-            </Text>
+          </View>
+          <View className="mt-1">
+            <Text className="font-medium">{user.fullname}</Text>
+            <Text className="">{user.story}</Text>
           </View>
           <View
             style={{
               display: "flex",
               flexDirection: "row",
-              gap: 16,
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 20,
+              marginTop: 16,
+              gap: 8,
             }}
           >
-            {/* post, following, follwer */}
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text
+            <FollowBtn user={user} showFull />
+
+            <View className="flex-1">
+              <Pressable
                 style={{
-                  fontSize: 17,
-                  fontWeight: "bold",
+                  backgroundColor: "#eeeeee",
+                  borderRadius: 6,
+                  paddingVertical: 8,
                 }}
               >
-                {0}
-              </Text>
-              <Text>Bài viết</Text>
+                <Text
+                  style={{
+                    fontWeight: 600,
+                    textAlign: "center",
+                  }}
+                >
+                  Nhắn tin
+                </Text>
+              </Pressable>
             </View>
-            <TouchableOpacity
-              onPress={() => router.push("/profile/following")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 17,
-                  fontWeight: "bold",
-                }}
-              >
-                {12}
-              </Text>
-              <Text>Người the...</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.push("/profile/following")}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 7,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 17,
-                  fontWeight: "bold",
-                }}
-              >
-                {3}
-              </Text>
-              <Text>Đang the...</Text>
-            </TouchableOpacity>
           </View>
         </View>
-        {/* Button */}
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 8,
-            gap: 8,
-            marginBottom: 20,
-          }}
-        >
+        <View className="mt-4 flex flex-1">
           <View
             style={{
-              flex: 1,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 3,
             }}
           >
-            <TouchableOpacity
-              style={{
-                backgroundColor: isFollowing ? "#DDDD" : "#c43302",
-                borderRadius: 5,
-                paddingVertical: 5,
-                paddingHorizontal: 30,
-              }}
-              onPress={() => setIsFollowing(!isFollowing)}
-            >
-              <Text
+            <View className="flex-1">
+              <TouchableOpacity
                 style={{
-                  textAlign: "center",
-                  fontSize: 15,
-                  fontWeight: 600,
-
-                  color: isFollowing ? "#000" : "#ffff",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingBottom: 10,
+                  borderBottomWidth: 1,
+                  borderColor: isShowPosts ? "#000000" : "#DDDDDD",
                 }}
+                onPress={() => setIsShowPosts(true)}
               >
-                {isFollowing ? "Đang theo dõi" : "Theo dõi"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={{
-              flex: 1,
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#DDDD",
-                borderRadius: 5,
-                paddingVertical: 5,
-                paddingHorizontal: 30,
-              }}
-              onPress={() => router.push("/message/chat")}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 15,
-                  fontWeight: 600,
-                }}
-              >
-                Nhắn tin
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 80,
-              paddingBottom: 10,
-              borderBottomWidth: 1,
-              borderColor: selectedIcon === "grid" ? "#000000" : "#DDDDDD",
-            }}
-            onPress={() => handleIconPress("grid")}
-          >
-            <MaterialCommunityIcons
-              name="grid"
-              size={24}
-              color={selectedIcon === "grid" ? "#000000" : "#DDDDDD"}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              paddingHorizontal: 80,
-              borderBottomWidth: 1,
-              borderColor: selectedIcon === "bookmark" ? "#000000" : "#DDDDDD",
-              paddingBottom: 10,
-            }}
-            onPress={() => handleIconPress("bookmark")}
-          >
-            <Feather
-              name="bookmark"
-              size={24}
-              color={selectedIcon === "bookmark" ? "#000000" : "#DDDDDD"}
-            />
-          </TouchableOpacity>
-        </View>
-        <View>
-          {selectedIcon === "grid" ? (
-            <View>
-              <ModalMyPost />
+                <MaterialCommunityIcons
+                  name="grid"
+                  size={24}
+                  color={isShowPosts ? "#000000" : "#DDDDDD"}
+                />
+              </TouchableOpacity>
             </View>
+            <View className="flex-1">
+              <TouchableOpacity
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderBottomWidth: 1,
+                  borderColor: !isShowPosts ? "#000000" : "#DDDDDD",
+                  paddingBottom: 10,
+                }}
+                onPress={() => setIsShowPosts(false)}
+              >
+                <Feather
+                  name="bookmark"
+                  size={24}
+                  color={!isShowPosts ? "#000000" : "#DDDDDD"}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {loadPost ? (
+            <Loading />
           ) : (
-            <View>
-              <Text>
-                <ModalMyPost />
-              </Text>
-            </View>
+            <PostList
+              posts={isShowPosts ? posts : savedPosts}
+              handlePickPost={handlePickPost}
+            />
           )}
         </View>
-       
       </ScrollView>
+      {postPicker && (
+        <Pressable
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            zIndex: 100,
+            backgroundColor: "rgba(0,0,0,0.4)",
+          }}
+          onPress={() => handlePickPost(null)}
+        >
+          <View
+            style={{
+              width: 340,
+              height: 450,
+              position: "absolute",
+              top: windowHeight / 2 - 225,
+              left: windowWidth / 2 - 170,
+              backgroundColor: "#fff",
+              elevation: 10,
+              borderRadius: 12,
+            }}
+          >
+            <View className="flex-row mx-3 py-2 items-center">
+              <Avatar avatar={postPicker.user.avatar} size="middle" />
+              <Text className="font-semibold ml-2">
+                {postPicker.user.username}
+              </Text>
+            </View>
+            <View className="flex-1">
+              <Image
+                source={{
+                  uri: postPicker.images[0].url,
+                }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </View>
+            <View className="flex-row py-3 items-center justify-around">
+              <FontAwesome5 name="heart" size={24} color="black" />
+              <FontAwesome5 name="user-circle" size={24} color="black" />
+              <FontAwesome5 name="paper-plane" size={24} color="black" />
+              <Entypo name="dots-three-vertical" size={24} color="black" />
+            </View>
+          </View>
+        </Pressable>
+      )}
     </View>
   );
 };
 
-export default OtherProfile;
-
-const styles = StyleSheet.create({});
+export default Profile;

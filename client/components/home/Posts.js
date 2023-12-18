@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import CardHeader from "../postCard/CardHeader";
 import CardBody from "../postCard/CardBody";
 import CardFooter from "../postCard/CardFooter";
+import Loading from "../Loading";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../redux/actions/postAction";
@@ -15,13 +16,14 @@ const Posts = () => {
   const dispatch = useDispatch();
 
   const [posts, setPosts] = useState([]);
-
-  const width = Dimensions.get("window").width;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getPostsData = async () => {
       if (homePosts.firstLoad) return;
+      setLoading(true);
       await dispatch(getPosts(auth.token));
+      setLoading(false);
     };
 
     getPostsData();
@@ -30,7 +32,6 @@ const Posts = () => {
   useEffect(() => {
     setPosts(homePosts.posts);
   }, [homePosts.posts]);
-
 
   return (
     <ScrollView className="mb-[60px]" showsVerticalScrollIndicator={false}>
@@ -41,6 +42,7 @@ const Posts = () => {
           </Text>
         </View>
       )}
+      {loading && <Loading />}
       {posts.map((post, index) => (
         <View key={index} className="mb-2 border-b-[0.5px] border-borderColor">
           <CardHeader post={post} />

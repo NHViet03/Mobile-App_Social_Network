@@ -7,6 +7,7 @@ export default function Layout() {
         name="index"
         options={{ headerShown: false, animation: "slide_from_right" }}
       />
+       <Stack.Screen name="follows" options={{ headerShown: false,animation:"slide_from_right" }} />
     </Stack>
   );
 }

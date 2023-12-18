@@ -12,6 +12,7 @@ app.use(cookieParser());
 //Routes
 app.use("/api", require("./routes/authRouter"));
 app.use("/api", require("./routes/postRouter"));
+app.use("/api", require("./routes/userRouter"));
 
 //Connect MongoDB
 const URI = process.env.MONGODB_URL;

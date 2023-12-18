@@ -45,7 +45,7 @@ const authCtrl = {
 
       return res.json({
         msg: "Chúc mừng bạn đã tạo thành công tài khoản Dreamers của mình. Bạn đã chính thức gia nhập cộng đồng đầy màu sắc và sáng tạo này.",
-        token:access_token,
+        token: access_token,
         user: {
           ...newUser._doc,
           password: "",
@@ -61,7 +61,7 @@ const authCtrl = {
 
       const user = await Users.findOne({ email }).populate(
         "followers following",
-        "-password"
+        "avatar username fullname"
       );
 
       if (!user) {
@@ -119,7 +119,7 @@ const authCtrl = {
 
           const user = await Users.findById(result.id).populate(
             "followers following",
-            "-password"
+            "avatar username fullname"
           );
 
           if (!user) {
@@ -143,14 +143,14 @@ const authCtrl = {
       return res.status(500).json({ msg: error.message });
     }
   },
-  logout:async (req,res)=>{
+  logout: async (req, res) => {
     try {
-      res.clearCookie('refresh_token',{path:'/api/refresh_token'})
-      return res.json({msg:"Đăng xuất thành công"})
+      res.clearCookie("refresh_token", { path: "/api/refresh_token" });
+      return res.json({ msg: "Đăng xuất thành công" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
-  }
+  },
 };
 
 const createAccessToken = (payload) => {

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useMemo } from "react";
 import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const ImageGallery = ({ posts, handlePickPost }) => {
   const imgWidth = useMemo(() => Dimensions.get("window").width / 3 - 2, []);
@@ -40,6 +41,9 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                 <Pressable
                   onLongPress={() => handlePickPost(cluster[4])}
                   onPress={() => handlePressPost(cluster[4])}
+                  style={{
+                    position: "relative",
+                  }}
                 >
                   <Image
                     source={{ uri: cluster[4].images[0].url }}
@@ -51,6 +55,18 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                       marginRight: 3,
                     }}
                   />
+                  {cluster[4].images.length > 1 && (
+                    <Ionicons
+                      name="md-images"
+                      size={16}
+                      color="#fff"
+                      style={{
+                        position: "absolute",
+                        top: 4,
+                        right: 4,
+                      }}
+                    />
+                  )}
                 </Pressable>
               )}
               <View
@@ -64,6 +80,9 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                     key={index}
                     onLongPress={() => handlePickPost(post)}
                     onPress={() => handlePressPost(post)}
+                    style={{
+                      position: "relative",
+                    }}
                   >
                     <Image
                       source={{ uri: post.images[0].url }}
@@ -74,6 +93,18 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                         borderRadius: 1,
                       }}
                     />
+                    {post.images.length > 1 && (
+                      <Ionicons
+                        name="md-images"
+                        size={16}
+                        color="#fff"
+                        style={{
+                          position: "absolute",
+                          top: 4,
+                          right: 4,
+                        }}
+                      />
+                    )}
                   </Pressable>
                 ))}
               </View>
@@ -82,6 +113,9 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                 <Pressable
                   onLongPress={() => handlePickPost(cluster[4])}
                   onPress={() => handlePressPost(cluster[4])}
+                  style={{
+                    position: "relative",
+                  }}
                 >
                   <Image
                     source={{ uri: cluster[4].images[0].url }}
@@ -93,6 +127,18 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                       marginLeft: 3,
                     }}
                   />
+                  {cluster[4].images.length > 1 && (
+                    <Ionicons
+                      name="md-images"
+                      size={16}
+                      color="#fff"
+                      style={{
+                        position: "absolute",
+                        top: 4,
+                        right: 4,
+                      }}
+                    />
+                  )}
                 </Pressable>
               )}
             </View>

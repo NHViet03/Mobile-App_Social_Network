@@ -6,7 +6,7 @@ import CardSearch from "./CardSearch";
 const SearchContent = ({ users }) => {
   return (
     <View className="my-3 mx-4">
-      <Text className="text-base font-bold mb-4">Gần đây</Text>
+      <Text className="text-base font-bold mb-4">Kết quả tìm kiếm</Text>
       {users &&
         users.map((user, index) => (
           <Pressable
@@ -14,7 +14,7 @@ const SearchContent = ({ users }) => {
             className="mb-3"
             onPress={() =>
               router.push({
-                pathname: "/(tabs)/userProfile",
+                pathname: "/otherProfile",
                 params: { id: user._id },
               })
             }

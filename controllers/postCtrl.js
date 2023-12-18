@@ -1,5 +1,6 @@
 const Posts = require("../models/postModel");
 const Comments = require("../models/commentModel");
+const Users = require("../models/userModel");
 
 class APIfeatures {
   constructor(query, queryString) {
@@ -79,10 +80,67 @@ const postCtrl = {
           },
         });
 
-        return res.json({
-          posts,
-          result:posts.length
-        })
+      return res.json({
+        posts,
+        result: posts.length,
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  },
+  getUserPosts: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const features = new APIfeatures(
+        Posts.find({
+          user: id,
+        }),
+        req.query
+      ).paginating();
+
+      const posts = await features.query
+        .populate("user", "avatar username fullname")
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user",
+            select: "avatar username fullname",
+          },
+        });
+
+      return res.json({
+        posts,
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  },
+  getSavedPosts: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const user = await Users.findById(id).select("saved").lean();
+
+      const features = new APIfeatures(
+        Posts.find({
+          _id: { $in: user.saved },
+        }),
+        req.query
+      ).paginating();
+
+      const posts = await features.query
+        .populate("user", "avatar username fullname")
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user",
+            select: "avatar username fullname",
+          },
+        });
+
+      return res.json({
+        posts,
+      });
     } catch (error) {
       res.status(500).json({ msg: error.message });
     }
