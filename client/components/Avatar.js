@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   avatar: {
     objectFit: "contain",
     borderColor: "#d9d9d9",
-    borderWidth: 0.5,
+    borderWidth:1,
     padding: 1,
   },
   small: {

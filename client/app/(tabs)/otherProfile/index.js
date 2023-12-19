@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Text,
   View,
@@ -7,6 +7,8 @@ import {
   Dimensions,
   Pressable,
   Image,
+  FlatList,
+  Linking,
 } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import { useRouter, useLocalSearchParams, Redirect } from "expo-router";
@@ -16,14 +18,14 @@ import {
   Feather,
   FontAwesome5,
   Entypo,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import Avatar from "../../../components/Avatar";
 import Loading from "../../../components/Loading";
 import PostList from "../../../components/profile/PostList";
 import FollowBtn from "../../../components/FollowBtn";
 
-import { useSelector, useDispatch } from "react-redux";
-import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
+import { useSelector } from "react-redux";
 import { getDataAPI } from "../../../utils/fetchData";
 
 const Profile = () => {
@@ -40,6 +42,7 @@ const Profile = () => {
   const router = useRouter();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -76,6 +79,14 @@ const Profile = () => {
   const handlePickPost = (image) => {
     setPostPicker(image);
   };
+
+  const handleOpenURL = useCallback(async () => {
+    const supported = await Linking.canOpenURL(user.website);
+
+    if (supported) {
+      await Linking.openURL(user.website);
+    }
+  }, [user.website]);
 
   if (auth.user._id === id) return <Redirect href="/profile" />;
   if (Object.keys(user).length === 0) return <Loading />;
@@ -180,6 +191,17 @@ const Profile = () => {
           <View className="mt-1">
             <Text className="font-medium">{user.fullname}</Text>
             <Text className="">{user.story}</Text>
+            {user.website && (
+              <Pressable
+                onPress={handleOpenURL}
+                className="flex-row items-center"
+              >
+                <MaterialIcons name="facebook" size={20} color="#1877F2" />
+                <Text className="text-[#1877F2] text-[13px] ml-1">
+                  {user.website}
+                </Text>
+              </Pressable>
+            )}
           </View>
           <View
             style={{
@@ -261,14 +283,42 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
           </View>
-          {loadPost ? (
-            <Loading />
-          ) : (
-            <PostList
-              posts={isShowPosts ? posts : savedPosts}
-              handlePickPost={handlePickPost}
-            />
-          )}
+          <FlatList
+            ref={flatListRef}
+            data={[posts, savedPosts]}
+            horizontal={true}
+            numColumns={1}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            initialNumToRender={2}
+            initialScrollIndex={isShowPosts ? 0 : 1}
+            getItemLayout={(data, index) => ({
+              length: windowWidth,
+              offset: windowWidth * index,
+              index,
+            })}
+            onScroll={(event) => {
+              const x = event.nativeEvent.contentOffset.x;
+              setIsShowPosts(!Math.round(x / windowWidth) > 0);
+            }}
+            renderItem={({ item, index }) => (
+              <ScrollView
+                style={{
+                  flex: 1,
+                  width: windowWidth,
+                  minHeight: windowHeight,
+                }}
+                showsVerticalScrollIndicator={false}
+                key={index}
+              >
+                {loadPost ? (
+                  <Loading />
+                ) : (
+                  <PostList posts={item} handlePickPost={handlePickPost} />
+                )}
+              </ScrollView>
+            )}
+          />
         </View>
       </ScrollView>
       {postPicker && (

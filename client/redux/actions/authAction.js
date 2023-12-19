@@ -29,7 +29,7 @@ export const loginAction = (data) => async (dispatch) => {
     await AsyncStorage.setItem("firstLogin", "true");
     dispatch({
       type: GLOBAL_TYPES.AUTH,
-      payload: {
+      payload: {  
         token: res.data.access_token,
         user: res.data.user,
       },

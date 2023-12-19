@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View } from "react-native";
 import { Redirect } from "expo-router";
 import moment from "moment";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { refreshToken } from "../redux/actions/authAction";
 
 // Config moment
@@ -28,7 +28,6 @@ moment.updateLocale("vi", {
 });
 
 const index = () => {
-  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -37,11 +36,7 @@ const index = () => {
 
   return (
     <View>
-      {auth.token ? (
-        <Redirect href="/(tabs)/home" />
-      ) : (
-        <Redirect href="/(auth)/login" />
-      )}
+      <Redirect href="/(tabs)/home" />
     </View>
   );
 };

@@ -1,12 +1,23 @@
 import { View, StatusBar, Image, Pressable, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import React from "react";
+import React, { useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import Posts from "../../../components/home/Posts";
 import StoryList from "../../../components/home/StoryList";
 
 const index = () => {
+  useEffect(() => {
+    const firstLogin = async () => {
+      const firstLogin = await AsyncStorage.getItem("firstLogin");
+      if (firstLogin === null) {
+        router.replace("/(auth)/login");
+      }
+    };
+
+    firstLogin();
+  }, []);
 
   return (
     <ScrollView
@@ -32,12 +43,8 @@ const index = () => {
           >
             <AntDesign name="hearto" size={24} color="black" />
           </Pressable>
-          <Pressable 
-          className="w-8" 
-          onPress={() => router.push("/message")}
-          >
+          <Pressable className="w-8" onPress={() => router.push("/message")}>
             <Feather name="message-square" size={25} color="black" />
-          
           </Pressable>
         </View>
       </View>

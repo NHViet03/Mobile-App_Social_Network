@@ -1,5 +1,6 @@
 import { GLOBAL_TYPES } from "./globalTypes";
-import { getDataAPI, patchDataAPI, deleteDataAPI } from "../../utils/fetchData";
+import { patchDataAPI } from "../../utils/fetchData";
+import { imageUpload } from "../../utils/imageUpload";
 
 export const deleteFollower =
   ({ user, auth }) =>
@@ -64,5 +65,76 @@ export const unFollow =
       });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+export const updateProfile =
+  ({ newUser, auth }) =>
+  async (dispatch) => {
+    const oldUser = auth.user;
+    if (
+      newUser.username === oldUser.username &&
+      newUser.fullname === oldUser.fullname &&
+      newUser.avatar === oldUser.avatar &&
+      newUser.story === oldUser.story &&
+      newUser.gender === oldUser.gender &&
+      newUser.website === oldUser.website
+    )
+      return;
+
+    try {
+      let media = [];
+
+      if (newUser.avatar !== oldUser.avatar)
+        media = await imageUpload([newUser.avatar]);
+
+      await patchDataAPI(
+        `update_profile`,
+        {
+          username: newUser.username,
+          fullname: newUser.fullname,
+          avatar: media.length > 0 ? media[0].url : oldUser.avatar,
+          story: newUser.story,
+          gender: newUser.gender,
+          website: newUser.website,
+        },
+        auth.token
+      );
+
+      dispatch({
+        type: GLOBAL_TYPES.AUTH,
+        payload: {
+          ...auth,
+          user: {
+            ...newUser,
+            avatar: media[0].url,
+          },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const changePassword =
+  ({ passwords, auth }) =>
+  async (dispatch) => {
+    try {
+      const res = await patchDataAPI(
+        "change_password",
+        {
+          currentPassword: passwords.currentPassword,
+          newPassword: passwords.newPassword,
+        },
+        auth.token
+      );
+
+      return {
+        success: res.data.msg,
+      };
+    } catch (error) {
+      return {
+        error: error.response.data.msg,
+      };
     }
   };

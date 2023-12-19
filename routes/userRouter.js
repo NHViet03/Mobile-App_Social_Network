@@ -10,6 +10,9 @@ router.patch("/delete_follower/:id", auth, userCtrl.deleteFollower);
 router.patch("/follow/:id", auth, userCtrl.follow);
 router.patch("/unfollow/:id", auth, userCtrl.unFollow);
 
-router.get("/search_users", userCtrl.searchUsers);
+router.get("/search_users", auth, userCtrl.searchUsers);
+
+router.patch("/update_profile", auth, userCtrl.updateProfile);
+router.patch("/change_password",auth, userCtrl.changePassword);
 
 module.exports = router;

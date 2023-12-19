@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import SelectImage from "../../../components/addPost/SelectImage";
 import ShowImage from "../../../components/addPost/ShowImage";

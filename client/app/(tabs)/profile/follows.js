@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Pressable, StatusBar } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  StatusBar,
+  Dimensions,
+  FlatList,
+} from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import { useRouter, useLocalSearchParams } from "expo-router";
 
@@ -59,6 +66,15 @@ const Follows = () => {
     await setFollowers(followers.filter((item) => item._id !== user._id));
   };
 
+  const width = Dimensions.get("window").width;
+  const flatListRef = useRef(null);
+
+  const handleChangeShowFollowers = (value) => {
+    setIsShowFollowers(value);
+    const index = value ? 0 : 1;
+    flatListRef.current.scrollToIndex({ animated: false, index });
+  };
+
   return (
     <View
       style={{
@@ -91,7 +107,7 @@ const Follows = () => {
                   : "border-b-borderColor"
               }`}
             >
-              <Pressable onPress={() => setIsShowFollowers(true)}>
+              <Pressable onPress={() => handleChangeShowFollowers(true)}>
                 <Text
                   className={`text-center font-bold ${
                     isShowFollowers ? "text-dark" : "text-textColor"
@@ -108,7 +124,7 @@ const Follows = () => {
                   : "border-b-borderColor"
               }`}
             >
-              <Pressable onPress={() => setIsShowFollowers(false)}>
+              <Pressable onPress={() => handleChangeShowFollowers(false)}>
                 <Text
                   className={`text-center font-bold ${
                     !isShowFollowers ? "text-dark" : "text-textColor"
@@ -119,27 +135,52 @@ const Follows = () => {
               </Pressable>
             </View>
           </View>
-          <ScrollView
-            style={{
-              flex: 1,
+
+          <FlatList
+            ref={flatListRef}
+            data={[followers, following]}
+            horizontal={true}
+            numColumns={1}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            initialNumToRender={2}
+            initialScrollIndex={isShowFollowers ? 0 : 1}
+            getItemLayout={(data, index) => ({
+              length: width,
+              offset: width * index,
+              index,
+            })}
+            onScroll={(event) => {
+              const x = event.nativeEvent.contentOffset.x;
+              setIsShowFollowers(!Math.round(x / width) > 0);
             }}
-          >
-            {loading ? (
-              <Loading />
-            ) : (
-              <View className="mt-4 px-4 flex-1">
-                <Text className="font-medium text-base mb-4">
-                  Tất cả người {isShowFollowers ? "theo dõi" : "đang theo dõi"}
-                </Text>
-                <FollowList
-                  users={isShowFollowers ? followers : following}
-                  followers={isShowFollowers}
-                  auth
-                  handleDeleteFollow={handleDeleteFollow}
-                />
-              </View>
+            renderItem={({ item, index }) => (
+              <ScrollView
+                style={{
+                  flex: 1,
+                  width: width,
+                }}
+                key={index}
+              >
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <View className="mt-4 px-4 flex-1">
+                    <Text className="font-medium text-base mb-4">
+                      Tất cả người{" "}
+                      {isShowFollowers ? "theo dõi" : "đang theo dõi"}
+                    </Text>
+                    <FollowList
+                      users={item}
+                      followers={isShowFollowers}
+                      auth
+                      handleDeleteFollow={handleDeleteFollow}
+                    />
+                  </View>
+                )}
+              </ScrollView>
             )}
-          </ScrollView>
+          />
         </View>
       </View>
     </View>

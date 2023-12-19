@@ -1,11 +1,12 @@
 const Users = require("../models/userModel");
+const bcrypt = require("bcrypt");
 
 const userCtrl = {
   getUser: async (req, res) => {
     try {
       const { id } = req.params;
       const user = await Users.findOne({ _id: id })
-        .select("avatar username fullname followers following story")
+        .select("avatar username fullname followers following story website")
         .lean();
 
       return res.json({ user });
@@ -129,6 +130,55 @@ const userCtrl = {
         .lean();
 
       res.json({ users });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  },
+  updateProfile: async (req, res) => {
+    try {
+      const { avatar, fullname, username, story, website, gender } = req.body;
+
+      await Users.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          avatar,
+          fullname,
+          username: username.toLowerCase().replace(/ /g, ""),
+          story,
+          website,
+          gender,
+        },
+        {
+          new: true,
+        }
+      );
+
+      return res.json({ msg: "Success" });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  },
+  changePassword: async (req, res) => {
+    try {
+      const { currentPassword, newPassword } = req.body;
+      const user = await Users.findById(req.user._id).select("password");
+
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+      if (!isMatch) {
+        return res.status(400).json({ msg: "Mật khẩu hiện tại không đúng." });
+      }
+
+      const newPasswordHash = await bcrypt.hash(newPassword, 12);
+
+      await Users.findOneAndUpdate(
+        { _id: req.user._id },
+        {
+          password: newPasswordHash,
+        }
+      );
+
+      return res.json({ msg: "Thay đổi mật khẩu thành công." });
     } catch (error) {
       res.status(500).json({ msg: error.message });
     }

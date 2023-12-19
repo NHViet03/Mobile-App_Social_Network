@@ -13,6 +13,8 @@ import {
   Dimensions,
   Pressable,
   Image,
+  FlatList,
+  Linking,
 } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import { useRouter } from "expo-router";
@@ -20,6 +22,7 @@ import {
   Ionicons,
   Octicons,
   MaterialCommunityIcons,
+  MaterialIcons,
   Feather,
   FontAwesome5,
   Entypo,
@@ -50,6 +53,7 @@ const Profile = () => {
   const snapPointsLogOut = useMemo(() => ["25%"], []);
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     setUser(auth.user);
@@ -89,6 +93,14 @@ const Profile = () => {
   const handlePickPost = (image) => {
     setPostPicker(image);
   };
+
+  const handleOpenURL = useCallback(async () => {
+    const supported = await Linking.canOpenURL(user.website);
+
+    if (supported) {
+      await Linking.openURL(user.website);
+    }
+  }, [user.website]);
 
   if (Object.keys(user).length === 0) return <Loading />;
 
@@ -134,7 +146,7 @@ const Profile = () => {
             gap: 10,
           }}
         >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/add")}>
             <Octicons name="diff-added" size={24} color="black" />
           </TouchableOpacity>
 
@@ -190,7 +202,18 @@ const Profile = () => {
           </View>
           <View className="mt-1">
             <Text className="font-medium">{user.fullname}</Text>
-            <Text className="">{user.story}</Text>
+            <Text>{user.story}</Text>
+            {user.website && (
+              <Pressable
+                onPress={handleOpenURL}
+                className="flex-row items-center"
+              >
+                <MaterialIcons name="facebook" size={20} color="#1877F2" />
+                <Text className="text-[#1877F2] text-[13px] ml-1">
+                  {user.website}
+                </Text>
+              </Pressable>
+            )}
           </View>
           <View
             style={{
@@ -235,7 +258,7 @@ const Profile = () => {
                   borderRadius: 6,
                   paddingVertical: 8,
                 }}
-                onPress={() => router.push("/profile/changePasswork")}
+                onPress={() => router.push("/profile/changePassword")}
               >
                 <Text
                   style={{
@@ -295,14 +318,43 @@ const Profile = () => {
               </TouchableOpacity>
             </View>
           </View>
-          {loading ? (
-            <Loading />
-          ) : (
-            <PostList
-              posts={isShowPosts ? posts : savedPosts}
-              handlePickPost={handlePickPost}
-            />
-          )}
+
+          <FlatList
+            ref={flatListRef}
+            data={[posts, savedPosts]}
+            horizontal={true}
+            numColumns={1}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            initialNumToRender={2}
+            initialScrollIndex={isShowPosts ? 0 : 1}
+            getItemLayout={(data, index) => ({
+              length: windowWidth,
+              offset: windowWidth * index,
+              index,
+            })}
+            onScroll={(event) => {
+              const x = event.nativeEvent.contentOffset.x;
+              setIsShowPosts(!Math.round(x / windowWidth) > 0);
+            }}
+            renderItem={({ item, index }) => (
+              <ScrollView
+                style={{
+                  flex: 1,
+                  width: windowWidth,
+                  minHeight: windowHeight,
+                }}
+                showsVerticalScrollIndicator={false}
+                key={index}
+              >
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <PostList posts={item} handlePickPost={handlePickPost} />
+                )}
+              </ScrollView>
+            )}
+          />
         </View>
       </ScrollView>
       {postPicker && (
@@ -372,4 +424,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
