@@ -2,7 +2,7 @@ import axios from "axios";
 import Constants from "expo-constants";
 
 const port = 5000;
-const uri = Constants?.expoConfig?.hostUri
+export const uri = Constants?.expoConfig?.hostUri
   ? Constants.expoConfig.hostUri.split(`:`).shift().concat(`:${port}`)
   : `localhost:${port}`;
 

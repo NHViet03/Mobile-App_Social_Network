@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     objectFit: "contain",
     borderColor: "#d9d9d9",
     borderWidth:1,
-    padding: 1,
+    padding: 2,
   },
   small: {
     width: 30,

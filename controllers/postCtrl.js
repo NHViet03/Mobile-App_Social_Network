@@ -145,6 +145,27 @@ const postCtrl = {
       res.status(500).json({ msg: error.message });
     }
   },
+  getPost: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const post = await Posts.findOne({ _id: id })
+        .populate("user", "avatar fullname username")
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user",
+            select: "avatar username fullname",
+          },
+        });
+
+      return res.json({
+        post,
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  },
 };
 
 module.exports = postCtrl;

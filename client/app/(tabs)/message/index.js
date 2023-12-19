@@ -8,28 +8,54 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { router } from "expo-router";
-import { Ionicons, EvilIcons, Entypo } from "@expo/vector-icons";
-import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
+import { Feather, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useCallback, useMemo, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import UserChat from "../../../components/message/UserChat";
+import ConservationItem from "../../../components/message/ConversationItem";
 import ModalNewChat from "../../../components/message/ModalNewChat";
-import StoryListMessage from "../../../components/message/StoryListMessage";
+import UserStoryList from "../../../components/message/UserStoryList";
+import Loading from "../../../components/Loading";
+
+import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
+import { useSelector, useDispatch } from "react-redux";
+import { getConversations } from "../../../redux/actions/messageAction";
 
 const index = () => {
   const auth = useSelector((state) => state.auth);
-  const bottomSheetModalNewChat = useRef(null);
+  const message = useSelector((state) => state.message);
   const dispatch = useDispatch();
 
-  const snapPointsNewChat = useMemo(() => ["95%"], []);
+  const [conversations, setConversations] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const getConversationsData = async () => {
+      if (message.firstLoad) return;
+      setLoading(true);
+      await dispatch(getConversations({ auth }));
+      setLoading(false);
+    };
+
+    getConversationsData();
+  }, [auth, dispatch, message.firstLoad]);
+
+  useEffect(() => {
+    setConversations(message.conversations);
+  }, [message.conversations]);
+
+  const bottomSheetModalNewChat = useRef(null);
+  const snapPointsNewChat = useMemo(() => ["95%"], []);
   const handleOpenNewChatModal = useCallback(() => {
     bottomSheetModalNewChat.current?.present();
   }, []);
-
   const handleCloseNewChatModal = () => {
     dispatch({
       type: GLOBAL_TYPES.NEWCHAT_MODAL,
@@ -41,36 +67,33 @@ const index = () => {
   return (
     <View
       style={{
-        display: "flex",
         flex: 1,
-        flexDirection: "column",
         backgroundColor: "#fff",
       }}
     >
       <View
         style={{
-          paddingHorizontal: 12,
-          display: "flex",
+          paddingHorizontal: 16,
           alignItems: "center",
           justifyContent: "space-between",
           flexDirection: "row",
-          height: 50,
+          height: 60,
           marginTop: StatusBar.currentHeight,
           backgroundColor: "#fff",
-          marginBottom: 10,
+          marginBottom: 16,
         }}
       >
-        <Pressable onPress={() => router.push("/home")}>
-          <Ionicons name="chevron-back-outline" size={24} color="black" />
-        </Pressable>
-        <View>
+        <View className="flex-row items-center gap-4">
+          <Pressable onPress={() => router.back()}>
+            <Feather name="arrow-left" size={24} color="black" />
+          </Pressable>
           <Text
             style={{
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: "bold",
             }}
           >
-            {auth.username}
+            {auth.user.username}
           </Text>
         </View>
         <TouchableOpacity>
@@ -82,57 +105,40 @@ const index = () => {
           />
         </TouchableOpacity>
       </View>
-      {/* Input Search */}
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          backgroundColor: "#EEEEEE",
-          marginHorizontal:12,
-          paddingBottom: 5,
-          marginBottom: 10,
-          borderRadius: 10,
-        }}
-      >
-        <EvilIcons
-          name="search"
-          size={30}
-          color="black"
-          style={{
-            marginStart: 5,
-          }}
-        />
+      <View className="mx-4 mb-5 px-3 py-[6px] rounded-lg flex-row items-center justify-between bg-inputColor">
+        <MaterialCommunityIcons name="magnify" size={24} color="black" />
         <TextInput
           placeholder="Tìm kiếm"
-          style={{
-            padding: 5,
-            flex: 1,
-          }}
+          className="flex-1 mx-2"
+          value={search}
+          onChangeText={(text) => setSearch(text)}
         />
       </View>
-      {/* Post Story */}
-      <View
-        className="border-borderColor border-b-[0.5px]"
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
-          marginVertical: 16,
+          margin: 16,
           paddingBottom: 16,
         }}
       >
-        <StoryListMessage />
-      </View>
-      {/* User Chat */}
-      <ScrollView>
-        <UserChat />
-        <UserChat />
-        <UserChat />
-        <UserChat />
-        <UserChat />
-        <UserChat />
-        <UserChat />
-        <UserChat />
-        <UserChat />
+        <UserStoryList users={auth.user.followers} />
+        <Text className="font-bold text-base my-3">Tin nhắn</Text>
+
+        {loading && <Loading />}
+        {conversations.length === 0 && !loading && (
+          <Text className="fw-medium text-base text-center">
+            Không có tin nhắn nào
+          </Text>
+        )}
+
+        {conversations.map((conversation) => (
+          <View key={conversation._id} className=" mb-4">
+            <ConservationItem conversation={conversation} auth={auth} />
+          </View>
+        ))}
       </ScrollView>
+
       <BottomSheetModal
         ref={bottomSheetModalNewChat}
         index={0}

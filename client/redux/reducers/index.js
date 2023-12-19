@@ -9,6 +9,9 @@ import reportPostModal from "./reportPostModalReducer";
 import sharePostModal from "./sharePostModalReducer";
 import newChatModal from "./newChatModalReducer";
 import logOutModal from "./logOutModalReducer";
+import message from "./messageReducer";
+import socket from "./socketReducer";
+
 export default combineReducers({
   auth,
   alert,
@@ -21,4 +24,6 @@ export default combineReducers({
   commentModal,
   newChatModal,
   logOutModal,
+  message,
+  socket
 });

@@ -350,7 +350,7 @@ const Profile = () => {
                 {loading ? (
                   <Loading />
                 ) : (
-                  <PostList posts={item} handlePickPost={handlePickPost} />
+                  <PostList posts={item} handlePickPost={handlePickPost} profile />
                 )}
               </ScrollView>
             )}

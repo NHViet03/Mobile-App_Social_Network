@@ -10,5 +10,7 @@ router.get('/explore_posts',auth,postCtrl.getExplorePosts)
 router.get('/user_posts/:id',auth,postCtrl.getUserPosts)
 router.get('/saved_posts/:id',auth,postCtrl.getSavedPosts)
 
+router.get('/post/:id',auth,postCtrl.getPost)
+
 
 module.exports=router;

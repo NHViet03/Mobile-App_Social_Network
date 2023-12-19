@@ -8,6 +8,10 @@ export default function Layout() {
         options={{ headerShown: false, animation: "slide_from_right" }}
       />
        <Stack.Screen name="follows" options={{ headerShown: false,animation:"slide_from_right" }} />
+       <Stack.Screen
+        name="postDetail"
+        options={{ headerTitle:"Bài viết", animation: "slide_from_right" }}
+      />
     </Stack>
   );
 }

@@ -11,6 +11,8 @@ import ModalComment from "../components/ModalComment";
 import ModalReportPost from "../components/ModalReportPost";
 import ModalSharePost from "../components/ModalSharePost";
 
+import SocketClient from "./SocketClient";
+
 export const PostContext = createContext(null);
 
 export default function Layout() {
@@ -91,6 +93,7 @@ export default function Layout() {
           </BottomSheetModalProvider>
         </PostContext.Provider>
       </GestureHandlerRootView>
+      <SocketClient />
     </DataProvider>
   );
 }

@@ -1,23 +1,19 @@
-import { View, StatusBar, Image, Pressable, StyleSheet } from "react-native";
+import { View, StatusBar, Image, Pressable } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import React, { useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import Posts from "../../../components/home/Posts";
 import StoryList from "../../../components/home/StoryList";
 
-const index = () => {
-  useEffect(() => {
-    const firstLogin = async () => {
-      const firstLogin = await AsyncStorage.getItem("firstLogin");
-      if (firstLogin === null) {
-        router.replace("/(auth)/login");
-      }
-    };
+import { useSelector } from "react-redux";
 
-    firstLogin();
-  }, []);
+const index = () => {
+  const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!auth.token) router.replace("/(auth)/login");
+  }, [auth.token]);
 
   return (
     <ScrollView

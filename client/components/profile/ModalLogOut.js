@@ -9,12 +9,14 @@ import Avatar from "../Avatar";
 
 const ModalLogOut = ({ handleCloseLogOutModal }) => {
   const auth = useSelector((state) => state.auth);
+  const socket=useSelector(state=>state.socket);
   const dispatch=useDispatch();
 
   const handlePresslogout = async () => {
     router.replace("/(auth)/login");
     handleCloseLogOutModal();
     await dispatch(logoutAction());
+    socket.close();
   };
   return (
     <View>
