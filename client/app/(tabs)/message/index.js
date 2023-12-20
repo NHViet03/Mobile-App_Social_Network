@@ -40,7 +40,7 @@ const index = () => {
     const getConversationsData = async () => {
       if (message.firstLoad) return;
       setLoading(true);
-      await dispatch(getConversations({ auth }));
+      await dispatch(getConversations({ auth })); 
       setLoading(false);
     };
 
@@ -122,7 +122,7 @@ const index = () => {
           paddingBottom: 16,
         }}
       >
-        <UserStoryList users={auth.user.followers} />
+        <UserStoryList users={auth.user.following} />
         <Text className="font-bold text-base my-3">Tin nhắn</Text>
 
         {loading && <Loading />}

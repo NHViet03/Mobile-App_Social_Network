@@ -6,11 +6,12 @@ import {
   Pressable,
   TouchableOpacity,
   Image,
-  ScrollView
+  ScrollView,
+  Button,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import { FontAwesome, Entypo, Feather } from "@expo/vector-icons";
+import { Octicons, Entypo, Feather, AntDesign } from "@expo/vector-icons";
 import EmojiSelector from "react-native-emoji-selector";
 import * as ImagePicker from "expo-image-picker";
 import OtherMessage from "../../../components/message/OtherMessage";
@@ -20,24 +21,32 @@ import Loading from "../../../components/Loading";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getDataAPI } from "../../../utils/fetchData";
-import { getMessages } from "../../../redux/actions/messageAction";
+import {
+  getMessages,
+  MESS_TYPES,
+  createMessage,
+} from "../../../redux/actions/messageAction";
 
 const chatBox = () => {
   const auth = useSelector((state) => state.auth);
   const message = useSelector((state) => state.message);
+  const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
 
   const { id, userId, username, fullname, avatar } = useLocalSearchParams();
 
-  const [messageType, setMessageType] = useState("");
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({});
-  const [selectedImage, setSelectedImage] = useState(null);
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [messageInput, setMessageInput] = useState({
+    text: "",
+    media: [],
+  });
+  const [page, setPage] = useState(0);
 
   const scrollRef = useRef();
-
+  const pageEnd = useRef();
 
   useEffect(() => {
     const getUserData = async () => {
@@ -50,74 +59,78 @@ const chatBox = () => {
   }, [userId]);
 
   useEffect(() => {
-    if (!id) return;
     getMessagesData = async () => {
+      if (messages.length > page * 10) return;
       setLoading(true);
-      await dispatch(getMessages({ id, auth }));
+      await dispatch(getMessages({ id: userId, auth, page }));
       setLoading(false);
     };
 
     getMessagesData();
-  }, [dispatch, auth, id]);
+  }, [dispatch, auth, userId, page]);
 
   useEffect(() => {
     setMessages([...message.messages].reverse());
+    page===0 && scrollRef.current.scrollToEnd({ animated: false });
   }, [message.messages]);
+
+  const handleBack = () => {
+    dispatch({ type: MESS_TYPES.GET_MESSAGES, payload: [] });
+    router.replace("/message");
+  };
 
   const handleEmojiPress = () => {
     setShowEmojiSelector(!showEmojiSelector);
   };
 
-  // const handleSendMessage = () => {
-  //   if (message.trim() !== "" || selectedImage) {
-  //     setMessages((prevMessages) => [
-  //       ...prevMessages,
-  //       {
-  //         id: prevMessages.length,
-  //         text: message,
-  //         image: selectedImage,
-  //         type: "You",
-  //       },
-  //     ]);
-
-  //     setMessage("");
-  //     setSelectedImage(null);
-  //   }
-  // };
-
   const pickImageAsync = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
+    let media = await ImagePicker.launchImageLibraryAsync({
       quality: 1,
+      allowsMultipleSelection: true,
+      base64: true,
     });
 
-    if (!result.canceled) {
-      setSelectedImage(result.uri);
+    if (!media.canceled) {
+      const newArr = [];
+      media.assets.forEach((image) => {
+        newArr.push(image);
+      });
+
+      setMessageInput({
+        ...messageInput,
+        media: newArr,
+      });
     } else {
       console.log("Cancelled");
     }
   };
-  const renderSelectedImage = () => {
-    if (selectedImage) {
-      return (
-        <View
-          style={{
-            position: "absolute",
-            right: 12,
-            top: -10,
-          }}
-        >
-          <Image
-            source={{ uri: selectedImage }}
-            style={{ width: 50, height: 50, borderRadius: 4 }}
-          />
-        </View>
-      );
-    }
-    return null;
+
+  const handleRemoveImage = (index) => {
+    const newArr = [...messageInput.media];
+    newArr.splice(index, 1);
+    setMessageInput({
+      ...messageInput,
+      media: newArr,
+    });
   };
 
-  
+  const handleSendMessage = () => {
+    const newMessage = {
+      media: messageInput.media,
+      sender: auth.user,
+      recipient: user,
+      text: messageInput.text,
+      createdAt: new Date().toISOString(),
+    };
+
+    setMessages([...messages, newMessage]);
+    setMessageInput({
+      text: "",
+      media: [],
+    });
+    dispatch(createMessage({ message: newMessage, auth, socket }));
+  };
+
   return (
     <View
       style={{
@@ -136,7 +149,7 @@ const chatBox = () => {
           marginBottom: 16,
         }}
       >
-        <Pressable onPress={() => router.replace("/message")}>
+        <Pressable onPress={handleBack}>
           <Feather name="arrow-left" size={24} color="black" />
         </Pressable>
         <View className="ml-3" style={{ flex: 1 }}>
@@ -177,18 +190,16 @@ const chatBox = () => {
 
       <ScrollView
         ref={scrollRef}
-        onContentSizeChange={() =>
-          scrollRef.current?.scrollToEnd({ animated: false })
-        }
         scrollEnabled
         showsVerticalScrollIndicator={false}
+        onScroll={(e) =>
+          e.nativeEvent.contentOffset.y < 10 && setPage(page + 1)
+        }
       >
         <View className="mt-2 mb-12 justify-center items-center">
-          <Avatar size="large" avatar={user.avatar} />
-          <Text className="font-bold text-[17px] mt-[6px]">
-            {user.fullname}
-          </Text>
-          <Text className="text-base">Dreamers . {user.username}</Text>
+          <Avatar size="large" avatar={avatar} />
+          <Text className="font-bold text-[17px] mt-[6px]">{fullname}</Text>
+          <Text className="text-base">Dreamers . {username}</Text>
           <Text className="text-base text-textColor mb-4">
             {user.followers?.length} người theo dõi . {user.following?.length}{" "}
             đang theo dõi{" "}
@@ -209,6 +220,8 @@ const chatBox = () => {
         </View>
         {loading && <Loading />}
 
+        <View ref={pageEnd} />
+
         {messages.map((item, index) => (
           <View key={index} className="mb-3">
             {item.sender._id === auth.user._id ? (
@@ -220,24 +233,59 @@ const chatBox = () => {
         ))}
       </ScrollView>
 
-      <View
-        style={{
-          display: "flex",
-          borderTopColor: "#EEEEEE",
-          backgroundColor: "#fff",
-        }}
-      >
+      <View className="mt-3">
+        {messageInput.media.length > 0 && (
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            className="mb-3"
+          >
+            {messageInput.media.map((image, index) => (
+              <Pressable
+                style={{
+                  position: "relative",
+                  marginEnd: 12,
+                }}
+                key={index}
+                onPress={() => handleRemoveImage(index)}
+              >
+                <Image
+                  source={{ uri: image.uri }}
+                  style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 4,
+                    objectFit: "cover",
+                  }}
+                />
+                <AntDesign
+                  name="closecircleo"
+                  size={16}
+                  color="#fff"
+                  style={{
+                    position: "absolute",
+                    top: 4,
+                    right: 4,
+                    shadowColor: "#000000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 6,
+                    },
+                  }}
+                />
+              </Pressable>
+            ))}
+          </ScrollView>
+        )}
         <View
+          className="bg-inputColor"
           style={{
-            paddingHorizontal: 10,
-            display: "flex",
+            paddingHorizontal: 12,
             alignItems: "center",
             flexDirection: "row",
-            height: 50,
-            marginBottom: 10,
-            backgroundColor: "#EEEEEE",
-            borderRadius: 30,
-            position: "relative",
+            height: 48,
+            marginBottom: 12,
+            borderRadius: 24,
           }}
         >
           <Entypo
@@ -252,50 +300,53 @@ const chatBox = () => {
               flex: 1,
               fontSize: 16,
               borderRadius: 8,
-              borderColor: "#fff",
-              marginStart: 10,
+              marginStart: 12,
             }}
           >
-            {renderSelectedImage()}
-            <TextInput placeholder="Nhắn tin"></TextInput>
+            <TextInput
+              placeholder="Nhắn tin"
+              value={messageInput.text}
+              onChangeText={(text) =>
+                setMessageInput({ ...messageInput, text })
+              }
+            />
           </View>
-
-          <Entypo
+          <Octicons
             name="image"
             size={24}
             color="black"
             style={{
-              marginEnd: 10,
+              marginEnd: 12,
             }}
             onPress={pickImageAsync}
           />
-          <FontAwesome
-            name="microphone"
-            size={24}
-            color="black"
-            style={{
-              marginEnd: 10,
-            }}
-          />
-          <Text
-            style={{
-              color: "#C43302",
-              fontWeight: 600,
-              fontSize: 16,
-              marginEnd: 10,
-            }}
-          >
-            Gửi
-          </Text>
+
+          <Pressable onPress={handleSendMessage}>
+            <Text
+              style={{
+                color: "#C43302",
+                fontWeight: 600,
+                fontSize: 16,
+              }}
+            >
+              Gửi
+            </Text>
+          </Pressable>
         </View>
       </View>
+
       {showEmojiSelector && (
         <EmojiSelector
-          // onEmojiSelected={(emoji) => {
-          //   setMessage((prevMessage) => prevMessage + emoji);
-          // }}
+          onEmojiSelected={(emoji) => {
+            setMessageInput({
+              ...messageInput,
+              text: messageInput.text + emoji,
+            });
+          }}
+          columns={8}
           showSearchBar={false}
-          style={{ height: 240 }}
+          showTabs={false}
+          style={{ height: 200 }}
         />
       )}
     </View>

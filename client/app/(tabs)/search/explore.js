@@ -9,10 +9,8 @@ import CardFooter from "../../../components/postCard/CardFooter";
 import { useSelector } from "react-redux";
 
 const explore = () => {
-  const { explore, homePosts } = useSelector((state) => ({
-    explore: state.explore,
-    homePosts: state.homePosts,
-  }));
+  const explore=useSelector(state=>state.explore);
+  const homePosts=useSelector(state=>state.homePosts);
   const { id } = useLocalSearchParams();
   const [post, setPost] = useState(null);
 

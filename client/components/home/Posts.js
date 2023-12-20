@@ -9,10 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../redux/actions/postAction";
 
 const Posts = () => {
-  const { auth, homePosts } = useSelector((state) => ({
-    homePosts: state.homePosts,
-    auth: state.auth,
-  }));
+  const auth=useSelector(state=>state.auth);
+  const homePosts=useSelector(state=>state.homePosts)
   const dispatch = useDispatch();
 
   const [posts, setPosts] = useState([]);

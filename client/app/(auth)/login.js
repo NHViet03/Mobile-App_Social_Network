@@ -9,10 +9,14 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
-import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { loginAction } from "../../redux/actions/authAction";
 import ModalAlert from "../../components/ModalAlert";
+
+import { io } from "socket.io-client";
+import { uri } from "../../utils/fetchData";
+import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
+import { loginAction } from "../../redux/actions/authAction";
+import { useDispatch, useSelector } from "react-redux";
 
 const login = () => {
   const [email, setEmail] = useState("");
@@ -40,7 +44,23 @@ const login = () => {
         handlePress: () => setAlert(false),
       });
     }
-    if (res.success) router.replace("/(tabs)/home");
+    if (res.success) {
+      router.replace("/(tabs)/home");
+      if (socket) return;
+      const socket = io(`http://${uri}`, {
+        transports: ["websocket"],
+      });
+
+      dispatch({
+        type: GLOBAL_TYPES.SOCKET,
+        payload: socket,
+      });
+
+      socket.on &&
+        socket.on("connect", () => {
+          console.log("Socket Connected");
+        });
+    }
   };
   return (
     <View style={styles.container}>

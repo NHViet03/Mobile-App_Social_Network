@@ -18,9 +18,9 @@ const ConservationItem = ({ conversation, auth }) => {
           params: {
             id: conversation._id,
             userId: user._id,
-            avatar:user.avatar,
-            username:user.username,
-            fullname:user.fullname
+            avatar: user.avatar,
+            username: user.username,
+            fullname: user.fullname,
           },
         })
       }
@@ -33,7 +33,13 @@ const ConservationItem = ({ conversation, auth }) => {
       <View className="ml-3">
         <Text className="font-medium text-base leading-5">{user.fullname}</Text>
         <View className="flex-row items-center">
-          <Text className="text-textColor">
+          <Text
+            className={`${
+              new Date() - new Date(conversation.updatedAt) < 60000
+                ? ""
+                : "text-textColor"
+            }`}
+          >
             {conversation.media.length > 0
               ? "Đã gửi một hình ảnh"
               : conversation.text.length > 20

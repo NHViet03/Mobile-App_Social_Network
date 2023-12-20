@@ -25,10 +25,9 @@ import { getExplorePosts } from "../../../redux/actions/exploreAction";
 import { getDataAPI } from "../../../utils/fetchData";
 
 const index = () => {
-  const { auth, explore } = useSelector((state) => ({
-    auth: state.auth,
-    explore: state.explore,
-  }));
+
+  const auth=useSelector(state=>state.auth);
+  const explore=useSelector(state=>state.explore);
   const dispatch = useDispatch();
 
   const [posts, setPosts] = useState([]);

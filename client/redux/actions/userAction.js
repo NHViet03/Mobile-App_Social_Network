@@ -107,7 +107,7 @@ export const updateProfile =
           ...auth,
           user: {
             ...newUser,
-            avatar: media[0].url,
+            avatar: media.length > 0 ? media[0].url : oldUser.avatar,
           },
         },
       });

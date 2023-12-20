@@ -49,7 +49,7 @@ const index = () => {
       payload: socket,
     });
 
-    socket.on("connect", () => {
+    socket.on && socket.on("connect", () => {
       console.log("Socket Connected");
     });
   }, [dispatch]);

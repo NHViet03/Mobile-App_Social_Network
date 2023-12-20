@@ -22,6 +22,21 @@ const messageReducer = (state = initialState, action) => {
         ...state,
         messages: action.payload,
       };
+
+    case MESS_TYPES.UPDATE_MESSAGES:
+      return {
+        ...state,
+        messages: [action.payload, ...state.messages],
+      };
+
+    case MESS_TYPES.UPDATE_CONVERSATION:
+      let newArr = [...state.conversations];
+      newArr = newArr.filter((item) => item._id !== action.payload._id);
+
+      return {
+        ...state,
+        conversations: [action.payload, ...newArr],
+      };
     default:
       return state;
   }
