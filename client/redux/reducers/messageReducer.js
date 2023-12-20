@@ -1,3 +1,4 @@
+import { GLOBAL_TYPES } from "../actions/globalTypes";
 import { MESS_TYPES } from "../actions/messageAction";
 
 const initialState = {
@@ -36,6 +37,21 @@ const messageReducer = (state = initialState, action) => {
       return {
         ...state,
         conversations: [action.payload, ...newArr],
+      };
+
+    case MESS_TYPES.DELETE_CONVERSATION:
+      return {
+        ...state,
+        conversations: state.conversations.filter(
+          (item) =>
+            item.recipients[0]._id !== action.payload &&
+            item.recipients[1]._id !== action.payload
+        ),
+      };
+
+    case GLOBAL_TYPES.LOGOUT:
+      return {
+        ...initialState,
       };
     default:
       return state;

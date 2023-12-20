@@ -1,3 +1,5 @@
+import { GLOBAL_TYPES } from "../actions/globalTypes";
+
 const initialState = {
   notifies: [
     {
@@ -61,6 +63,10 @@ const initialState = {
 
 const notifyReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GLOBAL_TYPES.LOGOUT:
+      return {
+        ...initialState,
+      };
     default:
       return state;
   }

@@ -1,5 +1,5 @@
 import { GLOBAL_TYPES } from "./globalTypes";
-import { getDataAPI, postDataAPI } from "../../utils/fetchData";
+import { getDataAPI, postDataAPI, deleteDataAPI } from "../../utils/fetchData";
 import { imageUpload } from "../../utils/imageUpload";
 
 export const MESS_TYPES = {
@@ -7,6 +7,7 @@ export const MESS_TYPES = {
   GET_MESSAGES: "GET_MESSAGES",
   UPDATE_MESSAGES: "UPDATE_MESSAGES",
   UPDATE_CONVERSATION: "UPDATE_CONVERSATION",
+  DELETE_CONVERSATION: "DELETE_CONVERSATION",
 };
 
 export const getConversations =
@@ -71,8 +72,19 @@ export const createMessage =
 
       //Socket
       socket.emit && socket.emit("updateConversation", res.data.conversation);
-      
     } catch (error) {
       console.log(error);
     }
+  };
+
+export const deleteConversation =
+  ({ id, auth }) =>
+  async (dispatch) => {
+    dispatch({
+      type: MESS_TYPES.DELETE_CONVERSATION,
+      payload: id,
+    });
+    try {
+      await deleteDataAPI(`delete_conversation/${id}`, auth.token);
+    } catch (error) {}
   };

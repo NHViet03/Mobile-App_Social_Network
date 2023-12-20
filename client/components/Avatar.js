@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   avatarContainer: {
     justifyContent: "center",
     alignItems: "center",
+    zIndex:1
   },
   avatar: {
     objectFit: "contain",

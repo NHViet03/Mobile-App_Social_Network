@@ -23,13 +23,13 @@ import ModalNewChat from "../../../components/message/ModalNewChat";
 import UserStoryList from "../../../components/message/UserStoryList";
 import Loading from "../../../components/Loading";
 
-import { GLOBAL_TYPES } from "../../../redux/actions/globalTypes";
 import { useSelector, useDispatch } from "react-redux";
 import { getConversations } from "../../../redux/actions/messageAction";
 
 const index = () => {
   const auth = useSelector((state) => state.auth);
   const message = useSelector((state) => state.message);
+  const online = useSelector((state) => state.online);
   const dispatch = useDispatch();
 
   const [conversations, setConversations] = useState([]);
@@ -40,7 +40,7 @@ const index = () => {
     const getConversationsData = async () => {
       if (message.firstLoad) return;
       setLoading(true);
-      await dispatch(getConversations({ auth })); 
+      await dispatch(getConversations({ auth }));
       setLoading(false);
     };
 
@@ -51,16 +51,27 @@ const index = () => {
     setConversations(message.conversations);
   }, [message.conversations]);
 
+  useEffect(() => {
+    if (search) {
+      const newConversations = message.conversations.filter((conversation) =>
+        conversation.recipients.find((recipient) =>
+          recipient.fullname?.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+
+      setConversations(newConversations);
+    } else {
+      setConversations(message.conversations);
+    }
+  }, [search, message.conversations]);
+
   const bottomSheetModalNewChat = useRef(null);
   const snapPointsNewChat = useMemo(() => ["95%"], []);
   const handleOpenNewChatModal = useCallback(() => {
     bottomSheetModalNewChat.current?.present();
   }, []);
+
   const handleCloseNewChatModal = () => {
-    dispatch({
-      type: GLOBAL_TYPES.NEWCHAT_MODAL,
-      payload: false,
-    });
     bottomSheetModalNewChat.current?.dismiss();
   };
 
@@ -122,7 +133,7 @@ const index = () => {
           paddingBottom: 16,
         }}
       >
-        <UserStoryList users={auth.user.following} />
+        <UserStoryList users={auth.user.following} online={online} />
         <Text className="font-bold text-base my-3">Tin nhắn</Text>
 
         {loading && <Loading />}
@@ -134,7 +145,11 @@ const index = () => {
 
         {conversations.map((conversation) => (
           <View key={conversation._id} className=" mb-4">
-            <ConservationItem conversation={conversation} auth={auth} />
+            <ConservationItem
+              conversation={conversation}
+              auth={auth}
+              online={online}
+            />
           </View>
         ))}
       </ScrollView>
@@ -151,7 +166,7 @@ const index = () => {
           }
         }}
       >
-        <ModalNewChat />
+        <ModalNewChat handleCloseNewChatModal={handleCloseNewChatModal} />
       </BottomSheetModal>
     </View>
   );

@@ -100,6 +100,26 @@ const messageCtrl = {
       res.status(500).json({ msg: error.message });
     }
   },
+  deleteConversation: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const conversation = await Conversations.findOneAndDelete({
+        $or: [
+          { recipients: [req.user._id, id] },
+          {
+            recipients: [id, req.user._id],
+          },
+        ],
+      });
+
+      await Messages.deleteMany({ conversation: conversation._id });
+
+      return res.json({ msg: "Đã xóa cuộc trò chuyện" });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  },
 };
 
 module.exports = messageCtrl;

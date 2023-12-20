@@ -25,9 +25,8 @@ import { getExplorePosts } from "../../../redux/actions/exploreAction";
 import { getDataAPI } from "../../../utils/fetchData";
 
 const index = () => {
-
-  const auth=useSelector(state=>state.auth);
-  const explore=useSelector(state=>state.explore);
+  const auth = useSelector((state) => state.auth);
+  const explore = useSelector((state) => state.explore);
   const dispatch = useDispatch();
 
   const [posts, setPosts] = useState([]);
@@ -35,20 +34,24 @@ const index = () => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loadSearch, setLoadSearch] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const [postPicker, setPostPicker] = useState(null);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
 
   useEffect(() => {
     const getPostsData = async () => {
-      if (explore.firstLoad) return;
+      if (explore.firstLoad && !reload) return;
+      if (loadPost) return;
+
       setLoadPost(true);
       await dispatch(getExplorePosts(auth.token));
       setLoadPost(false);
+      setReload(false);
     };
 
     getPostsData();
-  }, [dispatch, auth.token, explore.firstLoad]);
+  }, [dispatch, auth.token, explore.firstLoad, loadPost, reload]);
 
   useEffect(() => {
     setPosts(explore.posts);
@@ -85,8 +88,7 @@ const index = () => {
   return (
     <View
       style={{
-        width: "100%",
-        height: "100%",
+        flex: 1,
         backgroundColor: "#fff",
         position: "relative",
       }}
@@ -120,7 +122,16 @@ const index = () => {
         </ScrollView>
       ) : (
         <>
-          <ScrollView showsVerticalScrollIndicator={false} className="mb-3">
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            className="mb-3"
+            style={{
+              flex: 1,
+            }}
+            onScroll={(e) =>
+              e.nativeEvent.contentOffset.y === 0 && setReload(true)
+            }
+          >
             {loadPost ? (
               <Loading />
             ) : (

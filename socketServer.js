@@ -2,15 +2,29 @@ let users = [];
 
 const SocketServer = (socket) => {
   // Connect - Disconnect
-  socket.on("joinUser", (id) => {
-    if (id !== null && !users.find((user) => user.id === id))
-      users.push({ id, socketId: socket.id });
+  socket.on("joinUser", (user) => {
+    if (user && !users.find((item) => item.id === user._id))
+      users.push({
+        id: user._id,
+        socketId: socket.id,
+        followers: user.followers,
+      });
     console.log(users);
   });
 
   socket.on("disconnect", () => {
+    const data=users.find(user=>user.socketId===socket.id)
+
+    if(data){
+      const clients=users.filter(user=>data.followers.find(item=>item._id===user.id))
+
+      clients.forEach(client=>{
+        socket.to(client.socketId).emit("checkUserOfflineToClient",data.id);
+      })
+    }
+
+
     users = users.filter((user) => user.socketId !== socket.id);
-    console.log(users);
   });
 
   socket.on("createMessage", (message) => {
@@ -29,6 +43,26 @@ const SocketServer = (socket) => {
     if (user) {
       socket.to(user.socketId).emit("updateConversationToClient", conversation);
     }
+  });
+
+  socket.on("checkUserOnline", (data) => {
+    if (Object.keys(data).length === 0) return;
+
+    const following = users.filter((user) =>
+      data.following.find((item) => item._id === user.id)
+    );
+
+    if (following) {
+      socket.emit("checkUserOnlineToMe", following);
+    }
+
+    const clients = users.filter((user) =>
+      data.followers.find((item) => item._id === user.id)
+    );
+
+    clients.forEach((client) => {
+      socket.to(client.socketId).emit("checkUserOnlineToClient", data._id);
+    });
   });
 };
 

@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
 import { useSelector,useDispatch } from "react-redux";
 import { logoutAction } from "../../redux/actions/authAction";
+import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
 import Avatar from "../Avatar";
 
 const ModalLogOut = ({ handleCloseLogOutModal }) => {
@@ -16,6 +17,7 @@ const ModalLogOut = ({ handleCloseLogOutModal }) => {
     router.replace("/(auth)/login");
     handleCloseLogOutModal();
     await dispatch(logoutAction());
+    dispatch({type:GLOBAL_TYPES.LOGOUT})
     socket.close();
   };
   return (

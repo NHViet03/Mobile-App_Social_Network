@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  Button,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import { router, useLocalSearchParams } from "expo-router";
@@ -25,15 +24,17 @@ import {
   getMessages,
   MESS_TYPES,
   createMessage,
+  deleteConversation,
 } from "../../../redux/actions/messageAction";
 
 const chatBox = () => {
   const auth = useSelector((state) => state.auth);
   const message = useSelector((state) => state.message);
   const socket = useSelector((state) => state.socket);
+  const online = useSelector((state) => state.online);
   const dispatch = useDispatch();
 
-  const { id, userId, username, fullname, avatar } = useLocalSearchParams();
+  const { userId, username, fullname, avatar } = useLocalSearchParams();
 
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({});
@@ -44,6 +45,7 @@ const chatBox = () => {
     media: [],
   });
   const [page, setPage] = useState(0);
+  const [showSetting, setShowSetting] = useState(false);
 
   const scrollRef = useRef();
   const pageEnd = useRef();
@@ -71,7 +73,7 @@ const chatBox = () => {
 
   useEffect(() => {
     setMessages([...message.messages].reverse());
-    page===0 && scrollRef.current.scrollToEnd({ animated: false });
+    page === 0 && scrollRef.current.scrollToEnd({ animated: false });
   }, [message.messages]);
 
   const handleBack = () => {
@@ -131,6 +133,11 @@ const chatBox = () => {
     dispatch(createMessage({ message: newMessage, auth, socket }));
   };
 
+  const handleDeleteConversation = async () => {
+    await dispatch(deleteConversation({ id: userId, auth }));
+    handleBack();
+  };
+
   return (
     <View
       style={{
@@ -179,13 +186,46 @@ const chatBox = () => {
               <Text className="text-base font-medium leading-5">
                 {fullname}
               </Text>
-              <Text className="text-textColor">{username}</Text>
+              <Text className="text-textColor">
+                {online.includes(userId) ? "Đang hoạt động" : username}
+              </Text>
             </View>
           </Pressable>
         </View>
-        <TouchableOpacity>
+        <Pressable
+          style={{
+            position: "relative",
+            width: 40,
+            alignItems: "flex-end",
+          }}
+          onPress={() => setShowSetting(!showSetting)}
+        >
           <Feather name="info" size={24} color="black" />
-        </TouchableOpacity>
+          {showSetting && (
+            <View
+              className="absolute top-7 bg-white right-0 w-[150px] px-2 py-[10px] rounded-md"
+              style={{
+                shadowColor: "#000000",
+                shadowOffset: {
+                  width: 0,
+                  height: 6,
+                },
+                shadowOpacity: 0.2,
+                shadowRadius: 6,
+                elevation: 6,
+                zIndex: 9999,
+              }}
+            >
+              <Pressable
+                className="flex-row justify-between items-center"
+                onPress={handleDeleteConversation}
+              >
+                <Text className="text-primary font-medium">Xóa hộp thoại</Text>
+                <Octicons name="trash" size={24} color="#c43302" />
+              </Pressable>
+            </View>
+          )}
+        </Pressable>
       </View>
 
       <ScrollView

@@ -1,3 +1,4 @@
+import { GLOBAL_TYPES } from "../actions/globalTypes";
 import { POST_TYPES } from "../actions/postAction";
 
 const initialState = {
@@ -91,6 +92,11 @@ const postReducer = (state = initialState, action) => {
         posts: action.payload.posts,
         result: action.payload.result,
         firstLoad: true,
+      };
+
+    case GLOBAL_TYPES.LOGOUT:
+      return {
+        ...initialState,
       };
     default:
       return state;

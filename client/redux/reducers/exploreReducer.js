@@ -1,3 +1,4 @@
+import { GLOBAL_TYPES } from "../actions/globalTypes";
 import { EXPLORE_TYPES } from "../actions/exploreAction";
 
 const initialState = {
@@ -15,6 +16,11 @@ const exploreReducer = (state = initialState, action) => {
         result: action.payload.result,
         firstLoad: true,
       };
+    case GLOBAL_TYPES.LOGOUT:
+      return {
+        ...initialState,
+      };
+
     default:
       return state;
   }

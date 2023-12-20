@@ -4,8 +4,9 @@ import Avatar from "../Avatar";
 import { router } from "expo-router";
 import moment from "moment";
 import { Entypo } from "@expo/vector-icons";
+import ActiveStatus from "../ActiveStatus";
 
-const ConservationItem = ({ conversation, auth }) => {
+const ConservationItem = ({ conversation, auth, online }) => {
   const user = conversation.recipients.find(
     (item) => item._id !== auth.user._id
   );
@@ -29,14 +30,17 @@ const ConservationItem = ({ conversation, auth }) => {
         alignItems: "center",
       }}
     >
-      <Avatar size="medium" avatar={user.avatar}></Avatar>
+      <View className="relative">
+        <Avatar size="medium" avatar={user.avatar}></Avatar>
+        {online.includes(user._id) && <ActiveStatus small />}
+      </View>
       <View className="ml-3">
         <Text className="font-medium text-base leading-5">{user.fullname}</Text>
         <View className="flex-row items-center">
           <Text
             className={`${
               new Date() - new Date(conversation.updatedAt) < 60000
-                ? ""
+                ? "font-medium"
                 : "text-textColor"
             }`}
           >

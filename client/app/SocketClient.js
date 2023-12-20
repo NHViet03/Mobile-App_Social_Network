@@ -1,18 +1,23 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { MESS_TYPES } from "../redux/actions/messageAction";
+import { GLOBAL_TYPES } from "../redux/actions/globalTypes";
 
 export default function SocketClient() {
   const auth = useSelector((state) => state.auth);
   const socket = useSelector((state) => state.socket);
+  const online = useSelector((state) => state.online);
   const dispatch = useDispatch();
 
   // Join User
 
   useEffect(() => {
-    if (!socket) return;
-    socket.emit("joinUser", auth.user?._id);
-  }, [socket, auth.user._id]);
+    if (!socket || !auth) return;
+    socket.emit("joinUser", {
+      _id: auth.user._id,
+      followers: auth.user.followers,
+    });
+  }, [socket, auth]);
 
   // Message
   useEffect(() => {
@@ -38,6 +43,55 @@ export default function SocketClient() {
 
     return () => socket.off("updateConversationToClient");
   }, [socket]);
+
+  useEffect(() => {
+    if (!socket || !auth) return;
+
+    socket.emit("checkUserOnline", {
+      _id: auth.user._id,
+      following: auth.user.following,
+      followers: auth.user.followers,
+    });
+  }, [socket, auth]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("checkUserOnlineToMe", (following) => {
+      following.forEach((item) => {
+        if (!online.includes(item.id)) {
+          dispatch({ type: GLOBAL_TYPES.ONLINE, payload: item.id });
+        }
+      });
+    });
+
+    return () => socket.off("checkUserOnlineToMe");
+  }, [socket, online, dispatch]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("checkUserOnlineToClient", (id) => {
+      if (!online.includes(id)) {
+        dispatch({ type: GLOBAL_TYPES.ONLINE, payload: id });
+      }
+    });
+
+    return () => socket.off("checkUserOnlineToClient");
+  }, [socket, online, dispatch]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("checkUserOfflineToClient", (id) => {
+      dispatch({
+        type: GLOBAL_TYPES.OFFLINE,
+        payload: id,
+      });
+    });
+
+    return () => socket.off("checkUserOfflineToClient");
+  }, [socket, dispatch]);
 
   return <></>;
 }
