@@ -9,7 +9,7 @@ import ActiveStatus from "../ActiveStatus";
 const ConservationItem = ({ conversation, auth, online }) => {
   const user = conversation.recipients.find(
     (item) => item._id !== auth.user._id
-  );
+  )||auth.user;
 
   return (
     <Pressable

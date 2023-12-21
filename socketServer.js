@@ -16,7 +16,7 @@ const SocketServer = (socket) => {
     const data=users.find(user=>user.socketId===socket.id)
 
     if(data){
-      const clients=users.filter(user=>data.followers.find(item=>item._id===user.id))
+      const clients=users.filter(user=>data.followers?.find(item=>item._id===user.id))
 
       clients.forEach(client=>{
         socket.to(client.socketId).emit("checkUserOfflineToClient",data.id);
