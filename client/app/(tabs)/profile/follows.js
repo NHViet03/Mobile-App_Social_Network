@@ -173,7 +173,7 @@ const Follows = () => {
                     <FollowList
                       users={item}
                       followers={isShowFollowers}
-                      auth
+                      isMe
                       handleDeleteFollow={handleDeleteFollow}
                     />
                   </View>

@@ -12,12 +12,12 @@ export default function SocketClient() {
   // Join User
 
   useEffect(() => {
-    if (!socket || !auth) return;
+    if (!socket || Object.keys(auth.user).length===0) return;
     socket.emit("joinUser", {
       _id: auth.user._id,
       followers: auth.user.followers,
     });
-  }, [socket, auth]);
+  }, [socket, auth.user]);
 
   // Message
   useEffect(() => {
@@ -45,14 +45,14 @@ export default function SocketClient() {
   }, [socket]);
 
   useEffect(() => {
-    if (!socket || !auth) return;
+    if (!socket || Object.keys(auth.user).length===0) return;
 
     socket.emit("checkUserOnline", {
       _id: auth.user._id,
       following: auth.user.following,
       followers: auth.user.followers,
     });
-  }, [socket, auth]);
+  }, [socket, auth.user]);
 
   useEffect(() => {
     if (!socket) return;

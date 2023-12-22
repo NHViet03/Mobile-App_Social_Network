@@ -48,6 +48,14 @@ const messageCtrl = {
 
       const messages = await features.query
         .populate("sender recipient", "avatar")
+        .populate({
+          path: "url",
+          select: "content images user",
+          populate: {
+            path: "user",
+            select: "avatar username",
+          },
+        })
         .sort("-createdAt")
         .lean();
 
@@ -58,9 +66,13 @@ const messageCtrl = {
   },
   createMessage: async (req, res) => {
     try {
-      const { text, recipient, media } = req.body;
+      const { text, recipient, media, url } = req.body;
 
-      if (!recipient || (!text.trim() && media.length === 0)) return;
+      if (
+        !recipient ||
+        (!text.trim() && media.length === 0 && url.length === 0)
+      )
+        return;
 
       const newConversation = await Conversations.findOneAndUpdate(
         {
@@ -88,6 +100,7 @@ const messageCtrl = {
         recipient,
         text,
         media,
+        url: url || null,
       });
 
       await newMessage.save();

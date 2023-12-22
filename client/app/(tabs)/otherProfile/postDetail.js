@@ -1,7 +1,8 @@
-import { View } from "react-native";
+import { View, Pressable, Text, StatusBar } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import { ScrollView } from "react-native-virtualized-view";
+import { Feather } from "@expo/vector-icons";
 import CardHeader from "../../../components/postCard/CardHeader";
 import CardBody from "../../../components/postCard/CardBody";
 import CardFooter from "../../../components/postCard/CardFooter";
@@ -34,6 +35,17 @@ const PostDetail = () => {
         backgroundColor: "#fff",
       }}
     >
+      <View
+        className="mt-4 flex flex-row items-center px-3"
+        style={{
+          marginTop: StatusBar.currentHeight+12,
+        }}
+      >
+        <Pressable onPress={() => router.back()}>
+          <Feather name="arrow-left" size={24} color="black" />
+        </Pressable>
+        <Text className="ml-5 font-bold text-[20px]">Bài viết</Text>
+      </View>
       <ScrollView className="mt-2" showsVerticalScrollIndicator={false}>
         {loading ? (
           <Loading />

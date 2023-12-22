@@ -35,12 +35,14 @@ export const follow =
       },
     };
 
+    dispatch({
+      type: GLOBAL_TYPES.AUTH,
+      payload: newAuth,
+    });
+
     try {
       await patchDataAPI(`follow/${user._id}`, null, auth.token);
-      dispatch({
-        type: GLOBAL_TYPES.AUTH,
-        payload: newAuth,
-      });
+     
     } catch (error) {
       console.log(error);
     }
@@ -57,12 +59,14 @@ export const unFollow =
       },
     };
 
+    dispatch({
+      type: GLOBAL_TYPES.AUTH,
+      payload: newAuth,
+    });
+
     try {
       await patchDataAPI(`unfollow/${user._id}`, null, auth.token);
-      dispatch({
-        type: GLOBAL_TYPES.AUTH,
-        payload: newAuth,
-      });
+     
     } catch (error) {
       console.log(error);
     }

@@ -14,13 +14,11 @@ import { Feather } from "@expo/vector-icons";
 import Loading from "../../../components/Loading";
 import FollowList from "../../../components/profile/FollowList";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { getDataAPI } from "../../../utils/fetchData";
-import { deleteFollower } from "../../../redux/actions/userAction";
 
 const Follows = () => {
   const auth = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
   const router = useRouter();
   const { type, id, username } = useLocalSearchParams();
 

@@ -6,7 +6,7 @@ import LikeBtn from "../LikeBtn";
 import BookmarkBtn from "./BookmarkBtn";
 import { PostContext } from "../../app/_layout";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
 
 const CardFooter = ({ post }) => {
@@ -16,7 +16,6 @@ const CardFooter = ({ post }) => {
   const [isLike, setIsLike] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   const [readMore, setReadMore] = useState(false);
-  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleLike = () => {

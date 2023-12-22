@@ -44,8 +44,9 @@ const ConservationItem = ({ conversation, auth, online }) => {
                 : "text-textColor"
             }`}
           >
+            {conversation.media.length ===0 && conversation.text.length ===0 && "Đã chia sẻ một bài viết."} 
             {conversation.media.length > 0
-              ? "Đã gửi một hình ảnh"
+              ? `Đã gửi ${conversation.media.length} hình ảnh.`
               : conversation.text.length > 20
               ? conversation.text.slice(0, 20) + "..."
               : conversation.text}

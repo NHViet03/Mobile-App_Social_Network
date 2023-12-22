@@ -22,7 +22,7 @@ export default function Layout() {
 
   const snapPointsComment = useMemo(() => ["25%", "50%", "95%"], []);
   const snapPointsReportPost = useMemo(() => ["50%"], []);
-  const snapPointsSharePost = useMemo(() => ["75%", "95%"], []);
+  const snapPointsSharePost = useMemo(() => ["75%"], []);
 
   const handleOpenCommentModal = useCallback(() => {
     bottomSheetModalComment.current?.present();
@@ -30,11 +30,15 @@ export default function Layout() {
 
   const handleOpenReportPostModal = useCallback(() => {
     bottomSheetModalReportPost.current?.present();
-  });
+  }, []);
 
   const handleOpenSharePostModal = useCallback(() => {
     bottomSheetModalSharePost.current?.present();
-  });
+  }, []);
+
+  const handleCloseSharePostModal = useCallback(() => {
+    bottomSheetModalSharePost.current?.dismiss();
+  }, []);
 
   return (
     <DataProvider>
@@ -55,7 +59,7 @@ export default function Layout() {
                 name="story"
                 options={{ headerShown: false, animation: "fade" }}
               />
-              
+
               <Stack.Screen name="index" />
             </Stack>
 
@@ -88,7 +92,9 @@ export default function Layout() {
               snapPoints={snapPointsSharePost}
               backgroundStyle={styles.modal}
             >
-              <ModalSharePost />
+              <ModalSharePost
+                handleCloseSharePostModal={handleCloseSharePostModal}
+              />
             </BottomSheetModal>
           </BottomSheetModalProvider>
         </PostContext.Provider>

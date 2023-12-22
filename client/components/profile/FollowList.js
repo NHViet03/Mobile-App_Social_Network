@@ -6,7 +6,7 @@ import FollowBtn from "../FollowBtn";
 export default function FollowList({
   users,
   followers,
-  auth,
+  isMe,
   handleDeleteFollow,
 }) {
   return (
@@ -25,7 +25,7 @@ export default function FollowList({
               </Text>
             </View>
           </View>
-          {followers && auth ? (
+          {followers && isMe ? (
             <Pressable
               className="bg-inputColor rounded-[6px] px-4 py-2"
               onPress={() => handleDeleteFollow(user)}
@@ -33,7 +33,7 @@ export default function FollowList({
               <Text className="font-bold">Xoá</Text>
             </Pressable>
           ) : (
-            <FollowBtn user={user} />
+            <FollowBtn user={user}/>
           )}
         </View>
       ))}

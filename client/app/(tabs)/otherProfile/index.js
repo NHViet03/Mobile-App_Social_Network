@@ -224,6 +224,17 @@ const Profile = () => {
                   borderRadius: 6,
                   paddingVertical: 8,
                 }}
+                onPress={() => {
+                  router.push({
+                    pathname: "/message/chatBox",
+                    params: {
+                      userId: user._id,
+                      avatar: user.avatar,
+                      username: user.username,
+                      fullname: user.fullname,
+                    },
+                  });
+                }}
               >
                 <Text
                   style={{

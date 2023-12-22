@@ -1,4 +1,3 @@
-import { GLOBAL_TYPES } from "./globalTypes";
 import { getDataAPI, postDataAPI, deleteDataAPI } from "../../utils/fetchData";
 import { imageUpload } from "../../utils/imageUpload";
 
@@ -40,7 +39,6 @@ export const createMessage =
   async (dispatch) => {
     try {
       let media = [];
-
       if (message.media.length > 0) media = await imageUpload(message.media);
       message = {
         ...message,
@@ -61,6 +59,7 @@ export const createMessage =
           text: message.text,
           recipient: message.recipient._id,
           media: message.media,
+          url:message.url ?  message.url._id : null
         },
         auth.token
       );

@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, View, Dimensions, Image, ImageBase } from "react-native";
+import { Text, View, Dimensions, Image, Pressable } from "react-native";
+import { router } from "expo-router";
 import Avatar from "../Avatar";
 import moment from "moment";
 
@@ -29,6 +30,49 @@ const YouMessage = ({ message }) => {
               />
             ))}
           </View>
+        )}
+        {message.url && (
+          <Pressable
+            className="bg-inputColor rounded-2xl"
+            onPress={() => {
+              router.replace({
+                pathname: "/otherProfile/postDetail",
+                params: {
+                  id: message.url._id,
+                },
+              });
+            }}
+            style={{
+              width:chatWidth+24
+            }}
+          >
+            <View className="flex-row px-[10px] my-[10px] items-center">
+              <Avatar avatar={message.url.user.avatar} />
+              <Text className="ml-2 font-bold text-base">
+                {message.url.user.username}
+              </Text>
+            </View>
+            <Image
+              source={{ uri: message.url.images[0].url }}
+              style={{
+                width: chatWidth + 24,
+                height: (chatWidth * 4) / 3 + 32,
+                objectFit: "cover",
+              }}
+            />
+            <View className="px-[10px] my-4">
+              <Text className="font-bold mr-1">
+                {message.url.user.username}{" "}
+                <Text
+                  className="ml-1 font-normal"
+                >
+                  {message.url.content.length > 20
+                    ? message.url.content.slice(0, 20) + "..."
+                    : message.url.content}
+                </Text>
+              </Text>
+            </View>
+          </Pressable>
         )}
         <View className="flex-row-reverse items-end">
           {message.text && (
