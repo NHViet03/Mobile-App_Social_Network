@@ -31,7 +31,7 @@ const initialState = {
         username: "rosalineyuhh",
         fullname: "Rosa Line",
         avatar:
-          "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.15752-9/395465307_532495459099163_6143034257415964199_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFcfoE6yIwvbxu7SkRe6Aqqz3ycLNOzlu3PfJws07OW7c75IV2cO9E9iLWj80zbzQvX_OyX4p-sn_N8lcbP4dh8&_nc_ohc=yzbKK_12uF0AX_xse8f&_nc_ht=scontent.fsgn5-6.fna&oh=03_AdSpk-zY4au6stUa5CEp4IduEINQfVcvoBkVwXkNfnFKjg&oe=65687E9F",
+          "https://i.pinimg.com/736x/8d/89/c9/8d89c9bb216425049ac816a80f9424c7.jpg",
       },
       createdAt: "2023-11-8T07:08:08.000Z",
     },
@@ -54,7 +54,7 @@ const initialState = {
         username: "lavieenbluu",
         fullname: "Park Gyu-young",
         avatar:
-          "https://scontent.fsgn5-10.fna.fbcdn.net/v/t1.15752-9/368591203_718249323495961_8215655904493420963_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeF7av1jU9wtBPLnVg54AnFbh0UfhyrkjfuHRR-HKuSN-3EU3Zvcf_qyiDI0U6gGZF16FRYXkMPe2xjhsFsagWyx&_nc_ohc=NymJjJJjDYoAX9NNuQE&_nc_ht=scontent.fsgn5-10.fna&oh=03_AdR5YkeqJLOJCC4n4yUSA-ALVt9_3vELb6cGYO0Pn4O7MA&oe=65688115",
+          "https://i.pinimg.com/564x/d9/88/d0/d988d08b5e68200d1232409af8cabbdf.jpg",
       },
       createdAt: "2023-11-1T07:08:08.000Z",
     },

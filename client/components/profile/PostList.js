@@ -1,7 +1,7 @@
 import { View, Pressable, Image, Dimensions } from "react-native";
 import React, { useMemo } from "react";
 import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const PostList = ({ posts, handlePickPost, profile }) => {
   const imgWidth = useMemo(() => Dimensions.get("window").width / 3 - 2, []);
@@ -37,9 +37,9 @@ const PostList = ({ posts, handlePickPost, profile }) => {
             }}
           />
           {post.images.length > 1 && (
-            <Ionicons
-              name="md-images"
-              size={16}
+            <MaterialCommunityIcons
+              name="card-multiple"
+              size={20}
               color="#fff"
               style={{
                 position: "absolute",

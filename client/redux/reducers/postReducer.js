@@ -6,39 +6,18 @@ const initialState = {
   result: 0,
   users: [
     {
-      _id: "abc123",
-      username: "xeesoxee",
-      fullname: "Han So-hee",
-      avatar:
-        "https://i.pinimg.com/564x/14/9a/e0/149ae0f72060755d652d4d09591c6691.jpg",
-    },
-    {
-      _id: "abc670",
-      username: "rohyoonseo",
-      fullname: "Roh Yoon-seo",
-      avatar:
-        "https://i.pinimg.com/564x/20/92/2c/20922c29d6d7ec392068f4a924a5ebd6.jpg",
-    },
-    {
-      _id: "abc679",
-      username: "rosalineyuhh",
-      fullname: "Rosa Line",
-      avatar:
-        "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.15752-9/395465307_532495459099163_6143034257415964199_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFcfoE6yIwvbxu7SkRe6Aqqz3ycLNOzlu3PfJws07OW7c75IV2cO9E9iLWj80zbzQvX_OyX4p-sn_N8lcbP4dh8&_nc_ohc=yzbKK_12uF0AX_xse8f&_nc_ht=scontent.fsgn5-6.fna&oh=03_AdSpk-zY4au6stUa5CEp4IduEINQfVcvoBkVwXkNfnFKjg&oe=65687E9F",
-    },
-    {
       _id: "abc680",
       username: "phs1116",
-      fullname: "PARK HYUNGSIK",
+      fullname: "Park Min Young",
       avatar:
-        "https://i.pinimg.com/564x/1e/b0/22/1eb022bc5bc2be053ba0f363de7b75ad.jpg",
+        "https://i.pinimg.com/736x/e2/72/76/e272766e212038f7b9291c8187d3f024.jpg",
     },
     {
       _id: "abc681",
       username: "bogummy",
       fullname: "PARK BO GUM",
       avatar:
-        "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.15752-9/395301626_1274645599916557_3505396367880739948_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHaABJJFY00DTrgJdaCxc2DP0oNOZIQh5s_Sg05khCHm7jSOnRvalGV7mpD3aYZb3zgDcvqz_ixLA4vqnlbUJKz&_nc_ohc=wnRmsQe7KhMAX9Rcv--&_nc_ht=scontent.fsgn5-6.fna&oh=03_AdSKz3dtXJolfc4Dh8GdZxAFCW_e2BCVZIOl-O8gCgxHVA&oe=6568A648",
+        "https://i.pinimg.com/736x/94/b4/4f/94b44fe398d3fc668dfaa35cb0a7d66d.jpg",
     },
     {
       _id: "abc105",

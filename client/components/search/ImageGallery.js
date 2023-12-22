@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useMemo } from "react";
 import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const ImageGallery = ({ posts, handlePickPost }) => {
   const imgWidth = useMemo(() => Dimensions.get("window").width / 3 - 2, []);
@@ -56,9 +56,9 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                     }}
                   />
                   {cluster[4].images.length > 1 && (
-                    <Ionicons
-                      name="md-images"
-                      size={16}
+                    <MaterialCommunityIcons
+                      name="card-multiple"
+                      size={20}
                       color="#fff"
                       style={{
                         position: "absolute",
@@ -94,9 +94,9 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                       }}
                     />
                     {post.images.length > 1 && (
-                      <Ionicons
-                        name="md-images"
-                        size={16}
+                      <MaterialCommunityIcons
+                        name="card-multiple"
+                        size={20}
                         color="#fff"
                         style={{
                           position: "absolute",
@@ -128,9 +128,9 @@ const ImageGallery = ({ posts, handlePickPost }) => {
                     }}
                   />
                   {cluster[4].images.length > 1 && (
-                    <Ionicons
-                      name="md-images"
-                      size={16}
+                    <MaterialCommunityIcons
+                      name="card-multiple"
+                      size={20}
                       color="#fff"
                       style={{
                         position: "absolute",

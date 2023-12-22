@@ -78,7 +78,8 @@ const postCtrl = {
             path: "user",
             select: "avatar username fullname",
           },
-        });
+        })
+        .sort("-createdAt");
 
       return res.json({
         posts,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Text,
   View,
@@ -34,21 +34,17 @@ const Profile = () => {
   const { id } = useLocalSearchParams();
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
-  const [savedPosts, setSavedPosts] = useState([]);
-  const [isShowPosts, setIsShowPosts] = useState(true);
   const [postPicker, setPostPicker] = useState(null);
   const [loadPost, setLoadPost] = useState(false);
 
   const router = useRouter();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
-  const flatListRef = useRef(null);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         setPosts([]);
-        setSavedPosts([]);
         const res = await getDataAPI(`user/${id}`, auth.token);
         setUser(res.data.user);
       } catch (error) {}
@@ -60,21 +56,17 @@ const Profile = () => {
   useEffect(() => {
     const getPosts = async () => {
       try {
-        if (posts.length > 0 && savedPosts.length > 0) return;
+        if (posts.length > 0) return;
 
         setLoadPost(true);
-        if (isShowPosts && posts.length === 0) {
-          const res = await getDataAPI(`user_posts/${id}`, auth.token);
-          setPosts(res.data.posts);
-        } else if (!isShowPosts && savedPosts.length === 0) {
-          const res = await getDataAPI(`saved_posts/${id}`, auth.token);
-          setSavedPosts(res.data.posts);
-        }
+        const res = await getDataAPI(`user_posts/${id}`, auth.token);
+        setPosts(res.data.posts);
+
         setLoadPost(false);
       } catch (error) {}
     };
     getPosts();
-  }, [auth.token, id, posts.length, savedPosts.length, isShowPosts]);
+  }, [auth.token, id, posts.length]);
 
   const handlePickPost = (image) => {
     setPostPicker(image);
@@ -264,14 +256,13 @@ const Profile = () => {
                   justifyContent: "center",
                   paddingBottom: 10,
                   borderBottomWidth: 1,
-                  borderColor: isShowPosts ? "#000000" : "#DDDDDD",
+                  borderColor: "#000000",
                 }}
-                onPress={() => setIsShowPosts(true)}
               >
                 <MaterialCommunityIcons
                   name="grid"
                   size={24}
-                  color={isShowPosts ? "#000000" : "#DDDDDD"}
+                  color="#000000"
                 />
               </TouchableOpacity>
             </View>
@@ -281,55 +272,33 @@ const Profile = () => {
                   alignItems: "center",
                   justifyContent: "center",
                   borderBottomWidth: 1,
-                  borderColor: !isShowPosts ? "#000000" : "#DDDDDD",
+                  borderColor: "#DDDDDD",
                   paddingBottom: 10,
                 }}
-                onPress={() => setIsShowPosts(false)}
               >
-                <Feather
-                  name="bookmark"
+                <MaterialCommunityIcons
+                  name="presentation-play"
                   size={24}
-                  color={!isShowPosts ? "#000000" : "#DDDDDD"}
+                  color="#DDDDDD"
                 />
               </TouchableOpacity>
             </View>
           </View>
-          <FlatList
-            ref={flatListRef}
-            data={[posts, savedPosts]}
-            horizontal={true}
-            numColumns={1}
-            pagingEnabled={true}
-            showsHorizontalScrollIndicator={false}
-            initialNumToRender={2}
-            initialScrollIndex={isShowPosts ? 0 : 1}
-            getItemLayout={(data, index) => ({
-              length: windowWidth,
-              offset: windowWidth * index,
-              index,
-            })}
-            onScroll={(event) => {
-              const x = event.nativeEvent.contentOffset.x;
-              setIsShowPosts(!Math.round(x / windowWidth) > 0);
+
+          <ScrollView
+            style={{
+              flex: 1,
+              width: windowWidth,
+              minHeight: windowHeight,
             }}
-            renderItem={({ item, index }) => (
-              <ScrollView
-                style={{
-                  flex: 1,
-                  width: windowWidth,
-                  minHeight: windowHeight,
-                }}
-                showsVerticalScrollIndicator={false}
-                key={index}
-              >
-                {loadPost ? (
-                  <Loading />
-                ) : (
-                  <PostList posts={item} handlePickPost={handlePickPost} />
-                )}
-              </ScrollView>
+            showsVerticalScrollIndicator={false}
+          >
+            {loadPost ? (
+              <Loading />
+            ) : (
+              <PostList posts={posts} handlePickPost={handlePickPost} />
             )}
-          />
+          </ScrollView>
         </View>
       </ScrollView>
       {postPicker && (
