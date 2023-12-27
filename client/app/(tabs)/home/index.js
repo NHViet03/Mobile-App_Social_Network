@@ -1,12 +1,45 @@
-import { View, StatusBar, Image, Pressable, StyleSheet } from "react-native";
+import { View, StatusBar, Image, Pressable } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import Posts from "../../../components/home/Posts";
 import StoryList from "../../../components/home/StoryList";
+import Loading from "../../../components/Loading";
+
+import { useSelector, useDispatch } from "react-redux";
+import { getPosts } from "../../../redux/actions/postAction";
 
 const index = () => {
+  const auth = useSelector((state) => state.auth);
+  const homePosts = useSelector((state) => state.homePosts);
+  const dispatch = useDispatch();
+
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    if (!auth.token) router.replace("/(auth)/login");
+  }, [auth.token]);
+
+  useEffect(() => {
+    const getPostsData = async () => {
+      if (homePosts.firstLoad && !reload) return;
+      if (loading) return;
+      setLoading(true);
+      setPosts([]);
+      await dispatch(getPosts(auth.token));
+      setLoading(false);
+      setReload(false);
+    };
+
+    getPostsData();
+  }, [auth.token, homePosts.firstLoad, reload, loading, dispatch]);
+
+  useEffect(() => {
+    setPosts(homePosts.posts);
+  }, [homePosts.posts]);
 
   return (
     <ScrollView
@@ -15,6 +48,7 @@ const index = () => {
         backgroundColor: "#fff",
       }}
       showsVerticalScrollIndicator={false}
+      onScroll={(e) => e.nativeEvent.contentOffset.y <= 0 && setReload(true)}
     >
       <View className="justify-between items-center flex-row pl-1 pr-3">
         <Image
@@ -32,18 +66,14 @@ const index = () => {
           >
             <AntDesign name="hearto" size={24} color="black" />
           </Pressable>
-          <Pressable 
-          className="w-8" 
-          onPress={() => router.push("/message")}
-          >
+          <Pressable className="w-8" onPress={() => router.push("/message")}>
             <Feather name="message-square" size={25} color="black" />
-          
           </Pressable>
         </View>
       </View>
       <StoryList />
-
-      <Posts />
+      {loading && <Loading />}
+      <Posts posts={posts} />
     </ScrollView>
   );
 };

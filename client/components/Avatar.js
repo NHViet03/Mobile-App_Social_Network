@@ -69,12 +69,13 @@ const styles = StyleSheet.create({
   avatarContainer: {
     justifyContent: "center",
     alignItems: "center",
+    zIndex:1
   },
   avatar: {
     objectFit: "contain",
     borderColor: "#d9d9d9",
-    borderWidth: 0.5,
-    padding: 1,
+    borderWidth:1,
+    padding: 2,
   },
   small: {
     width: 30,

@@ -1,48 +1,51 @@
-import React from 'react';
-import { Text, View, Image } from 'react-native';
+import React from "react";
+import { Text, View, Dimensions, Image, ImageBase } from "react-native";
+import Avatar from "../Avatar";
+import moment from "moment";
 
-const YouMessage = ({ text, image }) => {
+const YouMessage = ({ message }) => {
+  const chatWidth = Dimensions.get("window").width * 0.6;
+
   return (
-    <View
-      style={{
-        display: 'flex',
-        alignSelf: 'flex-end',
-        minHeight: 0,
-        minWidth: 0,
-        borderRadius: 20,
-        marginBottom: 10,
-      }}
-    >
-      {text && (
-        <Text
-          style={{
-            color: '#fff',
-            alignItems: 'flex-end',
-            fontSize: 16,
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            backgroundColor: '#dc8567',
-            borderRadius: 10,
-          }}
-        >
-          {text}
-        </Text>
-      )}
-      {image && (
-        <View
-          style={{
-            color: '#fff',
-            alignItems: 'flex-end',
-            fontSize: 16,
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            borderRadius: 10,
-            borderColor: '#dc8567',
-          }}
-        >
-          <Image source={{ uri: image }} style={{width:150, height:180, borderRadius:12}} />
+    <View className="flex-row-reverse items-end">
+      <Avatar size="small" avatar={message.sender.avatar} />
+      <View className="mx-2 items-end justify-end">
+        {message.media.length > 0 && (
+          <View className="mb-2">
+            {message.media.map((image, index) => (
+              <Image
+                key={index}
+                style={{
+                  width: chatWidth,
+                  height: (chatWidth * 4) / 3,
+                  borderRadius: 12,
+                  objectFit: "cover",
+                  marginBottom: 4,
+                  borderWidth: 1,
+                  padding: 4,
+                  borderColor: "rgba(0,0,0,0.1)",
+                }}
+                source={{ uri: image.uri ? image.uri : image.url }}
+              />
+            ))}
+          </View>
+        )}
+        <View className="flex-row-reverse items-end">
+          {message.text && (
+            <View
+              className="bg-primary p-3 rounded-l-2xl rounded-br-2xl  rounded-tr-sm"
+              style={{
+                maxWidth: chatWidth,
+              }}
+            >
+              <Text className="text-white">{message.text}</Text>
+            </View>
+          )}
+          <Text className="mr-2 text-textColor text-[10px]">
+            {moment(message.createdAt).format("hh:mm, D MMM")}
+          </Text>
         </View>
-      )}
+      </View>
     </View>
   );
 };

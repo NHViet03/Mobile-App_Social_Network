@@ -17,7 +17,7 @@ import Avatar from "../components/Avatar";
 
 const story = () => {
   const { id } = useLocalSearchParams();
-  const { users } = useSelector((state) => state.homePosts);
+  const auth = useSelector((state) => state.auth);
   const [user, setUser] = useState(null);
   const [progress, setProgress] = useState(new Animated.Value(0));
 
@@ -25,7 +25,7 @@ const story = () => {
   const windowHeight = Dimensions.get("window").height;
 
   useEffect(() => {
-    setUser(users.find((user) => user._id === id));
+    setUser(auth.user.following.find((user) => user._id === id));
 
     Animated.timing(progress, {
       toValue: 5,
@@ -36,7 +36,7 @@ const story = () => {
       router.back();
     }, 5000);
     return () => clearTimeout(closeModal);
-  }, [id, users]);
+  }, [id, auth.user.following]);
 
   const progressAnimation = progress.interpolate({
     inputRange: [0, 5],
@@ -64,7 +64,7 @@ const story = () => {
                 {user.username}
               </Text>
             </View>
-            <Pressable onPress={()=>router.back()}>
+            <Pressable onPress={() => router.back()}>
               <AntDesign name="close" size={24} color="white" />
             </Pressable>
           </View>

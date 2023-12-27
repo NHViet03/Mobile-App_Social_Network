@@ -7,7 +7,6 @@ import {
   MaterialCommunityIcons,
   AntDesign,
 } from "@expo/vector-icons";
-import { Image } from "react-native";
 import { useSelector } from "react-redux";
 import React from "react";
 import Avatar from "../../components/Avatar";
@@ -80,11 +79,11 @@ export default function Layout() {
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
-            auth.avatar ? (
+            auth.user.avatar ? (
               focused ? (
-                <Avatar avatar={auth.avatar} size="small" primary />
+                <Avatar avatar={auth.user.avatar} size="small" primary />
               ) : (
-                <Avatar avatar={auth.avatar} size="small" />
+                <Avatar avatar={auth.user.avatar} size="small" />
               )
             ) : (
               <FontAwesome name="user-o" size={25} color="black" />
@@ -92,12 +91,12 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="userProfile"
+        name="otherProfile"
         options={{
-          href:null
+          headerShown: false,
+          href: null,
         }}
       />
-      
     </Tabs>
   );
 }

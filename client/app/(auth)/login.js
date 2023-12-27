@@ -7,21 +7,31 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
-import { useDispatch } from "react-redux";
-import { FontAwesome5 } from '@expo/vector-icons';
-import { loginAction } from "../../redux/actions/authAction";
+import { FontAwesome5 } from "@expo/vector-icons";
 import ModalAlert from "../../components/ModalAlert";
+
+import { io } from "socket.io-client";
+import { uri } from "../../utils/fetchData";
+import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
+import { loginAction } from "../../redux/actions/authAction";
+import { useDispatch, useSelector } from "react-redux";
 
 const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [alert, setAlert] = useState(false);
 
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (auth.token) {
+      router.replace("/(tabs)/home");
+    }
+  }, [auth.token]);
 
   const handleLogin = async () => {
     const res = await dispatch(loginAction({ email, password }));
@@ -34,7 +44,23 @@ const login = () => {
         handlePress: () => setAlert(false),
       });
     }
-    router.replace("/(tabs)/home");
+    if (res.success) {
+      router.replace("/(tabs)/home");
+      if (socket) return;
+      const socket = io(`http://${uri}`, {
+        transports: ["websocket"],
+      });
+
+      dispatch({
+        type: GLOBAL_TYPES.SOCKET,
+        payload: socket,
+      });
+
+      socket.on &&
+        socket.on("connect", () => {
+          console.log("Socket Connected");
+        });
+    }
   };
   return (
     <View style={styles.container}>
@@ -55,7 +81,7 @@ const login = () => {
           alignItems: "center",
           marginBottom: 10,
           borderWidth: 1,
-          marginHorizontal:20,
+          marginHorizontal: 20,
           borderColor: "#EEEEEE",
           borderRadius: 10,
           backgroundColor: "#EEEEEE",
@@ -82,7 +108,10 @@ const login = () => {
           </Text>
         </Pressable>
       </View>
-      <TouchableOpacity onPress={() => handleLogin()} style={{paddingHorizontal:20}}>
+      <TouchableOpacity
+        onPress={() => handleLogin()}
+        style={{ paddingHorizontal: 20 }}
+      >
         <Text style={styles.button_login}>Đăng nhập</Text>
       </TouchableOpacity>
       <Text style={styles.forgotpass}>Quên mật khẩu?</Text>
@@ -129,25 +158,20 @@ const styles = StyleSheet.create({
   },
   input: {
     padding: 12,
-    marginHorizontal:20,
+    marginHorizontal: 20,
     marginBottom: 16,
     borderWidth: 1,
     borderColor: "#EEEEEE",
     borderRadius: 10,
     backgroundColor: "#EEEEEE",
   },
-  // toggleVisibilityText: {
-  //   textAlign: "center",
-  //   color: "#C43302",
-  //   marginVertical: 10,
-  // },
   button_login: {
     textAlign: "center",
     color: "#fff",
     backgroundColor: "#C43302",
     padding: 12,
     borderRadius: 12,
-    marginTop:24
+    marginTop: 24,
   },
   button_login_disable: {
     textAlign: "center",
@@ -172,7 +196,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   seperate_space: {
-    backgroundColor: '#d9d9d9',
+    backgroundColor: "#d9d9d9",
     width: 150,
     height: 1.5,
   },
@@ -182,8 +206,7 @@ const styles = StyleSheet.create({
   login_facebook: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:'center',
-   
+    justifyContent: "center",
   },
   logo_facebook: {
     width: 30,
@@ -207,6 +230,6 @@ const styles = StyleSheet.create({
   },
   dont_have_account_register: {
     color: "#C43302",
-    fontWeight:'500'
+    fontWeight: "500",
   },
 });

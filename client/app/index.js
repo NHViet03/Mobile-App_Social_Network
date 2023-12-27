@@ -1,5 +1,16 @@
+import React, { useEffect } from "react";
+import { View } from "react-native";
 import { Redirect } from "expo-router";
-import moment from 'moment';
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { refreshToken } from "../redux/actions/authAction";
+
+import { io } from "socket.io-client";
+import { uri } from "../utils/fetchData";
+import { GLOBAL_TYPES } from "../redux/actions/globalTypes";
+
+import "moment/locale/vi";
+moment.locale("vi");
 
 // Config moment
 moment.updateLocale("vi", {
@@ -23,9 +34,31 @@ moment.updateLocale("vi", {
   },
 });
 
-
 const index = () => {
-  return <Redirect href={"/(auth)/login"} />;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(refreshToken());
+
+    const socket = io(`http://${uri}`, {
+      transports: ["websocket"],
+    });
+
+    dispatch({
+      type: GLOBAL_TYPES.SOCKET,
+      payload: socket,
+    });
+
+    socket.on && socket.on("connect", () => {
+      console.log("Socket Connected");
+    });
+  }, [dispatch]);
+
+  return (
+    <View>
+      <Redirect href="/(tabs)/home" />
+    </View>
+  );
 };
 
 export default index;

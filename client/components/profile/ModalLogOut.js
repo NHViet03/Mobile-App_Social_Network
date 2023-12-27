@@ -3,15 +3,22 @@ import { View, Text } from "react-native";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import { logoutAction } from "../../redux/actions/authAction";
+import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
 import Avatar from "../Avatar";
 
 const ModalLogOut = ({ handleCloseLogOutModal }) => {
   const auth = useSelector((state) => state.auth);
+  const socket=useSelector(state=>state.socket);
+  const dispatch=useDispatch();
 
-  const handlePresslogout = () => {
+  const handlePresslogout = async () => {
+    router.replace("/(auth)/login");
     handleCloseLogOutModal();
-    router.push("/login");
+    await dispatch(logoutAction());
+    dispatch({type:GLOBAL_TYPES.LOGOUT})
+    socket.close();
   };
   return (
     <View>
@@ -34,7 +41,7 @@ const ModalLogOut = ({ handleCloseLogOutModal }) => {
             alignItems: "center",
           }}
         >
-          <Avatar size="medium" avatar={auth.avatar}></Avatar>
+          <Avatar size="medium" avatar={auth.user.avatar}></Avatar>
           <Text
             style={{
               fontSize: 16,
@@ -43,7 +50,7 @@ const ModalLogOut = ({ handleCloseLogOutModal }) => {
               marginStart: 12,
             }}
           >
-            {auth.username}
+            {auth.user.username}
           </Text>
         </View>
 
