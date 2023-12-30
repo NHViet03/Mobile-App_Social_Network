@@ -8,26 +8,38 @@ import { PostContext } from "../../app/_layout";
 
 import { useSelector, useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
-import { likePost } from "../../redux/actions/postAction";
+import { likePost, unlikePost } from "../../redux/actions/postAction";
 
 const CardFooter = ({ post }) => {
   const { handleOpenCommentModal, handleOpenSharePostModal } =
     useContext(PostContext);
     
   const [isLike, setIsLike] = useState(false);
+  const [loadLike, setLoadLike] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  const handleLike = () => {
-    // console.log(post.likes)
-    dispatch(likePost({post, auth}));
-    setIsLike(true);
+  useEffect(()=> {
+    if(post.likes.find(like => like === auth.user._id)){
+      setIsLike(true);
+    }else{
+      setIsLike(false);
+    }
 
+  },[post.likes, auth.user._id]);
+
+  const handleLike =  () => {
+    if (loadLike) return ;
+    setLoadLike(true);
+    setIsLike(true);
+    dispatch(likePost({post, auth}))
+    setLoadLike(false);
   };
 
-  const handleUnLike = () => {
+  const handleUnLike = async () => {
+    await dispatch(unlikePost({post, auth}))
     setIsLike(false);
    
   };

@@ -193,6 +193,43 @@ const postCtrl = {
       res.status(500).json({ msg: error.message });
     }
   },  
+  likePost: async (req, res) => {
+    try{
+      const {post, user } = req.body
+      newPost = await Posts.findOneAndUpdate(
+        {_id: post._id},
+        {$push: {likes: user._id}},
+        {new : true}
+      ),
+      res.json({
+         msg: "Like thành công",
+         newPost: newPost
+        })
+    }
+    catch (error)
+    {
+      res.status(500).json({ msg: error.message });
+    }
+  },
+  unlikePost: async (req, res) => {
+    try{
+      const {post, user } = req.body
+      newPost = await Posts.findOneAndUpdate(
+        {_id: post._id},
+        {$pull: {likes: user._id}},
+        {new : true}
+      ),
+    
+      res.json({
+         msg: "UnLike thành công",
+         newPost: newPost
+        })
+    }
+    catch (error)
+    {
+      res.status(500).json({ msg: error.message });
+    }
+  }
 };
    
 module.exports = postCtrl;

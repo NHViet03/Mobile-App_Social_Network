@@ -10,6 +10,10 @@ router.get('/explore_posts',auth,postCtrl.getExplorePosts)
 router.get('/user_posts/:id',auth,postCtrl.getUserPosts)
 router.get('/saved_posts/:id',auth,postCtrl.getSavedPosts)
 router.patch('/post', auth, postCtrl.updatePost)
+router.patch('/post/like', auth, postCtrl.likePost)
+router.patch('/post/unlike', auth, postCtrl.unlikePost)
+
+
 router.get('/post/:id',auth,postCtrl.getPost)
  
 

@@ -72,10 +72,33 @@ export const updatePost = ({editPost, auth}) => async (dispatch) => {
   }
 }
 
-export const likePost = ({post, auth}) =>  (dispatch) => {
-    const newPost = {...post, likes: [...post.likes, auth.user]}
-    dispatch({
-        type: POST_TYPES.LIKE_POST,
-        payload: newPost
+export const likePost = ({post, auth}) =>  async (dispatch) => {
+    try{
+    const res =  await patchDataAPI("post/like",{
+      post: post,
+      user: auth.user
+      }, auth.token);
+      dispatch({
+        type: POST_TYPES.UPDATE_POST,
+        payload: res.data.newPost
     })
+    }catch(error){
+        console.log(error);
+    }
+   
+}
+export const unlikePost = ({post, auth}) =>  async (dispatch) => {
+  try{
+  const res =  await patchDataAPI("post/unlike",{
+    post: post,
+    user: auth.user
+    }, auth.token);
+    dispatch({
+      type: POST_TYPES.UPDATE_POST,
+      payload: res.data.newPost
+  })
+  }catch(error){
+      console.log(error);
+  }
+ 
 }
