@@ -1,13 +1,15 @@
 import { imageUpload } from "../../utils/imageUpload";
-import { postDataAPI, getDataAPI } from "../../utils/fetchData";
+import { postDataAPI, getDataAPI, patchDataAPI } from "../../utils/fetchData";
 
 export const POST_TYPES = {
   CREATE_POST: "CREATE_POST",
   GET_POSTS: "GET_POSTS",
+  EDIT_POST: "EDIT_POST",
+  UPDATE_POST: "UPDATE_POST",
+  LIKE_POST: "LIKE_POST",
 };
 
-export const createPost =
-  ({ post, auth }) =>
+export const createPost =({ post, auth }) =>
   async (dispatch) => {
     try {
       let media = [];
@@ -22,7 +24,7 @@ export const createPost =
         },
         auth.token
       );
-
+ 
       dispatch({
         type: POST_TYPES.CREATE_POST,
         payload: {
@@ -49,4 +51,31 @@ export const getPosts = (token) => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
+ 
 };
+
+export const updatePost = ({editPost, auth}) => async (dispatch) => {
+    const { content, _id } = editPost
+   
+  try {
+    const res = await patchDataAPI("post",{
+      content,
+      _id
+    } ,auth.token);
+    
+    dispatch({
+      type: POST_TYPES.UPDATE_POST,
+      payload: res.data.post
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const likePost = ({post, auth}) =>  (dispatch) => {
+    const newPost = {...post, likes: [...post.likes, auth.user]}
+    dispatch({
+        type: POST_TYPES.LIKE_POST,
+        payload: newPost
+    })
+}

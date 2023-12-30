@@ -166,6 +166,33 @@ const postCtrl = {
       res.status(500).json({ msg: error.message });
     }
   },
+  updatePost: async (req, res) => {
+    try {
+      const { content, _id } = req.body;
+      
+    
+      const post = await Posts.findOneAndUpdate(
+        { _id: _id },
+        { content },
+        { new: true } 
+      )
+        .populate("user", "avatar fullname username")
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user",
+            select: "avatar username fullname",
+          },
+        });
+        
+      return res.json({
+        msg: "Cập nhật bài viết thành công",
+        post,
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  },  
 };
-
+   
 module.exports = postCtrl;

@@ -4,6 +4,10 @@ import { POST_TYPES } from "../actions/postAction";
 const initialState = {
   posts: [],
   result: 0,
+
+  firstLoad: false,
+  post: {},
+  onEdit: false,
   users: [
     {
       _id: "abc123",
@@ -76,7 +80,6 @@ const initialState = {
         "https://i.pinimg.com/564x/22/60/3a/22603ab665885115366fdc481c652628.jpg",
     },
   ],
-  firstLoad: false,
 };
 
 const postReducer = (state = initialState, action) => {
@@ -98,6 +101,27 @@ const postReducer = (state = initialState, action) => {
       return {
         ...initialState,
       };
+    case POST_TYPES.EDIT_POST:
+      return {
+        ...state,
+        post: action.payload.post,
+        onEdit: action.payload.onEdit,
+      };
+    case POST_TYPES.UPDATE_POST:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        ),
+      };
+    case POST_TYPES.LIKE_POST:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        ),
+      };
+      
     default:
       return state;
   }

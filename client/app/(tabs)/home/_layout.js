@@ -8,6 +8,10 @@ export default function Layout() {
         name="notify"
         options={{ headerTitle: "Thông báo", animation: "slide_from_right" }}
       />
+      <Stack.Screen
+        name="editPost"
+        options={{ headerShown: false , animation: "slide_from_right" }}
+      />
     </Stack>
   );
 }

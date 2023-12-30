@@ -9,7 +9,6 @@ const SocketServer = (socket) => {
         socketId: socket.id,
         followers: user.followers,
       });
-    console.log(users);
   });
 
   socket.on("disconnect", () => {
@@ -67,3 +66,4 @@ const SocketServer = (socket) => {
 };
 
 module.exports = SocketServer;
+  

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import LikeBtn from "../LikeBtn";
@@ -8,6 +8,7 @@ import { PostContext } from "../../app/_layout";
 
 import { useSelector, useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
+import { likePost } from "../../redux/actions/postAction";
 
 const CardFooter = ({ post }) => {
   const { handleOpenCommentModal, handleOpenSharePostModal } =
@@ -20,8 +21,10 @@ const CardFooter = ({ post }) => {
   const dispatch = useDispatch();
 
   const handleLike = () => {
+    // console.log(post.likes)
+    dispatch(likePost({post, auth}));
     setIsLike(true);
-    
+
   };
 
   const handleUnLike = () => {

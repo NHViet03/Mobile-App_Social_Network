@@ -1,17 +1,24 @@
 import { Text, View, Pressable } from "react-native";
 import React, { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useSelector} from "react-redux";
+import { useDispatch } from "react-redux";
+import { router } from "expo-router";
 import {
   Feather,
   MaterialCommunityIcons,
   FontAwesome5,
   Octicons,
   MaterialIcons,
+  AntDesign ,
 } from "@expo/vector-icons";
-
+import { POST_TYPES } from "../redux/actions/postAction";
+  
 const ModalReportPost = () => {
-  const reportPostModal = useSelector((state) => state.reportPostModal);
+  const {reportPostModal, auth, homePosts } = useSelector((state) => state);
+
   const [isOpenReport, setIsOpenReport] = useState(false);
+
+const dispatch = useDispatch()
 
   const reportContent = useMemo(
     () => [
@@ -32,6 +39,19 @@ const ModalReportPost = () => {
     setIsOpenReport(false);
   };
  
+  const handleUpdatePost = () => {
+    dispatch({
+      type: POST_TYPES.EDIT_POST,
+      payload: {
+        post: reportPostModal,
+        onEdit: true,
+      }
+    })
+   router.push("home/editPost")
+  }
+  const handleDeletePost = () => {
+      
+  }
 
   return (
     <View className="flex-1">
@@ -70,7 +90,9 @@ const ModalReportPost = () => {
             ))}
           </View>
         </>
-      ) : (
+      ) : reportPostModal?.user._id === auth?.user._id
+      ?
+       (
         <>
           <View className="mt-4 pb-4 border-borderColor border-b-[0.5px] flex-row justify-around items-center">
             <View className="items-center">
@@ -91,14 +113,24 @@ const ModalReportPost = () => {
             </View>
           </View>
           <View className="flex-1">
-            <Pressable className="flex-row items-center p-4 border-borderColor border-b-[0.5px]">
+            {/* <Pressable className="flex-row items-center p-4 border-borderColor border-b-[0.5px]">
               <Feather name="link" size={24} color="black" />
               <Text className="text-base ml-2">Sao chép liên kết</Text>
-            </Pressable>
-            <Pressable className="flex-row items-center p-4 border-borderColor border-b-[0.5px]">
-              <FontAwesome5 name="user-circle" size={24} color="black" />
+            </Pressable> */}
+            <Pressable className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
+              onPress={handleUpdatePost}
+            >
+             <MaterialIcons name="edit" size={24} color="black" />
               <Text className="text-base ml-2">
-                Giới thiệu về tài khoản này
+                Chỉnh sửa
+              </Text>
+            </Pressable>
+            <Pressable className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
+              onPress={handleDeletePost}
+            >
+             <AntDesign name="delete" size={24} color="black" />
+              <Text className="text-base ml-2">
+                Xóa Bài viết
               </Text>
             </Pressable>
             <Pressable
@@ -110,7 +142,46 @@ const ModalReportPost = () => {
             </Pressable>
           </View>
         </>
-      )}
+      )
+      :
+      (
+        <>
+          <View className="mt-4 pb-4 border-borderColor border-b-[0.5px] flex-row justify-around items-center">
+            <View className="items-center">
+              <View className="w-14 h-14 rounded-[28px] border-dark border-[1px] justify-center items-center ">
+                <Feather name="bookmark" size={28} color="black" />
+              </View>
+              <Text className="font-semibold mt-1">Lưu</Text>
+            </View>
+            <View className="items-center">
+              <View className="w-14 h-14 rounded-[28px] border-dark border-[1px] justify-center items-center ">
+                <MaterialCommunityIcons
+                  name="qrcode-scan"
+                  size={28}
+                  color="black"
+                />
+              </View>
+              <Text className="font-semibold mt-1">Mã QR</Text>
+            </View>
+          </View>
+          <View className="flex-1">
+            {/* <Pressable className="flex-row items-center p-4 border-borderColor border-b-[0.5px]">
+              <Feather name="link" size={24} color="black" />
+              <Text className="text-base ml-2">Sao chép liên kết</Text>
+            </Pressable> */}
+           
+            <Pressable
+              className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
+              onPress={handleOpenReport}
+            >
+              <Octicons name="report" size={24} color="#c43302" />
+              <Text className="text-base ml-2 text-primary">Báo cáo</Text>
+            </Pressable>
+          </View>
+        </>
+      )
+      
+      } 
     </View>
   );
 };
