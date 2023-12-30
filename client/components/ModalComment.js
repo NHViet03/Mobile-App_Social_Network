@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch} from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
@@ -8,18 +8,26 @@ import Avatar from "./Avatar";
 import CardComment from "./postCard/CardComment";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { createComment } from "../redux/actions/commentAction";
+import { MaterialIcons } from '@expo/vector-icons';
 const ModalComment = () => {
   const auth = useSelector((state) => state.auth);
   const commentModal = useSelector((state) => state.commentModal);
-  const [postData, setPostData] = useState(commentModal);
+  const [postData, setPostData] = useState({});
   const [content, setContent] = useState("");
+  const [onEdit, setOnEdit] = useState(false);
+  const [indexActive, setIndexActive] = useState(-1);
   const [commentSelected, setCommentSelected] = useState(false);
-
+  
+  useEffect(() =>
+  {
+    setPostData(commentModal);
+  },[commentModal]);
   if (!postData) {
     return <View></View>;
   }
   const dispatch = useDispatch();
   const handleComment = () => {
+    if(content.trim() === '') return;
     const newComment = {
       _id: uuid.v4(),
       content,
@@ -36,8 +44,9 @@ const ModalComment = () => {
     dispatch(createComment({postData, content, auth }))
   };
 
-  const handleSelectComment = (item) => {
+  const handleSelectComment = (item, index) => {
     if (item.user._id === auth.user._id) {
+      setIndexActive(index)
       setCommentSelected(item);
     }
     return;
@@ -53,6 +62,11 @@ const ModalComment = () => {
     setCommentSelected(false);
   };
 
+  const handleEdit = () => {
+   
+    setOnEdit(true)
+  }
+
   return (
     <View className="flex-1">
       <View className="mt-4 pb-2 border-borderColor border-b-[0.5px]">
@@ -60,6 +74,9 @@ const ModalComment = () => {
           <View className="bg-primary flex-row items-center justify-between py-3 px-3">
             <Text className="text-white font-bold text-xl">Đã chọn 1 mục</Text>
             <View className="flex-row gap-3">
+            <Pressable onPress={handleEdit}>
+                <MaterialIcons name="mode-edit" size={28} color="white" />
+              </Pressable>
               <Pressable onPress={handleDeleteComment}>
                 <Ionicons name="trash-outline" size={28} color="white" />
               </Pressable>
@@ -72,7 +89,7 @@ const ModalComment = () => {
           <Text className="font-semibold text-center ">Bình luận</Text>
         )}
       </View>
-      {postData.comments.length > 0 ? (
+      {postData?.comments?.length > 0 ? (
         <BottomSheetFlatList
           className="flex-1 border-borderColor border-b-[0.5px]"
           data={postData.comments}
@@ -80,8 +97,8 @@ const ModalComment = () => {
           numColumns={1}
           renderItem={({ item, index }) => (
             <Pressable
-              onPress={() => handleSelectComment(item)}
-              onLongPress={() => handleSelectComment(item)}
+              onPress={() => handleSelectComment(item, index)}
+              onLongPress={() => handleSelectComment(item, index)}
               style={{
                 backgroundColor:
                   commentSelected && commentSelected?._id === item._id
@@ -89,7 +106,7 @@ const ModalComment = () => {
                     : "white",
               }}
             >
-              <CardComment comment={item} key={index} />
+              <CardComment comment={item} index={index} onEdit={onEdit} setOnEdit={setOnEdit} postData={postData} indexActive={indexActive}   />
             </Pressable>
           )}
         />
@@ -109,7 +126,7 @@ const ModalComment = () => {
           <Avatar avatar={auth.user.avatar} size="middle" />
           <TextInput
             className="flex-1 ml-3 mr-1 "
-            placeholder={`Bình luận cho ${postData.user.username}...`}
+            placeholder={`Bình luận cho ${postData?.user?.username}...`}
             placeholderTextColor={{ color: "#9e9e9e" }}
             value={content}
             onChangeText={(text) => setContent(text)}

@@ -25,6 +25,50 @@ const commentCtrl = {
         }catch(err){
 
         }
+    },
+    updateComment: async (req, res) => {
+        try{
+            const {content, _id} = req.body
+
+            await Comments.findOneAndUpdate({_id: _id, user: req.user._id}, {
+                content
+            })
+
+            res.json({
+                msg: "Update Success!"
+            })
+
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
+    },
+    likeComment: async (req, res) => {
+        const { _id} = req.body
+        try{
+             await Comments.findOneAndUpdate({_id: _id}, {
+                $push: {likes: req.user._id}
+            }, {new: true})
+
+            res.json({
+                msg: "Liked Comment!"
+            })
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
+    },
+    unlikeComment: async (req, res) => {
+        const { _id} = req.body
+        try{
+             await Comments.findOneAndUpdate({_id: _id}, {
+                $pull: {likes: req.user._id}
+            }, {new: true})
+
+            res.json({
+                msg: "UnLiked Comment!"
+            })
+        }catch(err){
+            return res.status(500).json({msg: err.message})
+        }
     }
 }
 
