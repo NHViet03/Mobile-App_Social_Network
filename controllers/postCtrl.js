@@ -47,8 +47,8 @@ const postCtrl = {
         .populate({
           path: "comments",
           populate: {
-            path: "user",
-            select: "avatar username fullname",
+            path: "user likes",
+            select: "-password",
           },
         });
 

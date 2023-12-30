@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch} from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
-import uuid from 'react-native-uuid';
+import uuid from "react-native-uuid";
 import Avatar from "./Avatar";
 import CardComment from "./postCard/CardComment";
-
+import { KeyboardAvoidingView, Platform } from "react-native";
+import { createComment } from "../redux/actions/commentAction";
 const ModalComment = () => {
   const auth = useSelector((state) => state.auth);
   const commentModal = useSelector((state) => state.commentModal);
@@ -17,7 +18,7 @@ const ModalComment = () => {
   if (!postData) {
     return <View></View>;
   }
-
+  const dispatch = useDispatch();
   const handleComment = () => {
     const newComment = {
       _id: uuid.v4(),
@@ -26,12 +27,13 @@ const ModalComment = () => {
       user: auth.user,
       createdAt: new Date().toISOString(),
     };
-    
+
     setPostData({
       ...postData,
       comments: [...postData.comments, newComment],
     });
     setContent("");
+    dispatch(createComment({postData, content, auth }))
   };
 
   const handleSelectComment = (item) => {
@@ -70,56 +72,59 @@ const ModalComment = () => {
           <Text className="font-semibold text-center ">Bình luận</Text>
         )}
       </View>
-      {
-        postData.comments.length > 0 ? (
-          <BottomSheetFlatList
-        className="flex-1 border-borderColor border-b-[0.5px]"
-        data={postData.comments}
-        scrollEnabled={true}
-        numColumns={1}
-        renderItem={({ item, index }) => (
-          <Pressable
-            onPress={() => handleSelectComment(item)}
-            onLongPress={() => handleSelectComment(item)}
-            style={{
-              backgroundColor:
-                commentSelected && commentSelected?._id === item._id
-                  ? "#c433024d"
-                  : "white",
-            }}
-          >
-            <CardComment comment={item} key={index} />
-          </Pressable>
-        )}
-      />
-        )
-        :(
-          <View className="flex-1 justify-center items-center  border-borderColor border-b-[0.5px]">
-            <Text className="text-2xl font-bold mb-2">Chưa có bình luận</Text>
-            <Text className="text-textColor">Bắt đầu trò chuyện.</Text>
-          </View>
-        )
-      }
-
-      <View className="flex-row items-center mb-2 px-4 py-3">
-        <Avatar avatar={auth.user.avatar} size="middle" />
-        <TextInput
-          className="flex-1 ml-3 mr-1 "
-          placeholder={`Bình luận cho ${postData.user.username}...`}
-          placeholderTextColor={{ color: "#9e9e9e" }}
-          value={content}
-          onChangeText={(text) => setContent(text)}
+      {postData.comments.length > 0 ? (
+        <BottomSheetFlatList
+          className="flex-1 border-borderColor border-b-[0.5px]"
+          data={postData.comments}
+          scrollEnabled={true}
+          numColumns={1}
+          renderItem={({ item, index }) => (
+            <Pressable
+              onPress={() => handleSelectComment(item)}
+              onLongPress={() => handleSelectComment(item)}
+              style={{
+                backgroundColor:
+                  commentSelected && commentSelected?._id === item._id
+                    ? "#c433024d"
+                    : "white",
+              }}
+            >
+              <CardComment comment={item} key={index} />
+            </Pressable>
+          )}
         />
-        <Pressable onPress={handleComment}>
-          <Text
-            className={` text-primary ${
-              content ? "opacity-100" : "opacity-50"
-            } font-semibold text-base`}
-          >
-            Đăng
-          </Text>
-        </Pressable>
-      </View>
+      ) : (
+        <View className="flex-1 justify-center items-center  border-borderColor border-b-[0.5px]">
+          <Text className="text-2xl font-bold mb-2">Chưa có bình luận</Text>
+          <Text className="text-textColor">Bắt đầu trò chuyện.</Text>
+        </View>
+      )}
+
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1, position: 'absolute', bottom: 0, width: '100%' }}
+      >
+        <View className="flex-row items-center mb-2 px-4 py-3"
+           >
+          <Avatar avatar={auth.user.avatar} size="middle" />
+          <TextInput
+            className="flex-1 ml-3 mr-1 "
+            placeholder={`Bình luận cho ${postData.user.username}...`}
+            placeholderTextColor={{ color: "#9e9e9e" }}
+            value={content}
+            onChangeText={(text) => setContent(text)}
+          />
+          <Pressable onPress={handleComment}>
+            <Text
+              className={` text-primary ${
+                content ? "opacity-100" : "opacity-50"
+              } font-semibold text-base`}
+            >
+              Đăng
+            </Text>
+          </Pressable>
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
