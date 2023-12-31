@@ -14,5 +14,6 @@ router.get("/search_users", auth, userCtrl.searchUsers);
 
 router.patch("/update_profile", auth, userCtrl.updateProfile);
 router.patch("/change_password",auth, userCtrl.changePassword);
+router.get("/suggestionsUser", auth, userCtrl.suggestionsUser);
 
 module.exports = router;
