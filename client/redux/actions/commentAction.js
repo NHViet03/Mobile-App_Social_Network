@@ -75,3 +75,18 @@ export const unlikeComment = ({commentData, postData, auth}) => async (dispatch)
         console.log(err)
     }
 }
+
+export const deleteComment = ({postData ,comment , auth}) => async (dispatch) => {
+   
+    dispatch({
+        type: POST_TYPES.UPDATE_POST,
+        payload: postData
+    })
+    try {
+      const res = await deleteDataAPI(`delete_comment/${comment._id}`, auth.token)
+       
+    } catch (err) {
+        console.log(err)
+    }
+   
+}

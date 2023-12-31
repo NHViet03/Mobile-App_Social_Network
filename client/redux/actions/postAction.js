@@ -1,5 +1,5 @@
 import { imageUpload } from "../../utils/imageUpload";
-import { postDataAPI, getDataAPI, patchDataAPI } from "../../utils/fetchData";
+import { postDataAPI, getDataAPI, patchDataAPI, deleteDataAPI } from "../../utils/fetchData";
 
 export const POST_TYPES = {
   CREATE_POST: "CREATE_POST",
@@ -7,6 +7,7 @@ export const POST_TYPES = {
   EDIT_POST: "EDIT_POST",
   UPDATE_POST: "UPDATE_POST",
   LIKE_POST: "LIKE_POST",
+  DELETE_POST: "DELETE_POST",
 };
 
 export const createPost =({ post, auth }) =>
@@ -101,4 +102,18 @@ export const unlikePost = ({post, auth}) =>  async (dispatch) => {
       console.log(error);
   }
  
+}
+export const deletePost = ({post, auth}) => async (dispatch) => {
+
+  dispatch({
+    type: POST_TYPES.DELETE_POST,
+    payload: post
+  })
+
+  try{
+    const res = await deleteDataAPI(`delete_post/${post._id}`,auth.token)
+  
+  }catch(error){
+    console.log("lỗi");
+  }
 }

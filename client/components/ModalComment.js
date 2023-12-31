@@ -7,7 +7,7 @@ import uuid from "react-native-uuid";
 import Avatar from "./Avatar";
 import CardComment from "./postCard/CardComment";
 import { KeyboardAvoidingView, Platform } from "react-native";
-import { createComment } from "../redux/actions/commentAction";
+import { createComment, deleteComment } from "../redux/actions/commentAction";
 import { MaterialIcons } from '@expo/vector-icons';
 const ModalComment = () => {
   const auth = useSelector((state) => state.auth);
@@ -60,6 +60,7 @@ const ModalComment = () => {
       ),
     });
     setCommentSelected(false);
+    dispatch(deleteComment({postData, comment: commentSelected, auth}))
   };
 
   const handleEdit = () => {

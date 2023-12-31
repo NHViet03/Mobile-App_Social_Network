@@ -11,7 +11,7 @@ import {
   MaterialIcons,
   AntDesign ,
 } from "@expo/vector-icons";
-import { POST_TYPES } from "../redux/actions/postAction";
+import { POST_TYPES, deletePost } from "../redux/actions/postAction";
   
 const ModalReportPost = () => {
   const {reportPostModal, auth, homePosts } = useSelector((state) => state);
@@ -50,7 +50,7 @@ const dispatch = useDispatch()
    router.push("home/editPost")
   }
   const handleDeletePost = () => {
-      
+      dispatch(deletePost({post: reportPostModal, auth: auth}))
   }
 
   return (

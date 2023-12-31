@@ -26,23 +26,24 @@ const CardComment = ({ comment , onEdit, setOnEdit, postData, index , indexActiv
  
   const dispatch = useDispatch()
   const handleLike = () => {
-    setIsLike(true);
+   
     setCommentData({
       ...commentData,
       likes: [...commentData?.likes, auth.user._id],
     });
   
     dispatch(likeComment({commentData,postData , auth}));
+    setIsLike(true);
   };
 
   const handleUnLike = () => {
-    setIsLike(false);
+  
     setCommentData({
       ...commentData,
       likes: commentData?.likes.filter((like) => like !== auth.user._id),
     });
     dispatch(unlikeComment({commentData ,postData , auth}));
-
+    setIsLike(false);
   };
 
   const handleUpdate = () => {

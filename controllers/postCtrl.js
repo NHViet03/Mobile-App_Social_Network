@@ -229,7 +229,26 @@ const postCtrl = {
     {
       res.status(500).json({ msg: error.message });
     }
-  }
+  },
+  deletePost: async (req, res) => {
+    const {id} = req.params
+   
+    try {
+      
+      const post = await Posts.findById(id);
+     await post.deleteOne();
+
+      await Comments.deleteMany({ _id: { $in: post.comments } });
+
+      console.log("oke");
+      return res.json({
+        msg: "Xóa bài viết thành công",
+      });
+    
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+   },
 };
    
 module.exports = postCtrl;
