@@ -249,6 +249,42 @@ const postCtrl = {
       res.status(500).json({ msg: error.message });
     }
    },
+   savePost: async (req, res) => {
+    const {id} = req.params
+    const {user} = req.body
+    
+    try {
+      await Users.findOneAndUpdate({ _id: user._id },
+        {
+          $push: {saved: id}
+        },
+        { new: true }
+      );
+      return res.json({
+        msg: "Lưu bài viết thành công",
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+   },
+   unsavePost: async (req, res) => {
+    const {id} = req.params
+    const {user} = req.body
+    
+    try {
+      await Users.findOneAndUpdate({ _id: user._id },
+        {
+          $pull: {saved: id}
+        },
+        { new: true }
+      );
+      return res.json({
+        msg: "Bỏ lưu bài viết thành công",
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+   }
 };
    
 module.exports = postCtrl;

@@ -117,3 +117,27 @@ export const deletePost = ({post, auth}) => async (dispatch) => {
     console.log("lỗi");
   }
 }
+
+export const savePost = ({post, auth}) => async (dispatch) => {
+  try{
+    const res = await patchDataAPI(`save_post/${post._id}`,
+    {
+      user: auth.user
+    },auth.token)
+  }catch(error){
+    console.log(error);
+  }
+  
+}
+
+export const unsavePost = ({post, auth}) => async (dispatch) => {
+  try{
+    const res = await patchDataAPI(`unsave_post/${post._id}`,
+    {
+      user: auth.user
+    },auth.token)
+  }catch(error){
+    console.log(error);
+  }
+  
+}

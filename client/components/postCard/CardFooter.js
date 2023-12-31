@@ -8,7 +8,7 @@ import { PostContext } from "../../app/_layout";
 
 import { useSelector, useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
-import { likePost, unlikePost } from "../../redux/actions/postAction";
+import { likePost, savePost, unlikePost, unsavePost } from "../../redux/actions/postAction";
 
 const CardFooter = ({ post }) => {
   const { handleOpenCommentModal, handleOpenSharePostModal } =
@@ -30,6 +30,13 @@ const CardFooter = ({ post }) => {
 
   },[post.likes, auth.user._id]);
 
+  useEffect(()=> {
+    if(auth.user.saved.find(id => id === post._id)){
+      setIsBookmark(true);
+    }else{
+      setIsBookmark(false);
+    }
+  },[auth.user.saved, post._id]);
   const handleLike =  () => {
     if (loadLike) return ;
     setLoadLike(true);
@@ -45,9 +52,11 @@ const CardFooter = ({ post }) => {
   };
 
   const handleBookmark = () => {
+     dispatch(savePost({post, auth}))
     setIsBookmark(true);
   };
   const handleUnBookmark = () => {
+    dispatch(unsavePost({post, auth}))
     setIsBookmark(false);
   };
 
