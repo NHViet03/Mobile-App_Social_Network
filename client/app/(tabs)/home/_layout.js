@@ -6,7 +6,7 @@ export default function Layout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
         name="notify"
-        options={{ headerTitle: "Thông báo", animation: "slide_from_right" }}
+        options={{headerShown: false , animation: "slide_from_right"}}
       />
       <Stack.Screen
         name="editPost"

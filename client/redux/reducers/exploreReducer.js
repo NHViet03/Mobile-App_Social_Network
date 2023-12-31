@@ -2,7 +2,9 @@ import { GLOBAL_TYPES } from "../actions/globalTypes";
 import { EXPLORE_TYPES } from "../actions/exploreAction";
 
 const initialState = {
-  posts: [],
+  posts: [
+    
+  ],
   result: 0,
   firstLoad: false,
 };

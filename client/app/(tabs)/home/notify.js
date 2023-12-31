@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
+import { StyleSheet, Text, View, Pressable, FlatList,StatusBar , TouchableOpacity} from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Feather } from "@expo/vector-icons";
 import CardNotify from "../../../components/home/CardNotify";
 import CardSuggest from "../../../components/home/CardSuggest";
 import { router } from "expo-router";
@@ -32,6 +33,41 @@ const notify = () => {
       }}
       showsVerticalScrollIndicator={false}
     >
+    <View
+        style={{
+          paddingHorizontal: 16,
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexDirection: "row",
+          height: 60,
+          marginTop: StatusBar.currentHeight,
+          backgroundColor: "#fff",
+          marginBottom: 16,
+        }}
+      >
+        <View className="flex-row items-center gap-4">
+          <Pressable onPress={() => router.push("/home")}>
+            <Feather name="arrow-left" size={24} color="black" />
+          </Pressable>
+          <Text className=" text-center font-bold text-xl flex-1"
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+           Thông báo
+          </Text>
+        </View>
+        <TouchableOpacity>
+        <Pressable >
+           {/* <Text className="text-base "
+           style={{
+            color: "#f16c2e",
+            fontSize: 17,
+           }} ></Text> */}
+          </Pressable>
+        </TouchableOpacity>
+      </View>
     {/* Phần thông báo */}
       <View className="mt-5 px-3 pb-3 border-b-borderColor border-b-[0.5px]">
         <Text className="text-base font-bold mb-4">30 ngày qua</Text>

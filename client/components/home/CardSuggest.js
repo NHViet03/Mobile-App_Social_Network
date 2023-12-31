@@ -4,7 +4,6 @@ import Avatar from "../Avatar";
 import { AntDesign } from '@expo/vector-icons';
 
 const CardSuggest = ({ user,handleRemoveSuggestUser}) => {
-  console.log(user)
     const handleRemove = ()=>{
         handleRemoveSuggestUser(user._id)
     }
