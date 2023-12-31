@@ -2,6 +2,7 @@ import { Text, View, Pressable } from "react-native";
 import React from "react";
 import Avatar from "../Avatar";
 import { AntDesign } from '@expo/vector-icons';
+import FollowBtn from "../FollowBtn";
 
 const CardSuggest = ({ user,handleRemoveSuggestUser}) => {
     const handleRemove = ()=>{
@@ -18,9 +19,10 @@ const CardSuggest = ({ user,handleRemoveSuggestUser}) => {
           </View>
         </View>
         <Pressable>
-          <View className="bg-primary px-3 py-2 rounded-lg">
+          {/* <View className="bg-primary px-3 py-2 rounded-lg">
             <Text className="text-white font-semibold">Theo dõi</Text>
-          </View>
+          </View> */}
+          <FollowBtn user={user}/>
         </Pressable>
         <Pressable className="ml-3 w-6 h-6 " onPress={handleRemove}>
             <AntDesign name="close" size={18} color="black" />

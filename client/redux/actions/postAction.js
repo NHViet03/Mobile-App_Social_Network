@@ -73,7 +73,9 @@ export const updatePost = ({editPost, auth}) => async (dispatch) => {
   }
 }
 
-export const likePost = ({post, auth}) =>  async (dispatch) => {
+export const likePost = ({post, auth, socket}) =>  async (dispatch) => {
+  const newPost = {...post, likes: [...post.likes, auth.user._id]}
+  socket.emit('likePost', newPost)
     try{
     const res =  await patchDataAPI("post/like",{
       post: post,
@@ -88,7 +90,10 @@ export const likePost = ({post, auth}) =>  async (dispatch) => {
     }
    
 }
-export const unlikePost = ({post, auth}) =>  async (dispatch) => {
+export const unlikePost = ({post, auth, socket}) =>  async (dispatch) => {
+  const newPost = {...post, likes: post.likes.filter(id => id !== auth.user._id)}
+  socket.emit('unLikePost', newPost)
+
   try{
   const res =  await patchDataAPI("post/unlike",{
     post: post,

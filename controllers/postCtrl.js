@@ -43,7 +43,7 @@ const postCtrl = {
         user: users,
       })
         .sort("-createdAt")
-        .populate("user", "avatar username fullname")
+        .populate("user", "avatar username fullname followers")
         .populate({
           path: "comments",
           populate: {

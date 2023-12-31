@@ -19,6 +19,9 @@ const CardFooter = ({ post }) => {
   const [isBookmark, setIsBookmark] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const auth = useSelector((state) => state.auth);
+  const socket = useSelector((state) => state.socket);
+  const homePosts = useSelector((state) => state.homePosts);
+
   const dispatch = useDispatch();
 
   useEffect(()=> {
@@ -38,14 +41,16 @@ const CardFooter = ({ post }) => {
     }
   },[auth.user.saved, post._id]);
   const handleLike =  () => {
+      post.likes = [auth.user._id, ...post.likes]
     if (loadLike) return ;
     setLoadLike(true);
     setIsLike(true);
-    dispatch(likePost({post, auth}))
+    dispatch(likePost({post, auth, socket}))
     setLoadLike(false);
   };
 
   const handleUnLike = async () => {
+    post.likes = post.likes.filter(id => id !== auth.user._id)
     await dispatch(unlikePost({post, auth}))
     setIsLike(false);
    
