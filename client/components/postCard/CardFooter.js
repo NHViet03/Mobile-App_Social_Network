@@ -21,7 +21,7 @@ const CardFooter = ({ post }) => {
   const auth = useSelector((state) => state.auth);
   const socket = useSelector((state) => state.socket);
   const homePosts = useSelector((state) => state.homePosts);
-
+  const [data, setData] = useState();
   const dispatch = useDispatch();
 
   useEffect(()=> {

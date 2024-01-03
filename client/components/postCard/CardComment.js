@@ -32,7 +32,8 @@ const CardComment = ({ comment , onEdit, setOnEdit, postData, index , indexActiv
       likes: [...commentData?.likes, auth.user._id],
     });
   
-    dispatch(likeComment({commentData,postData , auth}));
+    dispatch(likeComment({commentData : { ...commentData,
+      likes: [...commentData?.likes, auth.user._id]},postData , auth}));
     setIsLike(true);
   };
 
@@ -42,7 +43,8 @@ const CardComment = ({ comment , onEdit, setOnEdit, postData, index , indexActiv
       ...commentData,
       likes: commentData?.likes.filter((like) => like !== auth.user._id),
     });
-    dispatch(unlikeComment({commentData ,postData , auth}));
+    dispatch(unlikeComment({commentData: {  ...commentData,
+      likes: commentData?.likes.filter((like) => like !== auth.user._id)} ,postData , auth}));
     setIsLike(false);
   };
 

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import uuid from "react-native-uuid";
@@ -8,7 +8,7 @@ import Avatar from "./Avatar";
 import CardComment from "./postCard/CardComment";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { createComment, deleteComment } from "../redux/actions/commentAction";
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from "@expo/vector-icons";
 const ModalComment = () => {
   const auth = useSelector((state) => state.auth);
   const commentModal = useSelector((state) => state.commentModal);
@@ -17,17 +17,16 @@ const ModalComment = () => {
   const [onEdit, setOnEdit] = useState(false);
   const [indexActive, setIndexActive] = useState(-1);
   const [commentSelected, setCommentSelected] = useState(false);
-  
-  useEffect(() =>
-  {
+
+  useEffect(() => {
     setPostData(commentModal);
-  },[commentModal]);
+  }, [commentModal]);
   if (!postData) {
     return <View></View>;
   }
   const dispatch = useDispatch();
   const handleComment = () => {
-    if(content.trim() === '') return;
+    if (content.trim() === "") return;
     const newComment = {
       _id: uuid.v4(),
       content,
@@ -41,12 +40,18 @@ const ModalComment = () => {
       comments: [...postData.comments, newComment],
     });
     setContent("");
-    dispatch(createComment({postData, content, auth }))
+    dispatch(
+      createComment({
+        postData: { ...postData, comments: [...postData.comments, newComment] },
+        content,
+        auth,
+      })
+    );
   };
 
   const handleSelectComment = (item, index) => {
     if (item.user._id === auth.user._id) {
-      setIndexActive(index)
+      setIndexActive(index);
       setCommentSelected(item);
     }
     return;
@@ -60,13 +65,23 @@ const ModalComment = () => {
       ),
     });
     setCommentSelected(false);
-    dispatch(deleteComment({postData, comment: commentSelected, auth}))
+    dispatch(
+      deleteComment({
+        postData: {
+          ...postData,
+          comments: postData.comments.filter(
+            (comment) => comment._id !== commentSelected?._id
+          ),
+        },
+        comment: commentSelected,
+        auth,
+      })
+    );
   };
 
   const handleEdit = () => {
-   
-    setOnEdit(true)
-  }
+    setOnEdit(true);
+  };
 
   return (
     <View className="flex-1">
@@ -75,7 +90,7 @@ const ModalComment = () => {
           <View className="bg-primary flex-row items-center justify-between py-3 px-3">
             <Text className="text-white font-bold text-xl">Đã chọn 1 mục</Text>
             <View className="flex-row gap-3">
-            <Pressable onPress={handleEdit}>
+              <Pressable onPress={handleEdit}>
                 <MaterialIcons name="mode-edit" size={28} color="white" />
               </Pressable>
               <Pressable onPress={handleDeleteComment}>
@@ -107,7 +122,14 @@ const ModalComment = () => {
                     : "white",
               }}
             >
-              <CardComment comment={item} index={index} onEdit={onEdit} setOnEdit={setOnEdit} postData={postData} indexActive={indexActive}   />
+              <CardComment
+                comment={item}
+                index={index}
+                onEdit={onEdit}
+                setOnEdit={setOnEdit}
+                postData={postData}
+                indexActive={indexActive}
+              />
             </Pressable>
           )}
         />
@@ -119,11 +141,10 @@ const ModalComment = () => {
       )}
 
       <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, position: 'absolute', bottom: 0, width: '100%' }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1, position: "absolute", bottom: 0, width: "100%" }}
       >
-        <View className="flex-row items-center mb-2 px-4 py-3"
-           >
+        <View className="flex-row items-center mb-2 px-4 py-3">
           <Avatar avatar={auth.user.avatar} size="middle" />
           <TextInput
             className="flex-1 ml-3 mr-1 "

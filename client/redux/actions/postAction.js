@@ -1,6 +1,6 @@
 import { imageUpload } from "../../utils/imageUpload";
 import { postDataAPI, getDataAPI, patchDataAPI, deleteDataAPI } from "../../utils/fetchData";
-
+import { USER_TYPES } from "../actions/userAction";
 export const POST_TYPES = {
   CREATE_POST: "CREATE_POST",
   GET_POSTS: "GET_POSTS",
@@ -73,9 +73,9 @@ export const updatePost = ({editPost, auth}) => async (dispatch) => {
   }
 }
 
-export const likePost = ({post, auth, socket}) =>  async (dispatch) => {
+export const likePost = ({post, auth}) =>  async (dispatch) => {
   const newPost = {...post, likes: [...post.likes, auth.user._id]}
-  socket.emit('likePost', newPost)
+  // socket.emit('likePost', newPost)
     try{
     const res =  await patchDataAPI("post/like",{
       post: post,
@@ -90,9 +90,9 @@ export const likePost = ({post, auth, socket}) =>  async (dispatch) => {
     }
    
 }
-export const unlikePost = ({post, auth, socket}) =>  async (dispatch) => {
+export const unlikePost = ({post, auth}) =>  async (dispatch) => {
   const newPost = {...post, likes: post.likes.filter(id => id !== auth.user._id)}
-  socket.emit('unLikePost', newPost)
+  // socket.emit('unLikePost', newPost)
 
   try{
   const res =  await patchDataAPI("post/unlike",{
@@ -124,6 +124,10 @@ export const deletePost = ({post, auth}) => async (dispatch) => {
 }
 
 export const savePost = ({post, auth}) => async (dispatch) => {
+  dispatch({
+    type: USER_TYPES.SAVE_POST,
+    payload:  post._id
+})
   try{
     const res = await patchDataAPI(`save_post/${post._id}`,
     {
@@ -136,6 +140,10 @@ export const savePost = ({post, auth}) => async (dispatch) => {
 }
 
 export const unsavePost = ({post, auth}) => async (dispatch) => {
+  dispatch({
+    type: USER_TYPES.UNSAVE_POST,
+    payload:  post._id
+})
   try{
     const res = await patchDataAPI(`unsave_post/${post._id}`,
     {

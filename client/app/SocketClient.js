@@ -95,21 +95,21 @@ export default function SocketClient() {
   }, [socket, dispatch]);
 
   // Likes
-  useEffect(() => {
-    socket.on("likeToClient", (newPost) => {
-      if (!socket) return;
-      dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
-    });
-    return () => socket.off("likeToClient");
-  }, [socket, dispatch]);
+  // useEffect(() => {
+  //   socket.on("likeToClient", (newPost) => {
+  //     if (!socket) return;
+  //     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+  //   });
+  //   return () => socket.off("likeToClient");
+  // }, [socket, dispatch]);
 
-  useEffect(() => {
-    socket.on("unLikeToClient", (newPost) => {
-      if (!socket) return;
-      dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
-    });
-    return () => socket.off("unLikeToClient");
-  }, [socket, dispatch]);
+  // useEffect(() => {
+  //   socket.on("unLikeToClient", (newPost) => {
+  //     if (!socket) return;
+  //     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+  //   });
+  //   return () => socket.off("unLikeToClient");
+  // }, [socket, dispatch]);
 
   return <></>;
 }

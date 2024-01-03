@@ -41,6 +41,8 @@ const index = () => {
     setPosts(homePosts.posts);
   }, [homePosts.posts]);
 
+
+
   return (
     <ScrollView
       style={{

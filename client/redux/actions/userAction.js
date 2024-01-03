@@ -2,6 +2,11 @@ import { GLOBAL_TYPES } from "./globalTypes";
 import { patchDataAPI } from "../../utils/fetchData";
 import { imageUpload } from "../../utils/imageUpload";
 
+export const USER_TYPES = {
+  SAVE_POST: "SAVE_POST",
+  UNSAVE_POST: "UNSAVE_POST",
+}
+
 export const deleteFollower =
   ({ user, auth }) =>
   async (dispatch) => {
