@@ -11,41 +11,34 @@ const CardComment = ({ comment , onEdit, setOnEdit, postData, index , indexActiv
   const auth = useSelector((state) => state.auth);
   const [isLike, setIsLike] = useState(false);
   const [commentData, setCommentData] = useState({});
-  
   useEffect(() => {
     setCommentData(comment);
   }, [comment]);
-  useEffect(() => {
-   
+ useEffect(() => {
     if (commentData?.likes?.find((like) => like._id === auth.user._id)) {
       setIsLike(true);
     } else {
       setIsLike(false);
     }
-  }, [ commentData?.likes, auth.user._id]);
- 
+ },[commentData])
   const dispatch = useDispatch()
   const handleLike = () => {
-   
-    setCommentData({
-      ...commentData,
-      likes: [...commentData?.likes, auth.user._id],
-    });
-  
-    dispatch(likeComment({commentData : { ...commentData,
-      likes: [...commentData?.likes, auth.user._id]},postData , auth}));
-    setIsLike(true);
+    dispatch(likeComment({
+      commentData : { 
+            ...commentData,
+            likes: [...commentData?.likes, 
+            auth.user]},
+      postData , 
+      auth
+    }));
   };
 
   const handleUnLike = () => {
   
-    setCommentData({
-      ...commentData,
-      likes: commentData?.likes.filter((like) => like !== auth.user._id),
-    });
+   
     dispatch(unlikeComment({commentData: {  ...commentData,
-      likes: commentData?.likes.filter((like) => like !== auth.user._id)} ,postData , auth}));
-    setIsLike(false);
+      likes: commentData?.likes.filter((like) => like._id !== auth.user._id)} ,postData , auth}));
+  
   };
 
   const handleUpdate = () => {

@@ -28,7 +28,6 @@ const ModalComment = () => {
   const handleComment = () => {
     if (content.trim() === "") return;
     const newComment = {
-      _id: uuid.v4(),
       content,
       likes: [],
       user: auth.user,

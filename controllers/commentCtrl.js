@@ -54,7 +54,7 @@ const commentCtrl = {
         },
         { new: true }
       );
-
+        console.log("ke")
       res.json({
         msg: "Liked Comment!",
       });

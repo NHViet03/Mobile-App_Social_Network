@@ -8,44 +8,64 @@ export const COMMENT_TYPES = {
 };
 
 export const createComment  = ({postData,content, auth}) => async (dispatch) =>{
-    dispatch({
-        type: POST_TYPES.UPDATE_POST,
-        payload: postData
-    })
-
+   
     try {
         const res = await postDataAPI("comments",
         {
             postId: postData._id,
             content: content
         },auth.token)
+        dispatch({
+            type: POST_TYPES.UPDATE_POST,
+            payload: {
+                ...postData,
+                comments: [...postData.comments, res.data.newComment]
+            }
+        })
+    
     } catch (err) {
         console.log(err)
     }
 }
 
 export const updateComment = ({commentData, postData, auth}) => async  (dispatch) => {
-    const newPost = postData.comments.map(comment =>
-        comment._id === commentData._id ? commentData : comment
-    )
+    const newPost = {
+        ...postData,
+        comments: postData.comments.map(comment =>
+            comment._id === commentData._id ? commentData : comment
+        )
+    }
+    dispatch({
+        type: GLOBAL_TYPES.COMMENT_MODAL,
+        payload: newPost
+    })
+    dispatch({
+        type: POST_TYPES.UPDATE_POST,
+        payload: newPost
+    })
    const res = await patchDataAPI("update_comment",
    {
          content: commentData.content,
          _id: commentData._id
    }, auth.token)
-    dispatch({
-        type: POST_TYPES.UPDATE_POST,
-        payload: newPost
-    })
+   
 }
 export const likeComment = ({commentData, postData, auth}) => async (dispatch) => {
-    const newPost = postData.comments.map(comment =>
-        comment._id === commentData._id ? commentData : comment
-    )
+    const newPost = {
+        ...postData,
+        comments: postData.comments.map(comment =>
+            comment._id === commentData._id ? commentData : comment
+        )
+    }
+    dispatch({
+        type: GLOBAL_TYPES.COMMENT_MODAL,
+        payload: newPost
+    })
     dispatch({
         type: POST_TYPES.UPDATE_POST,
         payload: newPost
     })
+
    
     try {
         const res = await patchDataAPI("like_comment",
@@ -58,9 +78,17 @@ export const likeComment = ({commentData, postData, auth}) => async (dispatch) =
 }
 
 export const unlikeComment = ({commentData, postData, auth}) => async (dispatch) => {
-    const newPost = postData.comments.map(comment =>
-        comment._id === commentData._id ? commentData : comment
-    )
+    const newPost = {
+        ...postData,
+        comments: postData.comments.map(comment =>
+            comment._id === commentData._id ? commentData : comment
+        )
+    }
+   
+    dispatch({
+        type: GLOBAL_TYPES.COMMENT_MODAL,
+        payload: newPost
+    })
     dispatch({
         type: POST_TYPES.UPDATE_POST,
         payload: newPost
