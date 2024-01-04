@@ -3,10 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
-import uuid from "react-native-uuid";
 import Avatar from "./Avatar";
 import CardComment from "./postCard/CardComment";
-import { KeyboardAvoidingView, Platform } from "react-native";
 import { createComment, deleteComment } from "../redux/actions/commentAction";
 import { MaterialIcons } from "@expo/vector-icons";
 const ModalComment = () => {

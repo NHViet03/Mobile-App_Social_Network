@@ -66,7 +66,7 @@ export const updatePost =
     const { content, _id } = editPost;
 
     try {
-      const res=await patchDataAPI(
+      const res = await patchDataAPI(
         "post",
         {
           content,
@@ -181,6 +181,28 @@ export const unsavePost =
         },
         auth.token
       );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const reportPost =
+  ({ post, reason, auth }) =>
+  async (dispatch) => {
+    const newReport = {
+      id: post._id,
+      reason,
+      reporter: auth.user._id,
+    };
+
+    dispatch({
+      type: POST_TYPES.DELETE_POST,
+      payload: post,
+    });
+
+    try {
+      const res = await postDataAPI("report_post", newReport, auth.token);
+      console.log(res.data);
     } catch (error) {
       console.log(error);
     }

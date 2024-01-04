@@ -16,7 +16,7 @@ router.delete('/delete_post/:id', auth, postCtrl.deletePost)
 router.patch('/save_post/:id', auth, postCtrl.savePost)
 router.patch('/unsave_post/:id', auth, postCtrl.unsavePost)
 
-
+router.post("/report_post", auth, postCtrl.reportPost);
 
 
 router.get('/post/:id',auth,postCtrl.getPost)
