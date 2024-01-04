@@ -7,14 +7,17 @@ export const COMMENT_TYPES = {
   CREATE_COMMENT: "CREATE_COMMENT",
 };
 
-export const createComment  = ({postData,content, auth}) => async (dispatch) =>{
-   
+export const createComment  = ({postData,content, auth, socket}) => async (dispatch) =>{
+    const newPost = {...postData}
     try {
         const res = await postDataAPI("comments",
         {
             postId: postData._id,
             content: content
         },auth.token)
+
+        // Socket
+        socket.emit('createComment', newPost)
         // dispatch({
         //     type: POST_TYPES.UPDATE_POST,
         //     payload: {
@@ -104,7 +107,7 @@ export const unlikeComment = ({commentData, postData, auth}) => async (dispatch)
     }
 }
 
-export const deleteComment = ({postData ,comment , auth}) => async (dispatch) => {
+export const deleteComment = ({postData ,comment , auth, socket}) => async (dispatch) => {
    
     dispatch({
         type: POST_TYPES.UPDATE_POST,
@@ -113,6 +116,8 @@ export const deleteComment = ({postData ,comment , auth}) => async (dispatch) =>
     try {
       const res = await deleteDataAPI(`delete_comment/${comment._id}`, auth.token)
        
+    //   Socket
+    socket.emit('deleteComment', postData)
     } catch (err) {
         console.log(err)
     }

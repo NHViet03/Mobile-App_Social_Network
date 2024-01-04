@@ -6,6 +6,7 @@ import { follow, unFollow } from "../redux/actions/userAction";
 
 const FollowBtn = ({ user, showFull }) => {
   const auth = useSelector((state) => state.auth);
+  const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
 
   const [followed, setFollowed] = useState(auth.user.following.find((item) => item._id === user._id) ? true :false);

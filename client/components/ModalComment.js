@@ -12,6 +12,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 const ModalComment = () => {
   const auth = useSelector((state) => state.auth);
   const commentModal = useSelector((state) => state.commentModal);
+  const socket = useSelector((state) => state.socket);
   const [postData, setPostData] = useState({});
   const [content, setContent] = useState("");
   const [onEdit, setOnEdit] = useState(false);
@@ -44,6 +45,7 @@ const ModalComment = () => {
         postData: { ...postData, comments: [...postData.comments, newComment] },
         content,
         auth,
+        socket
       })
     );
   };
@@ -74,6 +76,7 @@ const ModalComment = () => {
         },
         comment: commentSelected,
         auth,
+        socket
       })
     );
   };

@@ -9,16 +9,24 @@ import Loading from "../../../components/Loading";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getPosts } from "../../../redux/actions/postAction";
+import { getNotifies } from "../../../redux/actions/notifyAction";
+import NotifyAlert from "../../../components/NotifyAlert";
 
 const index = () => {
   const auth = useSelector((state) => state.auth);
   const homePosts = useSelector((state) => state.homePosts);
+  const { notify } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
 
+  useEffect(() => {
+    if (auth.token) {
+      dispatch(getNotifies({ auth }));
+    }
+  },[auth.token, dispatch]);
   useEffect(() => {
     if (!auth.token) router.replace("/(auth)/login");
   }, [auth.token]);
@@ -66,7 +74,11 @@ const index = () => {
             className="w-8 mr-4"
             onPress={() => router.push("/home/notify")}
           >
-            <AntDesign name="hearto" size={24} color="black" />
+          {
+            notify.notifies.length > 0
+            ? <NotifyAlert />
+            :  <AntDesign name="hearto" size={24} color="black" />
+          }
           </Pressable>
           <Pressable className="w-8" onPress={() => router.push("/message")}>
             <Feather name="message-square" size={25} color="black" />

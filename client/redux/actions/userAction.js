@@ -1,6 +1,7 @@
 import { GLOBAL_TYPES } from "./globalTypes";
 import { patchDataAPI } from "../../utils/fetchData";
 import { imageUpload } from "../../utils/imageUpload";
+import { createNotify } from "./notifyAction";
 
 export const USER_TYPES = {
   SAVE_POST: "SAVE_POST",
@@ -30,7 +31,7 @@ export const deleteFollower =
   };
 
 export const follow =
-  ({ user, auth }) =>
+  ({ user, auth, socket }) =>
   async (dispatch) => {
     const newAuth = {
       ...auth,
@@ -45,9 +46,19 @@ export const follow =
       payload: newAuth,
     });
 
+    
+    // Notify
+    const msg = {
+      id: auth.user._id,
+      content: "đã bắt đầu theo dõi bạn.",
+      recipients: [user._id],
+      url: `/profile/${auth.user._id}`,
+    };
+    dispatch(createNotify({ msg, auth }));
+
     try {
       await patchDataAPI(`follow/${user._id}`, null, auth.token);
-     
+      
     } catch (error) {
       console.log(error);
     }

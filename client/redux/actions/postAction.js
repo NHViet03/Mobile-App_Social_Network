@@ -6,6 +6,7 @@ import {
   deleteDataAPI,
 } from "../../utils/fetchData";
 import { USER_TYPES } from "../actions/userAction";
+import { createNotify } from "./notifyAction";
 export const POST_TYPES = {
   CREATE_POST: "CREATE_POST",
   GET_POSTS: "GET_POSTS",
@@ -39,6 +40,17 @@ export const createPost =
           user: auth.user,
         },
       });
+
+      // Notify
+      const msg = {
+        id: res.data.post._id,
+        text: "Đã tạo bài viết",
+        recipients: res.data.post.user.followers,
+        url: `/post/${res.data.post._id}`,
+        content: post.content,
+        image: post.images[0].url,
+      };
+      dispatch(createNotify({msg, auth}))
     } catch (error) {
       console.log(error);
     }
@@ -84,10 +96,10 @@ export const updatePost =
   };
 
 export const likePost =
-  ({ post, auth }) =>
+  ({ post, auth, socket }) =>
   async (dispatch) => {
     const newPost = { ...post, likes: [...post.likes, auth.user._id] };
-    // socket.emit('likePost', newPost)
+    socket.emit('likePost', newPost)
     try {
       const res = await patchDataAPI(
         "post/like",
@@ -97,6 +109,16 @@ export const likePost =
         },
         auth.token
       );
+      // Notify
+      const msg = {
+        id: auth.user._id,
+        content: "đã yêu thích bài viết của bạn",
+        recipients: [post.user._id],
+        url: `/post/${post._id}`,
+        image: post.images[0].url,
+      };
+      dispatch(createNotify({ msg, auth }));
+
       dispatch({
         type: POST_TYPES.UPDATE_POST,
         payload: res.data.newPost,
@@ -106,13 +128,13 @@ export const likePost =
     }
   };
 export const unlikePost =
-  ({ post, auth }) =>
+  ({ post, auth, socket }) =>
   async (dispatch) => {
     const newPost = {
       ...post,
       likes: post.likes.filter((id) => id !== auth.user._id),
     };
-    // socket.emit('unLikePost', newPost)
+    socket.emit('unLikePost', newPost)
 
     try {
       const res = await patchDataAPI(

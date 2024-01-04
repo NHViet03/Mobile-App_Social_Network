@@ -53,7 +53,7 @@ const CardFooter = ({ post }) => {
 
   const handleUnLike = async () => {
     post.likes = post.likes.filter((id) => id !== auth.user._id);
-    await dispatch(unlikePost({ post, auth }));
+    await dispatch(unlikePost({ post, auth , socket}));
     setIsLike(false);
   };
 
