@@ -6,14 +6,19 @@ import LikeBtn from "../LikeBtn";
 import BookmarkBtn from "./BookmarkBtn";
 import { PostContext } from "../../app/_layout";
 
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
-import { likePost, savePost, unlikePost, unsavePost } from "../../redux/actions/postAction";
+import {
+  likePost,
+  savePost,
+  unlikePost,
+  unsavePost,
+} from "../../redux/actions/postAction";
 
 const CardFooter = ({ post }) => {
   const { handleOpenCommentModal, handleOpenSharePostModal } =
     useContext(PostContext);
-    
+
   const [isLike, setIsLike] = useState(false);
   const [loadLike, setLoadLike] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
@@ -22,44 +27,42 @@ const CardFooter = ({ post }) => {
   const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
 
-  useEffect(()=> {
-    if(post.likes.find(like => like === auth.user._id)){
+  useEffect(() => {
+    if (post.likes.find((like) => like === auth.user._id)) {
       setIsLike(true);
-    }else{
+    } else {
       setIsLike(false);
     }
+  }, [post.likes, auth.user._id]);
 
-  },[post.likes, auth.user._id]);
-
-  useEffect(()=> {
-    if(auth.user.saved.find(id => id === post._id)){
+  useEffect(() => {
+    if (auth.user.saved.find((id) => id === post._id)) {
       setIsBookmark(true);
-    }else{
+    } else {
       setIsBookmark(false);
     }
-  },[auth.user.saved, post._id]);
-  const handleLike =  () => {
-      post.likes = [auth.user._id, ...post.likes]
-    if (loadLike) return ;
+  }, [auth.user.saved, post._id]);
+  const handleLike = () => {
+    post.likes = [auth.user._id, ...post.likes];
+    if (loadLike) return;
     setLoadLike(true);
     setIsLike(true);
-    dispatch(likePost({post, auth, socket}))
+    dispatch(likePost({ post, auth, socket }));
     setLoadLike(false);
   };
 
   const handleUnLike = async () => {
-    post.likes = post.likes.filter(id => id !== auth.user._id)
-    await dispatch(unlikePost({post, auth}))
+    post.likes = post.likes.filter((id) => id !== auth.user._id);
+    await dispatch(unlikePost({ post, auth }));
     setIsLike(false);
-   
   };
 
   const handleBookmark = () => {
-     dispatch(savePost({post, auth}))
+    dispatch(savePost({ post, auth }));
     setIsBookmark(true);
   };
   const handleUnBookmark = () => {
-    dispatch(unsavePost({post, auth}))
+    dispatch(unsavePost({ post, auth }));
     setIsBookmark(false);
   };
 
@@ -124,7 +127,9 @@ const CardFooter = ({ post }) => {
             </Text>
           </Pressable>
         )}
-        <Text className="text-textColor text-xs mt-[2px]">{moment(post.createdAt).fromNow()}</Text>
+        <Text className="text-textColor text-xs mt-[2px]">
+          {moment(post.createdAt).fromNow()}
+        </Text>
       </View>
       <Pressable onPress={handlePressComment}>
         <Text className="text-textColor mt-2">

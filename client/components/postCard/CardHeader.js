@@ -35,10 +35,14 @@ const CardHeader = ({ post, showFollow }) => {
         <Avatar avatar={user.avatar} size="middle" />
         <Text className=" ml-[6px] font-bold ">{user.username}</Text>
       </Pressable>
-      {showFollow && (
-        <FollowBtn user ={user}/>
-      )}
-      <Pressable onPress={handlePressReportPost}>
+      {showFollow && <FollowBtn user={user} />}
+      <Pressable
+        onPress={handlePressReportPost}
+        style={{
+          minWidth: 24,
+          marginRight:-8
+        }}
+      >
         <Entypo name="dots-three-vertical" size={18} color="black" />
       </Pressable>
     </View>
@@ -48,4 +52,3 @@ const CardHeader = ({ post, showFollow }) => {
 export default CardHeader;
 
 const styles = StyleSheet.create({});
-  

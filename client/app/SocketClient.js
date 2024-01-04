@@ -13,7 +13,7 @@ export default function SocketClient() {
   // Join User
 
   useEffect(() => {
-    if (!socket || Object.keys(auth.user).length===0) return;
+    if (!socket || Object.keys(auth.user).length === 0) return;
     socket.emit("joinUser", {
       _id: auth.user._id,
       followers: auth.user.followers,
@@ -46,7 +46,7 @@ export default function SocketClient() {
   }, [socket]);
 
   useEffect(() => {
-    if (!socket || Object.keys(auth.user).length===0) return;
+    if (!socket || Object.keys(auth.user).length === 0) return;
 
     socket.emit("checkUserOnline", {
       _id: auth.user._id,

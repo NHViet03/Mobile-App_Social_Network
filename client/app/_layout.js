@@ -32,6 +32,10 @@ export default function Layout() {
     bottomSheetModalReportPost.current?.present();
   }, []);
 
+  const handleCloseReportPostModal = useCallback(() => {
+    bottomSheetModalReportPost.current?.dismiss();
+  }, []);
+
   const handleOpenSharePostModal = useCallback(() => {
     bottomSheetModalSharePost.current?.present();
   }, []);
@@ -83,7 +87,9 @@ export default function Layout() {
               snapPoints={snapPointsReportPost}
               backgroundStyle={styles.modal}
             >
-              <ModalReportPost />
+              <ModalReportPost
+                handleCloseReportPostModal={handleCloseReportPostModal}
+              />
             </BottomSheetModal>
 
             <BottomSheetModal

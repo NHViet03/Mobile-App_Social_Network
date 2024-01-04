@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
+import { StyleSheet, Text, View, TextInput, Pressable,ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -82,6 +82,11 @@ const ModalComment = () => {
     setOnEdit(true);
   };
 
+  const handleCloseAction = () => {
+    setIndexActive(-1);
+      setCommentSelected(false);
+  }
+
   return (
     <View className="flex-1">
       <View className="mt-4 pb-2 border-borderColor border-b-[0.5px]">
@@ -115,6 +120,7 @@ const ModalComment = () => {
               onPress={() => handleSelectComment(item, index)}
               onLongPress={() => handleSelectComment(item, index)}
               style={{
+                overflow: "hidden",
                 backgroundColor:
                   commentSelected && commentSelected?._id === item._id
                     ? "#c433024d"
@@ -127,6 +133,7 @@ const ModalComment = () => {
                 onEdit={onEdit}
                 setOnEdit={setOnEdit}
                 postData={postData}
+                handleCloseAction={handleCloseAction}
                 indexActive={indexActive}
               />
             </Pressable>
@@ -139,10 +146,10 @@ const ModalComment = () => {
         </View>
       )}
 
-      <KeyboardAvoidingView
+      {/* <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1, position: "absolute", bottom: 0, width: "100%" }}
-      >
+      > */}
         <View className="flex-row items-center mb-2 px-4 py-3">
           <Avatar avatar={auth.user.avatar} size="middle" />
           <TextInput
@@ -162,7 +169,7 @@ const ModalComment = () => {
             </Text>
           </Pressable>
         </View>
-      </KeyboardAvoidingView>
+      {/* </KeyboardAvoidingView> */}
     </View>
   );
 };

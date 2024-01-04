@@ -1,6 +1,6 @@
 import { Text, View, Pressable } from "react-native";
 import React, { useState, useMemo } from "react";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { router } from "expo-router";
 import {
@@ -9,16 +9,17 @@ import {
   FontAwesome5,
   Octicons,
   MaterialIcons,
-  AntDesign ,
+  AntDesign,
 } from "@expo/vector-icons";
 import { POST_TYPES, deletePost } from "../redux/actions/postAction";
-  
-const ModalReportPost = () => {
-  const {reportPostModal, auth, homePosts } = useSelector((state) => state);
+
+const ModalReportPost = ({ handleCloseReportPostModal }) => {
+  const auth = useSelector((state) => state.auth);
+  const reportPostModal = useSelector((state) => state.reportPostModal);
 
   const [isOpenReport, setIsOpenReport] = useState(false);
 
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const reportContent = useMemo(
     () => [
@@ -38,30 +39,32 @@ const dispatch = useDispatch()
   const handleCloseReport = () => {
     setIsOpenReport(false);
   };
- 
+
   const handleUpdatePost = () => {
+    router.push("home/editPost");
+    handleCloseReportPostModal();
     dispatch({
       type: POST_TYPES.EDIT_POST,
       payload: {
         post: reportPostModal,
         onEdit: true,
-      }
-    })
-   router.push("home/editPost")
-  }
+      },
+    });
+  };
   const handleDeletePost = () => {
-      dispatch(deletePost({post: reportPostModal, auth: auth}))
-  }
+    dispatch(deletePost({ post: reportPostModal, auth: auth }));
+    handleCloseReportPostModal();
+  };
 
   return (
     <View className="flex-1">
       {isOpenReport ? (
         <>
-          <Pressable className="mt-3 pb-2 border-borderColor border-b-[0.5px]  flex-row relative items-center" onPress={handleCloseReport}>
-            <View
-              className="absolute top-0 left-4"
-             
-            >
+          <Pressable
+            className="mt-3 pb-2 border-borderColor border-b-[0.5px]  flex-row relative items-center"
+            onPress={handleCloseReport}
+          >
+            <View className="absolute top-0 left-4">
               <MaterialIcons
                 name="keyboard-backspace"
                 size={28}
@@ -90,9 +93,7 @@ const dispatch = useDispatch()
             ))}
           </View>
         </>
-      ) : reportPostModal?.user._id === auth?.user._id
-      ?
-       (
+      ) : reportPostModal?.user._id === auth?.user._id ? (
         <>
           <View className="mt-4 pb-4 border-borderColor border-b-[0.5px] flex-row justify-around items-center">
             <View className="items-center">
@@ -117,21 +118,19 @@ const dispatch = useDispatch()
               <Feather name="link" size={24} color="black" />
               <Text className="text-base ml-2">Sao chép liên kết</Text>
             </Pressable> */}
-            <Pressable className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
+            <Pressable
+              className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
               onPress={handleUpdatePost}
             >
-             <MaterialIcons name="edit" size={24} color="black" />
-              <Text className="text-base ml-2">
-                Chỉnh sửa
-              </Text>
+              <MaterialIcons name="edit" size={24} color="black" />
+              <Text className="text-base ml-2">Chỉnh sửa</Text>
             </Pressable>
-            <Pressable className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
+            <Pressable
+              className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
               onPress={handleDeletePost}
             >
-             <AntDesign name="delete" size={24} color="black" />
-              <Text className="text-base ml-2">
-                Xóa Bài viết
-              </Text>
+              <AntDesign name="delete" size={24} color="black" />
+              <Text className="text-base ml-2">Xóa Bài viết</Text>
             </Pressable>
             <Pressable
               className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
@@ -142,9 +141,7 @@ const dispatch = useDispatch()
             </Pressable>
           </View>
         </>
-      )
-      :
-      (
+      ) : (
         <>
           <View className="mt-4 pb-4 border-borderColor border-b-[0.5px] flex-row justify-around items-center">
             <View className="items-center">
@@ -169,7 +166,7 @@ const dispatch = useDispatch()
               <Feather name="link" size={24} color="black" />
               <Text className="text-base ml-2">Sao chép liên kết</Text>
             </Pressable> */}
-           
+
             <Pressable
               className="flex-row items-center p-4 border-borderColor border-b-[0.5px]"
               onPress={handleOpenReport}
@@ -179,9 +176,7 @@ const dispatch = useDispatch()
             </Pressable>
           </View>
         </>
-      )
-      
-      } 
+      )}
     </View>
   );
 };

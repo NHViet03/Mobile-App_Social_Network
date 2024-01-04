@@ -7,6 +7,9 @@ const onlineReducer = (state = [], action) => {
 
     case GLOBAL_TYPES.OFFLINE:
       return state.filter((item) => item !== action.payload);
+
+    case GLOBAL_TYPES.LOGOUT:
+      return [];
     default:
       return state;
   }

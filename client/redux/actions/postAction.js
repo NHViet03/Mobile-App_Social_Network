@@ -1,5 +1,10 @@
 import { imageUpload } from "../../utils/imageUpload";
-import { postDataAPI, getDataAPI, patchDataAPI, deleteDataAPI } from "../../utils/fetchData";
+import {
+  postDataAPI,
+  getDataAPI,
+  patchDataAPI,
+  deleteDataAPI,
+} from "../../utils/fetchData";
 import { USER_TYPES } from "../actions/userAction";
 export const POST_TYPES = {
   CREATE_POST: "CREATE_POST",
@@ -10,7 +15,8 @@ export const POST_TYPES = {
   DELETE_POST: "DELETE_POST",
 };
 
-export const createPost =({ post, auth }) =>
+export const createPost =
+  ({ post, auth }) =>
   async (dispatch) => {
     try {
       let media = [];
@@ -25,7 +31,7 @@ export const createPost =({ post, auth }) =>
         },
         auth.token
       );
- 
+
       dispatch({
         type: POST_TYPES.CREATE_POST,
         payload: {
@@ -52,105 +58,130 @@ export const getPosts = (token) => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
- 
 };
 
-export const updatePost = ({editPost, auth}) => async (dispatch) => {
-    const { content, _id } = editPost
-   
-  try {
-    const res = await patchDataAPI("post",{
-      content,
-      _id
-    } ,auth.token);
-    
-    dispatch({
-      type: POST_TYPES.UPDATE_POST,
-      payload: res.data.post
-    })
-  } catch (error) {
-    console.log(error);
-  }
-}
+export const updatePost =
+  ({ editPost, auth }) =>
+  async (dispatch) => {
+    const { content, _id } = editPost;
 
-export const likePost = ({post, auth}) =>  async (dispatch) => {
-  const newPost = {...post, likes: [...post.likes, auth.user._id]}
-  // socket.emit('likePost', newPost)
-    try{
-    const res =  await patchDataAPI("post/like",{
-      post: post,
-      user: auth.user
-      }, auth.token);
+    try {
+      const res=await patchDataAPI(
+        "post",
+        {
+          content,
+          _id,
+        },
+        auth.token
+      );
       dispatch({
         type: POST_TYPES.UPDATE_POST,
-        payload: res.data.newPost
-    })
-    }catch(error){
-        console.log(error);
-    }
-   
-}
-export const unlikePost = ({post, auth}) =>  async (dispatch) => {
-  const newPost = {...post, likes: post.likes.filter(id => id !== auth.user._id)}
-  // socket.emit('unLikePost', newPost)
-
-  try{
-  const res =  await patchDataAPI("post/unlike",{
-    post: post,
-    user: auth.user
-    }, auth.token);
-    dispatch({
-      type: POST_TYPES.UPDATE_POST,
-      payload: res.data.newPost
-  })
-  }catch(error){
+        payload: res.data.post,
+      });
+    } catch (error) {
       console.log(error);
-  }
- 
-}
-export const deletePost = ({post, auth}) => async (dispatch) => {
+    }
+  };
 
-  dispatch({
-    type: POST_TYPES.DELETE_POST,
-    payload: post
-  })
+export const likePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    const newPost = { ...post, likes: [...post.likes, auth.user._id] };
+    // socket.emit('likePost', newPost)
+    try {
+      const res = await patchDataAPI(
+        "post/like",
+        {
+          post: post,
+          user: auth.user,
+        },
+        auth.token
+      );
+      dispatch({
+        type: POST_TYPES.UPDATE_POST,
+        payload: res.data.newPost,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+export const unlikePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    const newPost = {
+      ...post,
+      likes: post.likes.filter((id) => id !== auth.user._id),
+    };
+    // socket.emit('unLikePost', newPost)
 
-  try{
-    const res = await deleteDataAPI(`delete_post/${post._id}`,auth.token)
-  
-  }catch(error){
-    console.log("lỗi");
-  }
-}
+    try {
+      const res = await patchDataAPI(
+        "post/unlike",
+        {
+          post: post,
+          user: auth.user,
+        },
+        auth.token
+      );
+      dispatch({
+        type: POST_TYPES.UPDATE_POST,
+        payload: res.data.newPost,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+export const deletePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    dispatch({
+      type: POST_TYPES.DELETE_POST,
+      payload: post,
+    });
 
-export const savePost = ({post, auth}) => async (dispatch) => {
-  dispatch({
-    type: USER_TYPES.SAVE_POST,
-    payload:  post._id
-})
-  try{
-    const res = await patchDataAPI(`save_post/${post._id}`,
-    {
-      user: auth.user
-    },auth.token)
-  }catch(error){
-    console.log(error);
-  }
-  
-}
+    try {
+      const res = await deleteDataAPI(`delete_post/${post._id}`, auth.token);
+    } catch (error) {
+      console.log("lỗi");
+    }
+  };
 
-export const unsavePost = ({post, auth}) => async (dispatch) => {
-  dispatch({
-    type: USER_TYPES.UNSAVE_POST,
-    payload:  post._id
-})
-  try{
-    const res = await patchDataAPI(`unsave_post/${post._id}`,
-    {
-      user: auth.user
-    },auth.token)
-  }catch(error){
-    console.log(error);
-  }
-  
-}
+export const savePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    dispatch({
+      type: USER_TYPES.SAVE_POST,
+      payload: post._id,
+    });
+    try {
+      const res = await patchDataAPI(
+        `save_post/${post._id}`,
+        {
+          user: auth.user,
+        },
+        auth.token
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const unsavePost =
+  ({ post, auth }) =>
+  async (dispatch) => {
+    dispatch({
+      type: USER_TYPES.UNSAVE_POST,
+      payload: post._id,
+    });
+    try {
+      const res = await patchDataAPI(
+        `unsave_post/${post._id}`,
+        {
+          user: auth.user,
+        },
+        auth.token
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };

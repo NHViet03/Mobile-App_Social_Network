@@ -62,13 +62,13 @@ const Profile = () => {
   useEffect(() => {
     const getPosts = async () => {
       try {
-        if (posts.length > 0 && savedPosts.length > 0) return;
+        // if (posts.length > 0 && savedPosts.length > 0) return;
 
         setLoading(true);
-        if (isShowPosts && posts.length === 0) {
+        if (isShowPosts) {
           const res = await getDataAPI(`user_posts/${user._id}`, auth.token);
           setPosts(res.data.posts);
-        } else if (!isShowPosts && savedPosts.length === 0) {
+        } else if (!isShowPosts) {
           const res = await getDataAPI(`saved_posts/${user._id}`, auth.token);
           setSavedPosts(res.data.posts);
         }

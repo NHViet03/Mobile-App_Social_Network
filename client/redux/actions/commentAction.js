@@ -15,13 +15,13 @@ export const createComment  = ({postData,content, auth}) => async (dispatch) =>{
             postId: postData._id,
             content: content
         },auth.token)
-        dispatch({
-            type: POST_TYPES.UPDATE_POST,
-            payload: {
-                ...postData,
-                comments: [...postData.comments, res.data.newComment]
-            }
-        })
+        // dispatch({
+        //     type: POST_TYPES.UPDATE_POST,
+        //     payload: {
+        //         ...postData,
+        //         comments: [...postData.comments, res.data.newComment]
+        //     }
+        // })
     
     } catch (err) {
         console.log(err)
@@ -35,14 +35,14 @@ export const updateComment = ({commentData, postData, auth}) => async  (dispatch
             comment._id === commentData._id ? commentData : comment
         )
     }
-    dispatch({
-        type: GLOBAL_TYPES.COMMENT_MODAL,
-        payload: newPost
-    })
-    dispatch({
-        type: POST_TYPES.UPDATE_POST,
-        payload: newPost
-    })
+    // dispatch({
+    //     type: GLOBAL_TYPES.COMMENT_MODAL,
+    //     payload: newPost
+    // })
+    // dispatch({
+    //     type: POST_TYPES.UPDATE_POST,
+    //     payload: newPost
+    // })
    const res = await patchDataAPI("update_comment",
    {
          content: commentData.content,
