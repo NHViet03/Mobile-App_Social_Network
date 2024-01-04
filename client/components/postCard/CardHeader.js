@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
 import Avatar from "../Avatar";
 import { PostContext } from "../../app/_layout";
+import FollowBtn from "../FollowBtn";
 
 const CardHeader = ({ post, showFollow }) => {
   const { user } = post;
@@ -35,11 +36,7 @@ const CardHeader = ({ post, showFollow }) => {
         <Text className=" ml-[6px] font-bold ">{user.username}</Text>
       </Pressable>
       {showFollow && (
-        <Pressable>
-          <View className="px-4 py-[6px] bg-inputColor rounded-md mr-3">
-            <Text className="font-semibold">Theo dõi</Text>
-          </View>
-        </Pressable>
+        <FollowBtn user ={user}/>
       )}
       <Pressable onPress={handlePressReportPost}>
         <Entypo name="dots-three-vertical" size={18} color="black" />
@@ -51,3 +48,4 @@ const CardHeader = ({ post, showFollow }) => {
 export default CardHeader;
 
 const styles = StyleSheet.create({});
+  

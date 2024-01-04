@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import LikeBtn from "../LikeBtn";
@@ -8,30 +8,58 @@ import { PostContext } from "../../app/_layout";
 
 import { useDispatch } from "react-redux";
 import { GLOBAL_TYPES } from "../../redux/actions/globalTypes";
+import { likePost, savePost, unlikePost, unsavePost } from "../../redux/actions/postAction";
 
 const CardFooter = ({ post }) => {
   const { handleOpenCommentModal, handleOpenSharePostModal } =
     useContext(PostContext);
     
   const [isLike, setIsLike] = useState(false);
+  const [loadLike, setLoadLike] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   const [readMore, setReadMore] = useState(false);
+  const auth = useSelector((state) => state.auth);
+  const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
 
-  const handleLike = () => {
+  useEffect(()=> {
+    if(post.likes.find(like => like === auth.user._id)){
+      setIsLike(true);
+    }else{
+      setIsLike(false);
+    }
+
+  },[post.likes, auth.user._id]);
+
+  useEffect(()=> {
+    if(auth.user.saved.find(id => id === post._id)){
+      setIsBookmark(true);
+    }else{
+      setIsBookmark(false);
+    }
+  },[auth.user.saved, post._id]);
+  const handleLike =  () => {
+      post.likes = [auth.user._id, ...post.likes]
+    if (loadLike) return ;
+    setLoadLike(true);
     setIsLike(true);
-    
+    dispatch(likePost({post, auth, socket}))
+    setLoadLike(false);
   };
 
-  const handleUnLike = () => {
+  const handleUnLike = async () => {
+    post.likes = post.likes.filter(id => id !== auth.user._id)
+    await dispatch(unlikePost({post, auth}))
     setIsLike(false);
    
   };
 
   const handleBookmark = () => {
+     dispatch(savePost({post, auth}))
     setIsBookmark(true);
   };
   const handleUnBookmark = () => {
+    dispatch(unsavePost({post, auth}))
     setIsBookmark(false);
   };
 

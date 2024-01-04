@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { MESS_TYPES } from "../redux/actions/messageAction";
 import { GLOBAL_TYPES } from "../redux/actions/globalTypes";
+import { POST_TYPES } from "../redux/actions/postAction";
 
 export default function SocketClient() {
   const auth = useSelector((state) => state.auth);
@@ -92,6 +93,23 @@ export default function SocketClient() {
 
     return () => socket.off("checkUserOfflineToClient");
   }, [socket, dispatch]);
+
+  // Likes
+  // useEffect(() => {
+  //   socket.on("likeToClient", (newPost) => {
+  //     if (!socket) return;
+  //     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+  //   });
+  //   return () => socket.off("likeToClient");
+  // }, [socket, dispatch]);
+
+  // useEffect(() => {
+  //   socket.on("unLikeToClient", (newPost) => {
+  //     if (!socket) return;
+  //     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+  //   });
+  //   return () => socket.off("unLikeToClient");
+  // }, [socket, dispatch]);
 
   return <></>;
 }

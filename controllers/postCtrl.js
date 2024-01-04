@@ -43,12 +43,12 @@ const postCtrl = {
         user: users,
       })
         .sort("-createdAt")
-        .populate("user", "avatar username fullname")
+        .populate("user", "avatar username fullname followers")
         .populate({
           path: "comments",
           populate: {
-            path: "user",
-            select: "avatar username fullname",
+            path: "user likes",
+            select: "-password",
           },
         });
 
@@ -167,6 +167,125 @@ const postCtrl = {
       res.status(500).json({ msg: error.message });
     }
   },
-};
+  updatePost: async (req, res) => {
+    try {
+      const { content, _id } = req.body;
+      
+    
+      const post = await Posts.findOneAndUpdate(
+        { _id: _id },
+        { content },
+        { new: true } 
+      )
+        .populate("user", "avatar fullname username")
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user",
+            select: "avatar username fullname",
+          },
+        });
+        
+      return res.json({
+        msg: "Cập nhật bài viết thành công",
+        post,
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  },  
+  likePost: async (req, res) => {
+    try{
+      const {post, user } = req.body
+      newPost = await Posts.findOneAndUpdate(
+        {_id: post._id},
+        {$push: {likes: user._id}},
+        {new : true}
+      ),
+      res.json({
+         msg: "Like thành công",
+         newPost: newPost
+        })
+    }
+    catch (error)
+    {
+      res.status(500).json({ msg: error.message });
+    }
+  },
+  unlikePost: async (req, res) => {
+    try{
+      const {post, user } = req.body
+      newPost = await Posts.findOneAndUpdate(
+        {_id: post._id},
+        {$pull: {likes: user._id}},
+        {new : true}
+      ),
+    
+      res.json({
+         msg: "UnLike thành công",
+         newPost: newPost
+        })
+    }
+    catch (error)
+    {
+      res.status(500).json({ msg: error.message });
+    }
+  },
+  deletePost: async (req, res) => {
+    const {id} = req.params
+   
+    try {
+      
+      const post = await Posts.findById(id);
+     await post.deleteOne();
 
+      await Comments.deleteMany({ _id: { $in: post.comments } });
+
+      console.log("oke");
+      return res.json({
+        msg: "Xóa bài viết thành công",
+      });
+    
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+   },
+   savePost: async (req, res) => {
+    const {id} = req.params
+    const {user} = req.body
+    
+    try {
+      await Users.findOneAndUpdate({ _id: user._id },
+        {
+          $push: {saved: id}
+        },
+        { new: true }
+      );
+      return res.json({
+        msg: "Lưu bài viết thành công",
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+   },
+   unsavePost: async (req, res) => {
+    const {id} = req.params
+    const {user} = req.body
+    
+    try {
+      await Users.findOneAndUpdate({ _id: user._id },
+        {
+          $pull: {saved: id}
+        },
+        { new: true }
+      );
+      return res.json({
+        msg: "Bỏ lưu bài viết thành công",
+      });
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+   }
+};
+   
 module.exports = postCtrl;
