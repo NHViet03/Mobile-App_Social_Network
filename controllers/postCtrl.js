@@ -30,7 +30,10 @@ const postCtrl = {
 
       return res.json({
         msg: "Tạo bài viết thành công",
-        post,
+        post :{
+          ...post._doc,
+          user: req.user
+        },
       });
     } catch (error) {
       res.status(500).json({ msg: error.message });
@@ -102,6 +105,7 @@ const postCtrl = {
 
       const posts = await features.query
         .populate("user", "avatar username fullname")
+        .sort("-createdAt")
         .populate({
           path: "comments",
           populate: {

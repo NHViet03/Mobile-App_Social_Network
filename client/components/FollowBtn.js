@@ -6,6 +6,7 @@ import { follow, unFollow } from "../redux/actions/userAction";
 
 const FollowBtn = ({ user, showFull }) => {
   const auth = useSelector((state) => state.auth);
+  const socket = useSelector((state) => state.socket);
   const dispatch = useDispatch();
 
   const [followed, setFollowed] = useState(auth.user.following.find((item) => item._id === user._id) ? true :false);
@@ -23,7 +24,7 @@ const FollowBtn = ({ user, showFull }) => {
     if (loading) return;
     setLoading(true);
     setFollowed(true);
-    await dispatch(follow({ user, auth }));
+    await dispatch(follow({ user, auth,socket }));
     setLoading(false);
   };
 
@@ -31,7 +32,7 @@ const FollowBtn = ({ user, showFull }) => {
     if (loading) return;
     setLoading(true);
     setFollowed(false);
-    await dispatch(unFollow({ user, auth }));
+    await dispatch(unFollow({ user, auth,socket }));
     setLoading(false);
   };
 

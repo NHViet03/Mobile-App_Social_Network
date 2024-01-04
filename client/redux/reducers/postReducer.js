@@ -1,6 +1,5 @@
 import { GLOBAL_TYPES } from "../actions/globalTypes";
 import { POST_TYPES } from "../actions/postAction";
-import { SUGGESTIONS_TYPES } from "../actions/suggestionsAction";
 
 const initialState = {
   posts: [],
@@ -42,16 +41,12 @@ const postReducer = (state = initialState, action) => {
           post._id === action.payload._id ? action.payload : post
         ),
       };
-    case POST_TYPES.DELETE_POST:
-      return {
-        ...state,
-        posts: state.posts.filter((post) => post._id !== action.payload._id),
-      };
-    case SUGGESTIONS_TYPES.GET_USERS:
-      return {
-        ...state,
-        users: [...action.payload],
-      };
+      case POST_TYPES.DELETE_POST:
+        return {
+          ...state,
+          posts: state.posts.filter((post) => post._id !== action.payload._id),
+        };
+
     default:
       return state;
   }

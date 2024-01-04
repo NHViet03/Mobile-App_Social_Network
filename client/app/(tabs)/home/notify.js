@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, Pressable, FlatList,StatusBar , TouchableOpacity} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  FlatList,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,25 +14,48 @@ import { Feather } from "@expo/vector-icons";
 import CardNotify from "../../../components/home/CardNotify";
 import CardSuggest from "../../../components/home/CardSuggest";
 import { router } from "expo-router";
-import { getSuggestions } from "../../../redux/actions/suggestionsAction";
+import Loading from "../../../components/Loading";
+
+import {
+  getNotifies,
+  deleteNotifies,
+} from "../../../redux/actions/notifyAction";
+import { getDataAPI } from "../../../utils/fetchData";
 
 const notify = () => {
-  // const { notifies } = useSelector((state) => state.notify);
-  // const { users } = useSelector((state) => state.homePosts);
-  // const { auth } = useSelector((state) => state.auth);
-  const { auth, homePosts, notify } = useSelector(state => state)
-  const dispatch = useDispatch()
-   const  notifies = notify.notifies
-  const[suggestUser, setSuggestUser ] = useState([]); //homePosts.users
-  
-  useEffect(() =>{
-    dispatch(getSuggestions(auth.token))
-    setSuggestUser(homePosts.users)
-  }, [auth.token])
+  const notify = useSelector((state) => state.notify);
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const [notifies, setNotifies] = useState([]);
+  const [suggestUser, setSuggestUser] = useState([]);
+  const [loadUser, setLoadUser] = useState(false);
+
+  useEffect(() => {
+    dispatch(getNotifies({ auth }));
+  }, [dispatch, auth]);
+
+  useEffect(() => {
+    setNotifies(notify.notifies);
+  }, [notify.notifies]);
+
+  useEffect(() => {
+    const getSuggestUser = async () => {
+      setLoadUser(true);
+      const res = await getDataAPI("suggestionsUser", auth.token);
+      setSuggestUser(res.data.users);
+      setLoadUser(false);
+    };
+
+    getSuggestUser();
+  }, [notifies]);
 
   const handleRemoveSuggestUser = (id) => {
-    setSuggestUser(suggestUser.filter(user => user._id !== id))
-  }
+    setSuggestUser(suggestUser.filter((user) => user._id !== id));
+  };
+
+  const handleDeleteAllNotifies = () => {
+    dispatch(deleteNotifies({ auth }));
+  };
 
   return (
     <ScrollView
@@ -33,7 +64,7 @@ const notify = () => {
       }}
       showsVerticalScrollIndicator={false}
     >
-    <View
+      <View
         style={{
           paddingHorizontal: 16,
           alignItems: "center",
@@ -49,71 +80,65 @@ const notify = () => {
           <Pressable onPress={() => router.push("/home")}>
             <Feather name="arrow-left" size={24} color="black" />
           </Pressable>
-          <Text className=" text-center font-bold text-xl flex-1"
+          <Text
+            className=" text-left font-bold text-xl flex-1"
             style={{
               fontSize: 18,
               fontWeight: "bold",
             }}
           >
-           Thông báo
+            Thông báo
           </Text>
         </View>
-        <TouchableOpacity>
-        <Pressable >
-           {/* <Text className="text-base "
-           style={{
-            color: "#f16c2e",
-            fontSize: 17,
-           }} ></Text> */}
-          </Pressable>
-        </TouchableOpacity>
       </View>
-    {/* Phần thông báo */}
-      <View className="mt-5 px-3 pb-3 border-b-borderColor border-b-[0.5px]">
-        <Text className="text-base font-bold mb-4">30 ngày qua</Text>
+      {/* Phần thông báo */}
+      <View className=" px-3 pb-3 border-b-borderColor border-b-[0.5px]">
+        <View className="flex flex-row justify-between > *">
+          <Text className="text-base font-bold mb-4">30 ngày qua</Text>
+          {notifies.length > 0 && (
+            <Pressable onPress={handleDeleteAllNotifies}>
+              <Text className="text-base font-semibold mb-4 text-primary">
+                Xóa tất cả thông báo
+              </Text>
+            </Pressable>
+          )}
+        </View>
         <FlatList
           data={notifies}
           scrollEnabled={true}
           renderItem={({ item, index }) => (
-            <Pressable
-              key={index}
-              className="mb-3"
-              onPress={() =>
-                router.push({
-                  pathname: "/(tabs)/userProfile",
-                  params: { id: item.user._id },
-                })
-              }
-            >
+            <View key={index}>
               <CardNotify notify={item} />
-            </Pressable>
+            </View>
           )}
         />
       </View>
       {/* Phần gợi ý cho bạn */}
       <View className="mt-4 px-3">
         <Text className="text-base font-bold mb-4">Gợi ý cho bạn</Text>
-        {suggestUser && (
-          <FlatList
-            data={suggestUser}
-            scrollEnabled={true}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item, index }) => (
-              <Pressable
-                key={index}
-                className="mb-3"
-                onPress={() =>
-                  router.push({
-                    pathname: "/(tabs)/userProfile",
-                    params: { id: item._id },
-                  })
-                }
-              >
-                <CardSuggest user={item} handleRemoveSuggestUser={handleRemoveSuggestUser} />
-              </Pressable>
-            )}
-          />
-        )}
+        {loadUser && <Loading />}
+        <FlatList
+          data={suggestUser}
+          scrollEnabled={true}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <Pressable
+              key={index}
+              className="mb-3"
+              onPress={() =>
+                router.push({
+                  pathname: `/(tabs)/otherProfile`,
+                  params: { id: item._id },
+                })
+              }
+            >
+              <CardSuggest
+                user={item}
+                handleRemoveSuggestUser={handleRemoveSuggestUser}
+              />
+            </Pressable>
+          )}
+        />
       </View>
     </ScrollView>
   );

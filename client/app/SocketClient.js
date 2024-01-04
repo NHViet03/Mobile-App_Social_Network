@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { MESS_TYPES } from "../redux/actions/messageAction";
 import { GLOBAL_TYPES } from "../redux/actions/globalTypes";
 import { POST_TYPES } from "../redux/actions/postAction";
+import { NOTIFY_TYPES } from "../redux/actions/notifyAction";
 
 export default function SocketClient() {
   const auth = useSelector((state) => state.auth);
@@ -95,21 +96,60 @@ export default function SocketClient() {
   }, [socket, dispatch]);
 
   // Likes
-  // useEffect(() => {
-  //   socket.on("likeToClient", (newPost) => {
-  //     if (!socket) return;
-  //     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
-  //   });
-  //   return () => socket.off("likeToClient");
-  // }, [socket, dispatch]);
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("likeToClient", (newPost) => {
+      dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+    });
+    return () => socket.off("likeToClient");
+  }, [socket, dispatch]);
 
-  // useEffect(() => {
-  //   socket.on("unLikeToClient", (newPost) => {
-  //     if (!socket) return;
-  //     dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
-  //   });
-  //   return () => socket.off("unLikeToClient");
-  // }, [socket, dispatch]);
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("unLikeToClient", (newPost) => {
+      dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+    });
+    return () => socket.off("unLikeToClient");
+  }, [socket, dispatch]);
+
+  // Comments
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("createCommentToClient", (newPost) => {
+      dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+    });
+    return () => socket.off("createCommentToClient");
+  }, [socket, dispatch]);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("deleteCommentToClient", (newPost) => {
+      dispatch({ type: POST_TYPES.UPDATE_POST, payload: newPost });
+    });
+    return () => socket.off("deleteCommentToClient");
+  }, [socket, dispatch]);
+
+  // Follow
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("followToClient", (user) => {
+      dispatch({ type: GLOBAL_TYPES.AUTH, payload: { ...auth, user: user } });
+    });
+    return () => socket.off("followToClient");
+  }, [socket, dispatch, auth]);
+
+  // Notification
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("createNotifyToClient", (notify) => {
+      dispatch({
+        type: NOTIFY_TYPES.CREATE_NOTIFY,
+        payload: notify,
+      });
+    });
+
+    return () => socket.off("createNotifyToClient");
+  }, [dispatch, socket]);
 
   return <></>;
 }

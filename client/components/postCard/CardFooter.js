@@ -43,7 +43,6 @@ const CardFooter = ({ post }) => {
     }
   }, [auth.user.saved, post._id]);
   const handleLike = () => {
-    post.likes = [auth.user._id, ...post.likes];
     if (loadLike) return;
     setLoadLike(true);
     setIsLike(true);
@@ -52,9 +51,11 @@ const CardFooter = ({ post }) => {
   };
 
   const handleUnLike = async () => {
-    post.likes = post.likes.filter((id) => id !== auth.user._id);
-    await dispatch(unlikePost({ post, auth }));
+    if (loadLike) return;
+    setLoadLike(true);
     setIsLike(false);
+    await dispatch(unlikePost({ post, auth, socket }));
+    setLoadLike(false);
   };
 
   const handleBookmark = () => {
