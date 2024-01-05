@@ -11,6 +11,7 @@ const DinhCode = () => {
         <Text>Update Model 4</Text>
         <Text>Update UI Story 5</Text>
         <Text>Update UI Post 6</Text>
+        <Text>Fix Event Delete Post 7</Text>
     </View>
 };
 
