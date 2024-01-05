@@ -10,6 +10,7 @@ const DinhCode = () => {
         <Text>UI check code 3</Text>
         <Text>Update Model 4</Text>
         <Text>Update UI Story 5</Text>
+        <Text>Update UI Post 6</Text>
     </View>
 };
 
