@@ -11,6 +11,7 @@ const HongCode = () => {
         <Text>Day la code 4</Text>
         <Text>Day la code 5</Text>
         <Text>Day la code 6</Text>
+        <Text>Day la code 7</Text>
     </View>
 };
 
