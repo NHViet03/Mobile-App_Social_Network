@@ -5,9 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 const DinhCode = () => {
     return
     <View>
-        
-        <Text>UI check code 3</Text>
-        <Text>Update Model 4</Text>
+        <Text>Fix UI Personal</Text>
         <Text>Update UI Story 5</Text>
         <Text>Update UI Post 6</Text>
         <Text>Fix Event Delete Post 7</Text>
