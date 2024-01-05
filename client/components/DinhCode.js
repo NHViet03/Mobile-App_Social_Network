@@ -14,6 +14,7 @@ const DinhCode = () => {
         <Text>Fix Event Delete Post 7</Text>
         <Text>Fix Event Edit Personal Site 8</Text>
         <Text>Fix Event Finding Site 9</Text>
+        <Text>Fix UI Create Site 10</Text>
     </View>
 };
 
